@@ -19,3 +19,8 @@ Route::get('/callback', function () {
 
         echo "callback";
 });
+
+
+Route::group(['prefix' => 'admin'], function () {
+    Voyager::routes();
+});
