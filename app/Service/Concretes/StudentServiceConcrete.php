@@ -19,10 +19,10 @@ class StudentServiceConcrete implements StudentServiceAbstract {
         return $student;
     }
 
-    public function updateStudent($data)
+    public function updateStudent($student,$data)
     {
-        $student = Student::update($data);
-        return $student;
+        $res = $student->update($data);
+        return $res;
 
     }
 

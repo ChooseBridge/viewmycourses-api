@@ -11,7 +11,7 @@ interface StudentServiceAbstract{
 
     public function createStudent($data);
 
-    public function updateStudent($data);
+    public function updateStudent($student,$data);
 
     public function getStudentByUCenterUId($uid);
 
