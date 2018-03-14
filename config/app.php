@@ -182,6 +182,8 @@ return [
 
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 
+        \App\Service\Providers\StudentServiceProvider::class,
+
     ],
 
     /*
