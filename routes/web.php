@@ -17,7 +17,36 @@ Route::get('/', function () {
 
 Route::get('/callback', function () {
 
-        echo "callback";
+    $code = $_GET['code'];
+
+    if($code){
+
+        $client = new \GuzzleHttp\Client([
+          'base_uri' => env('UCENTER_URL')
+        ]);
+        $response = $client->request('POST', env('UCENTER_URL').'oauth/access_token', [
+          'form_params' => [
+            "client_id" => env('CLIENT_ID'),
+            "client_secret" => env('CLIENT_SECRET'),
+            "redirect_uri" => env('CALL_BACK_URL'),
+            "code" => $code,
+            "grant_type" => "authorization_code",
+          ]
+        ]);
+        $body = $response->getBody();
+        $data = json_decode($body,true);
+        if(!empty($data) && isset($data['access_token'])){
+            $response =$client->request('GET', env('UCENTER_URL').'/api/user/basic?access_token='.$data['access_token']);
+            $body = $response->getBody();
+            var_dump($body);die;
+        }
+
+
+
+
+
+
+    }
 });
 
 
