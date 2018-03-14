@@ -56,7 +56,10 @@ Route::get('/callback', function (\App\Service\Abstracts\StudentServiceAbstract 
                         'access_token_expires_time'=>date("Y-m-d H:i:s",time()+$tokenInfo['expires_in']),
                         'ucenter_uid'=>$ucenterId
                     ];
-                    $newStudent = $studentService->createStudent($arr);
+                    $student = $studentService->createStudent($arr);
+                    if($student){
+                        return Redirect::to($redirectUrl."?token=".$student->token, 301);
+                    }
                 }else{
                     $arr = [
                       'token'=>md5(uniqid()),
@@ -66,13 +69,13 @@ Route::get('/callback', function (\App\Service\Abstracts\StudentServiceAbstract 
                       'access_token_expires_time'=>date("Y-m-d H:i:s",time()+$tokenInfo['expires_in']),
 
                     ];
-                    $newStudent = $studentService->updateStudent($arr);
+                    $isUpdate = $studentService->updateStudent($student,$arr);
+                    if($isUpdate){
+                        return Redirect::to($redirectUrl."?token=".$student->token, 301);
+                    }
                 }
 
-                if($newStudent){
-                    return Redirect::to($redirectUrl."?token=".$newStudent->token, 301);
-//                    echo  $newStudent->token;die;
-                }
+
 
             }
 
