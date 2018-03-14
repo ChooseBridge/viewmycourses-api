@@ -37,8 +37,8 @@ Route::get('/callback', function () {
         $data = json_decode($body,true);
         if(!empty($data) && isset($data['access_token'])){
             $response =$client->request('GET', env('UCENTER_URL').'/api/user/basic?access_token='.$data['access_token']);
-            $body = $response->getBody();
-            var_dump($body);die;
+            $content = $response->getBody()->getContents();
+            var_dump($content);die;
         }
 
 
