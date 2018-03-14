@@ -18,6 +18,7 @@ Route::get('/', function () {
 Route::get('/callback', function (\App\Service\Abstracts\StudentServiceAbstract $studentService) {
 
     $code = $_GET['code'];
+    $redirectUrl = $_GET['state'];
 
     if ($code) {
 
@@ -69,7 +70,8 @@ Route::get('/callback', function (\App\Service\Abstracts\StudentServiceAbstract 
                 }
 
                 if($newStudent){
-                    echo  $newStudent->token;die;
+                    return Redirect::to($redirectUrl."?token=".$newStudent->token, 301);
+//                    echo  $newStudent->token;die;
                 }
 
             }
