@@ -16,6 +16,8 @@ interface CityServiceAbstract
 
     public function getCitysByProvinceId($provinceId);
 
+    public function getCityById($id);
+
     public function validatorForCreate($data);
 
     public function createCity($data);

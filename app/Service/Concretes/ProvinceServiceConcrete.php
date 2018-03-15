@@ -15,30 +15,41 @@ use Illuminate\Support\Facades\Validator;
 
 class ProvinceServiceConcrete implements ProvinceServiceAbstract
 {
-    public function getAllProvinces(){
-        $provinces =  Province::all();
+    public function getAllProvinces()
+    {
+        $provinces = Province::all();
         return $provinces;
     }
 
-    public function getProvincesForPage($limit=10){
+    public function getProvincesForPage($limit = 10)
+    {
         $provinces = Province::paginate($limit);
         return $provinces;
     }
 
-    public function getProvincesByCountryId($countryId){
-        $provinces = Province::where('country_id',$countryId)->get();
+    public function getProvincesByCountryId($countryId)
+    {
+        $provinces = Province::where('country_id', $countryId)->get();
         return $provinces;
     }
 
-    public function validatorForCreate($data){
+    public function getProvinceById($id)
+    {
+        $province = Province::where('province_id', $id)->first();
+        return $province;
+    }
+
+    public function validatorForCreate($data)
+    {
         $validator = Validator::make($data, [
           'province_name' => 'required|max:255',
           'country_id' => 'required|integer',
         ]);
-        return $validator->fails()?$validator:true;
+        return $validator->fails() ? $validator : true;
     }
 
-    public function createProvince($data){
+    public function createProvince($data)
+    {
         $province = Province::create($data);
         return $province;
     }

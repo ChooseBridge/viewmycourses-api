@@ -14,8 +14,12 @@ use Throwable;
 class APIException extends \Exception
 {
     const MISS_PARAM = 1001; //缺失参数
+    const INVALID_LOGIN = 1002; //无效的登陆
+    const ERROR_PARAM = 1003; //错误的参数
+    const ILLGAL_OPERATION = 1004; //非法操作
+    const OPERATION_EXCEPTION = 1004; //操作异常
 
-    public function __construct(string $message = "", int $code = 0, Throwable $previous = null)
+    public function __construct( $message = "",  $code = 0, Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }

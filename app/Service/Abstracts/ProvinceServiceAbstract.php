@@ -17,6 +17,8 @@ interface ProvinceServiceAbstract
 
     public function getProvincesByCountryId($countryId);
 
+    public function getProvinceById($id);
+
     public function validatorForCreate($data);
 
     public function createProvince($data);

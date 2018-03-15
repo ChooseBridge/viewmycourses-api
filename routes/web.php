@@ -111,9 +111,9 @@ Route::group(['prefix' => 'open-api'], function () {
 
 });
 
-Route::group(['prefix' => 'api'], function () {
+Route::group(['prefix' => 'api','middleware'=>[\App\Http\Middleware\CheckLogin::class]], function () {
 
-    Route::post('geo/get-province-by-country', ['uses' => 'GeoController@getProvinceByCountry',     'as' => 'geo.get-province-by-country']);
+    Route::post('school/create', ['uses' => 'SchoolController@createSchool',     'as' => 'school.create']);
 
 });
 

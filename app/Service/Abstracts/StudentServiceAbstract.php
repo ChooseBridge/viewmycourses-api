@@ -15,4 +15,6 @@ interface StudentServiceAbstract{
 
     public function getStudentByUCenterUId($uid);
 
+    public function getStudentByToken($token);
+
 }

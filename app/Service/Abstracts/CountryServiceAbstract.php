@@ -16,6 +16,8 @@ interface CountryServiceAbstract
 
     public function getCountrysForPage($limit);
 
+    public function getCountryById($id);
+
     public function validatorForCreate($data);
 
     public function createCountry($data);

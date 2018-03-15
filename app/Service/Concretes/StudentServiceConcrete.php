@@ -32,4 +32,10 @@ class StudentServiceConcrete implements StudentServiceAbstract {
         return $student;
     }
 
+    public function getStudentByToken($token)
+    {
+        $student = Student::where('token',$token)->first();
+        return $student;
+    }
+
 }
