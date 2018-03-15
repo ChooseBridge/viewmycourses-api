@@ -22,6 +22,11 @@ class CityServiceConcrete implements CityServiceAbstract
         return $citys;
     }
 
+    public function getCitysByProvinceId($provinceId){
+        $citys = City::where('province_id',$provinceId)->get();
+        return $citys;
+    }
+
     public function validatorForCreate($data)
     {
         $validator = Validator::make($data, [
