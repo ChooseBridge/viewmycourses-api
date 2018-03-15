@@ -107,7 +107,7 @@ Route::group(['prefix' => 'open-api'], function () {
 
     Route::post('geo/get-province-by-country', ['uses' => 'GeoController@getProvinceByCountry',     'as' => 'geo.get-province-by-country']);
     Route::get('geo/get-all-countrys', ['uses' => 'GeoController@getAllCountrys',     'as' => 'geo.get-all-countrys']);
-    Route::post('geo/get-city-province', ['uses' => 'GeoController@getCityByProvince',     'as' => 'geo.get-city-province']);
+    Route::post('geo/get-city-by-province', ['uses' => 'GeoController@getCityByProvince',     'as' => 'geo.get-city-province']);
 
 });
 
