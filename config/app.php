@@ -183,6 +183,9 @@ return [
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 
         \App\Service\Providers\StudentServiceProvider::class,
+        \App\Service\Providers\CountryServiceProvider::class,
+        \App\Service\Providers\ProvinceServiceProvider::class,
+        \App\Service\Providers\CityServiceProvider::class,
 
     ],
 

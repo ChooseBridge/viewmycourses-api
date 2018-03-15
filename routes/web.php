@@ -15,6 +15,24 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::group(['middleware' => 'admin.user','as'=>'backend.'], function (){
+
+    Route::get('admin/country/index', ['uses' => 'CountryController@index',     'as' => 'country.index']);
+    Route::get('admin/country/add', ['uses' => 'CountryController@addCountry',     'as' => 'country.add.get']);
+    Route::post('admin/country/add', ['uses' => 'CountryController@addCountry',     'as' => 'country.add.post']);
+
+    Route::get('admin/province/index', ['uses' => 'ProvinceController@index',     'as' => 'province.index']);
+    Route::get('admin/province/add', ['uses' => 'ProvinceController@addProvince',     'as' => 'province.add.get']);
+    Route::post('admin/province/add', ['uses' => 'ProvinceController@addProvince',     'as' => 'province.add.post']);
+
+    Route::get('admin/city/index', ['uses' => 'CityController@index',     'as' => 'city.index']);
+    Route::get('admin/city/add', ['uses' => 'CityController@addCity',     'as' => 'city.add.get']);
+    Route::post('admin/city/add', ['uses' => 'CityController@addCity',     'as' => 'city.add.post']);
+
+
+
+});
+
 Route::get('/callback', function (\App\Service\Abstracts\StudentServiceAbstract $studentService) {
 
     $code = $_GET['code'];
@@ -83,6 +101,12 @@ Route::get('/callback', function (\App\Service\Abstracts\StudentServiceAbstract 
 
 
     }
+});
+
+Route::group(['prefix' => 'api'], function () {
+
+    Route::post('geo/get-province-by-country', ['uses' => 'GeoController@getProvinceByCountry',     'as' => 'geo.get-province-by-country']);
+
 });
 
 

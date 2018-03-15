@@ -19,8 +19,8 @@ class StudentServiceProvider extends ServiceProvider
           'App\Service\Concretes\StudentServiceConcrete'
         );
 
-//        $this->app->singleton('ChangeTranslateService', function () {
-//            return $this->app->make('Alqm\Domain\ChangeTranslate\Service\ChangeTranslateService');
+//        $this->app->singleton('StudentService', function () {
+//            return $this->app->make('App\Service\Abstracts\StudentServiceAbstract');
 //        });
     }
 }
