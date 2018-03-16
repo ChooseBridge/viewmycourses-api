@@ -19,7 +19,7 @@
                 <div class="form-group">
                     <label>所属学校</label>
                     <select class="form-control" name="school_id">
-                        <option value="">请选择</option>
+                        <option disabled="disabled" value="">请选择</option>
                         @foreach ($schools as $countryName => $subSchools)
                             <option value="">{{$countryName}}</option>
                             @foreach ($subSchools as $school)

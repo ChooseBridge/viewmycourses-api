@@ -21,7 +21,7 @@
                     <select class="form-control" name="school_id">
                         <option value="">请选择</option>
                         @foreach ($schools as $countryName => $subSchools)
-                            <option value="">{{$countryName}}</option>
+                            <option disabled="disabled" value="">{{$countryName}}</option>
                             @foreach ($subSchools as $school)
                                 <option value="{{$school['school_id']}}">-------{{$school['school_name']}}</option>
                             @endforeach
