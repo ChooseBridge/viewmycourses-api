@@ -17,4 +17,6 @@ interface CollegeServiceAbstract
     public function validatorForCreate($data);
 
     public function createCollege($data);
+
+    public function getCollegesBySchoolId($schoolId);
 }

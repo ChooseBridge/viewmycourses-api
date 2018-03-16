@@ -45,6 +45,14 @@ Route::group(['middleware' => 'admin.user', 'as' => 'backend.'], function () {
     Route::get('admin/school-district/add', ['uses' => 'SchoolDistrictController@addDistrict', 'as' => 'district.add.get']);
     Route::post('admin/school-district/add', ['uses' => 'SchoolDistrictController@addDistrict', 'as' => 'district.add.post']);
 
+    Route::get('admin/professor/index', ['uses' => 'ProfessorController@index', 'as' => 'professor.index']);
+    Route::get('admin/professor/add', ['uses' => 'ProfessorController@addProfessor', 'as' => 'professor.add.get']);
+    Route::post('admin/professor/add', ['uses' => 'ProfessorController@addProfessor', 'as' => 'professor.add.post']);
+    Route::get('admin/professor/approve', ['uses' => 'ProfessorController@approve', 'as' => 'professor.aprove.get']);
+    Route::get('admin/professor/reject', ['uses' => 'ProfessorController@reject', 'as' => 'professor.reject.get']);
+
+    Route::post('admin/api/get-college-by-school', ['uses' => 'CollegeController@getCollegeBySchool', 'as' => 'get-college-by-school']);
+
 });
 
 Route::get('/callback', function (\App\Service\Abstracts\StudentServiceAbstract $studentService) {
@@ -129,6 +137,8 @@ Route::group(['prefix' => 'open-api'], function () {
 Route::group(['prefix' => 'api', 'middleware' => [\App\Http\Middleware\CheckLogin::class]], function () {
 
     Route::post('school/create', ['uses' => 'SchoolController@createSchool', 'as' => 'school.create']);
+
+    Route::post('get-college-by-school', ['uses' => 'CollegeController@getCollegeBySchool', 'as' => 'api.get-college-by-school']);
 
 });
 

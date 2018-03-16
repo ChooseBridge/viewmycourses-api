@@ -188,7 +188,8 @@ return [
         \App\Service\Providers\CityServiceProvider::class,
         \App\Service\Providers\SchoolServiceProvider::class,
         \App\Service\Providers\CollegeServiceProvider::class,
-        \App\Service\Providers\SchoolDistrictServiceProvider::class
+        \App\Service\Providers\SchoolDistrictServiceProvider::class,
+        \App\Service\Providers\ProfessorServiceProvider::class,
     ],
 
     /*

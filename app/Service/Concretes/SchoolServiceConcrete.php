@@ -72,6 +72,12 @@ class SchoolServiceConcrete implements SchoolServiceAbstract
         return $schools;
     }
 
+    public function getAllCheckedSchools()
+    {
+        $schools = School::where('check_status',School::APPROVE_CHECK)->get();
+        return $schools;
+    }
+
     public function getSchoolsGroupCountry()
     {
         $schools = $this->getAllSchools();

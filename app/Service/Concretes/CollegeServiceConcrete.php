@@ -36,4 +36,10 @@ class CollegeServiceConcrete implements CollegeServiceAbstract
         $college = College::create($data);
         return $college;
     }
+
+    public function getCollegesBySchoolId($schoolId)
+    {
+        $colleges = College::where('school_id',$schoolId)->get();
+        return $colleges;
+    }
 }
