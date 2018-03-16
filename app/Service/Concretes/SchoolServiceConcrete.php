@@ -18,7 +18,6 @@ class SchoolServiceConcrete implements SchoolServiceAbstract
 
     public function createSchool($data)
     {
-        $data['check_status'] = School::PENDING_CHECK;
         $school = School::create($data);
         return $school;
     }
@@ -34,7 +33,36 @@ class SchoolServiceConcrete implements SchoolServiceAbstract
           'website_url' => 'required|max:255',
           'your_email' => 'required|email',
         ]);
-        return $validator->fails()?$validator:true;
+        return $validator->fails() ? $validator : true;
 
+    }
+
+    public function approveSchoolById($id)
+    {
+        $school = $this->getSchoolById($id);
+        if($school){
+            $school->check_status = School::APPROVE_CHECK;
+            $school->save();
+        }
+    }
+
+    public function rejectSchoolById($id)
+    {
+        $school = $this->getSchoolById($id);
+        if($school){
+            $school->delete();
+        }
+    }
+
+    public function getSchoolsForPage($limit = 10)
+    {
+        $schools = School::paginate($limit);
+        return $schools;
+    }
+
+    public function getSchoolById($id)
+    {
+        $school = School::where('school_id', $id)->first();
+        return $school;
     }
 }

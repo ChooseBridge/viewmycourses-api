@@ -15,4 +15,13 @@ interface SchoolServiceAbstract
 
     public function validatorForCreate($data);
 
+    public function approveSchoolById($id);
+
+    public function rejectSchoolById($id);
+
+    public function getSchoolsForPage($limit);
+
+    public function getSchoolById($id);
+
+
 }

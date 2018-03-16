@@ -7,6 +7,8 @@
  */
 namespace App\Service\Abstracts;
 
+use Illuminate\Http\Request;
+
 interface StudentServiceAbstract{
 
     public function createStudent($data);
@@ -16,5 +18,7 @@ interface StudentServiceAbstract{
     public function getStudentByUCenterUId($uid);
 
     public function getStudentByToken($token);
+
+
 
 }

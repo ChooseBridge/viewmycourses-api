@@ -10,10 +10,14 @@ class ProvinceController extends Controller
 {
     //
     protected $provinceService;
+    protected $countryService;
 
-    public function __construct(ProvinceServiceAbstract $provinceService)
-    {
+    public function __construct(
+      ProvinceServiceAbstract $provinceService,
+      CountryServiceAbstract $countryService
+    ) {
         $this->provinceService = $provinceService;
+        $this->countryService = $countryService;
     }
 
     public function index()
@@ -25,25 +29,23 @@ class ProvinceController extends Controller
         ]);
     }
 
-    public function addProvince(CountryServiceAbstract $countryService,Request $request)
+    public function addProvince(Request $request)
     {
-        if($request->isMethod('POST')){
+        if ($request->isMethod('POST')) {
 
             $data = $request->all();
             $validator = $this->provinceService->validatorForCreate($data);
-            if($validator !== true){
+            if ($validator !== true) {
                 return redirect(route('backend.province.add.get'))
                   ->withErrors($validator);
             }
             $this->provinceService->createProvince($data);
             return redirect(route("backend.province.index"));
-
-
         }
 
-        $countrys = $countryService->getAllCountrys();
-        return view('province.add',[
-          'countrys'=>$countrys
+        $countrys = $this->countryService->getAllCountrys();
+        return view('province.add', [
+          'countrys' => $countrys
         ]);
     }
 }

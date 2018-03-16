@@ -31,6 +31,7 @@ class CheckLogin
         }else{
             throw new APIException("未登陆",APIException::INVALID_LOGIN);
         }
+        $GLOBALS['gStudent']   = $student;
         return $next($request);
     }
 }
