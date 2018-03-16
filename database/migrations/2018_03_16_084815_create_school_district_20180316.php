@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCollege20180316 extends Migration
+class CreateSchoolDistrict20180316 extends Migration
 {
     /**
      * Run the migrations.
@@ -14,9 +14,9 @@ class CreateCollege20180316 extends Migration
     public function up()
     {
         //
-        Schema::create('college', function (Blueprint $table) {
-            $table->increments('college_id');
-            $table->string('college_name');
+        Schema::create('school_district', function (Blueprint $table) {
+            $table->increments('school_district_id');
+            $table->string('school_district_name');
             $table->integer('school_id');
             $table->integer('create_student_id')->default(0);
             $table->integer('create_user_id')->default(0);
@@ -32,6 +32,6 @@ class CreateCollege20180316 extends Migration
     public function down()
     {
         //
-        Schema::drop('college');
+        Schema::drop('school_district');
     }
 }

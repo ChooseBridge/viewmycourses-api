@@ -65,4 +65,23 @@ class SchoolServiceConcrete implements SchoolServiceAbstract
         $school = School::where('school_id', $id)->first();
         return $school;
     }
+
+    public function getAllSchools()
+    {
+        $schools = School::All();
+        return $schools;
+    }
+
+    public function getSchoolsGroupCountry()
+    {
+        $schools = $this->getAllSchools();
+        $res = [];
+        foreach ($schools as $school){
+            $res[$school->country->country_name][] = [
+              'school_id'=>$school->school_id,
+              'school_name'=>$school->school_name,
+            ];
+        }
+        return $res;
+    }
 }

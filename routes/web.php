@@ -36,6 +36,15 @@ Route::group(['middleware' => 'admin.user', 'as' => 'backend.'], function () {
     Route::get('admin/school/reject', ['uses' => 'SchoolController@reject', 'as' => 'school.reject.get']);
 
 
+    Route::get('admin/college/index', ['uses' => 'CollegeController@index', 'as' => 'college.index']);
+    Route::get('admin/college/add', ['uses' => 'CollegeController@addCollege', 'as' => 'college.add.get']);
+    Route::post('admin/college/add', ['uses' => 'CollegeController@addCollege', 'as' => 'college.add.post']);
+
+
+    Route::get('admin/school-district/index', ['uses' => 'SchoolDistrictController@index', 'as' => 'district.index']);
+    Route::get('admin/school-district/add', ['uses' => 'SchoolDistrictController@addDistrict', 'as' => 'district.add.get']);
+    Route::post('admin/school-district/add', ['uses' => 'SchoolDistrictController@addDistrict', 'as' => 'district.add.post']);
+
 });
 
 Route::get('/callback', function (\App\Service\Abstracts\StudentServiceAbstract $studentService) {

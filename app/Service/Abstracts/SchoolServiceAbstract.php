@@ -23,5 +23,9 @@ interface SchoolServiceAbstract
 
     public function getSchoolById($id);
 
+    public function getAllSchools();
+
+    public function getSchoolsGroupCountry();
+
 
 }
