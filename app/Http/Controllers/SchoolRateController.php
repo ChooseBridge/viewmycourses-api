@@ -22,6 +22,17 @@ class SchoolRateController extends Controller
         $this->schoolDistrictService = $schoolDistrictService;
     }
 
+
+//backend
+
+    public function index()
+    {
+        $rates = $this->schoolRateService->getRatesForPage();
+        return view('school_rate.index', [
+          'rates' => $rates
+        ]);
+    }
+
     public function createRate(Request $request)
     {
         //待处理用户权限处理

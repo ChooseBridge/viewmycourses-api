@@ -15,5 +15,7 @@ interface SchoolRateServiceAbstract
 
     public function createRate($data);
 
+    public function getRatesForPage($limit);
+
 
 }

@@ -51,6 +51,10 @@ Route::group(['middleware' => 'admin.user', 'as' => 'backend.'], function () {
     Route::get('admin/professor/approve', ['uses' => 'ProfessorController@approve', 'as' => 'professor.aprove.get']);
     Route::get('admin/professor/reject', ['uses' => 'ProfessorController@reject', 'as' => 'professor.reject.get']);
 
+    Route::get('admin/professor-rate/index', ['uses' => 'ProfessorRateController@Index', 'as' => 'professor-rate.index']);
+    Route::get('admin/school-rate/index', ['uses' => 'SchoolRateController@Index', 'as' => 'school-rate.index']);
+
+
     Route::post('admin/api/get-college-by-school', ['uses' => 'CollegeController@getCollegeBySchool', 'as' => 'get-college-by-school']);
 
 });

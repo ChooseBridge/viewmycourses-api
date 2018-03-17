@@ -21,6 +21,17 @@ class ProfessorRateController extends Controller
         $this->professorService = $professorService;
     }
 
+//backend
+
+    public function index()
+    {
+        $rates = $this->professorRateService->getRatesForPage();
+        return view('professor_rate.index', [
+          'rates' => $rates
+        ]);
+    }
+
+//api
 
     public function createRate(Request $request)
     {
@@ -28,7 +39,6 @@ class ProfessorRateController extends Controller
         //待处理用户权限处理
 
         $data = $request->all();
-
 
 
         if (!isset($data['professor_id'])) {

@@ -32,4 +32,23 @@ class ProfessorRate extends Model
       'tag',
       'create_student_id',
     ];
+
+    protected $appends = ['attend'];
+
+    public function getAttendAttribute()
+    {
+
+        return $this->is_attend == 1 ? "出勤" : "缺勤";
+    }
+
+    public function professor()
+    {
+        return $this->belongsTo('App\Professor', 'professor_id', 'professor_id');
+    }
+
+    public function student()
+    {
+        return $this->belongsTo('App\Student', 'create_student_id', 'student_id');
+    }
+
 }

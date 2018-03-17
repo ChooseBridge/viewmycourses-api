@@ -41,4 +41,11 @@ class SchoolRateServiceConcrete implements SchoolRateServiceAbstract
         $rate = SchoolRate::create($data);
         return $rate;
     }
+
+    public function getRatesForPage($limit = 10)
+    {
+        $rates = SchoolRate::paginate($limit);
+        return $rates;
+    }
+
 }

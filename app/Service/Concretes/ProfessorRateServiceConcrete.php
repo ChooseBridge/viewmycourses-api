@@ -44,4 +44,10 @@ class ProfessorRateServiceConcrete implements ProfessorRateServiceAbstract
         $rate = ProfessorRate::create($data);
         return $rate;
     }
+
+    public function getRatesForPage($limit=10)
+    {
+        $rates = ProfessorRate::paginate($limit);
+        return $rates;
+    }
 }
