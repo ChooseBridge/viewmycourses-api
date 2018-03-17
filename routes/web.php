@@ -143,6 +143,7 @@ Route::group(['prefix' => 'api', 'middleware' => [\App\Http\Middleware\CheckLogi
 
     Route::post('get-college-by-school', ['uses' => 'CollegeController@getCollegeBySchool', 'as' => 'api.get-college-by-school']);
     Route::get('get-school-group-by-country', ['uses' => 'SchoolController@getAllcheckedSchoolByCountry', 'as' => 'api.get-school-group-by-country']);
+    Route::get('get-student', ['uses' => 'StudentController@getStudent', 'as' => 'api.get-student']);
 
 });
 
