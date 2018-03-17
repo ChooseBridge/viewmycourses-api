@@ -37,4 +37,10 @@ class SchoolDistrictServiceConcrete implements SchoolDistrictServiceAbstract
         return $district;
     }
 
+    public function getDistrictById($id)
+    {
+        $district = SchoolDistrict::where('school_district_id',$id)->first();
+        return $district;
+    }
+
 }

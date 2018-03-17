@@ -138,6 +138,8 @@ Route::group(['prefix' => 'api', 'middleware' => [\App\Http\Middleware\CheckLogi
 
     Route::post('school/create', ['uses' => 'SchoolController@createSchool', 'as' => 'school.create']);
     Route::post('professor/create', ['uses' => 'ProfessorController@createProfessor', 'as' => 'professor.create']);
+    Route::post('professor-rate/create', ['uses' => 'ProfessorRateController@createRate', 'as' => 'professor-rate.create']);
+    Route::post('school-rate/create', ['uses' => 'SchoolRateController@createRate', 'as' => 'school-rate.create']);
 
     Route::post('get-college-by-school', ['uses' => 'CollegeController@getCollegeBySchool', 'as' => 'api.get-college-by-school']);
     Route::get('get-school-group-by-country', ['uses' => 'SchoolController@getAllcheckedSchoolByCountry', 'as' => 'api.get-school-group-by-country']);

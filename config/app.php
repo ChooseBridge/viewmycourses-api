@@ -190,6 +190,8 @@ return [
         \App\Service\Providers\CollegeServiceProvider::class,
         \App\Service\Providers\SchoolDistrictServiceProvider::class,
         \App\Service\Providers\ProfessorServiceProvider::class,
+        \App\Service\Providers\ProfessorRateServiceProvider::class,
+        \App\Service\Providers\SchoolRateServiceProvider::class,
     ],
 
     /*

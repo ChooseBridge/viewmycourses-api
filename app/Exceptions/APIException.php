@@ -17,7 +17,8 @@ class APIException extends \Exception
     const INVALID_LOGIN = 1002; //无效的登陆
     const ERROR_PARAM = 1003; //错误的参数
     const ILLGAL_OPERATION = 1004; //非法操作
-    const OPERATION_EXCEPTION = 1004; //操作异常
+    const OPERATION_EXCEPTION = 1005; //操作异常
+    const DATA_EXCEPTION = 1006; //数据异常
 
     public function __construct( $message = "",  $code = 0, Throwable $previous = null)
     {

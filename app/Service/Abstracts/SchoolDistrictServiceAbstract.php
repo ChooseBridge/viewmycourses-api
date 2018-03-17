@@ -16,4 +16,6 @@ interface SchoolDistrictServiceAbstract
     public function validatorForCreate($data);
 
     public function createDistrict($data);
+
+    public function getDistrictById($id);
 }
