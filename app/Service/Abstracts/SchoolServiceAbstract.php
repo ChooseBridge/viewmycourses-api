@@ -27,7 +27,7 @@ interface SchoolServiceAbstract
 
     public function getAllCheckedSchools();
 
-    public function getSchoolsGroupCountry();
+    public function getAllCheckedSchoolsGroupCountry();
 
 
 }

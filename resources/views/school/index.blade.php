@@ -36,7 +36,7 @@
                     <td>{{$school->your_email}}</td>
                     <td>{{$school->checkStatusName}}</td>
                     @if(!empty($school->student))
-                        <td>{{$school->student->student_name}}</td>
+                        <td>{{$school->student->name}}</td>
                     @elseif(!empty($school->user))
                         <td>{{$school->user->name}}</td>
                     @else

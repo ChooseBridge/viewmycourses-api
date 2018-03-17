@@ -18,7 +18,7 @@ class CreateProfessor20180316 extends Migration
             $table->string('professor_fisrt_name');
             $table->string('professor_second_name');
             $table->string('professor_full_name');
-            $table->string('professor_web_site');
+            $table->string('professor_web_site')->default("");
             $table->integer('school_id');
             $table->integer('college_id');
             $table->integer('create_student_id')->default(0);

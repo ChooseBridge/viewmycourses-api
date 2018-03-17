@@ -39,4 +39,28 @@ class ProfessorServiceConcrete implements ProfessorServiceAbstract
         $professor = Professor::create($data);
         return $professor;
     }
+
+    public function approveProfessorById($id)
+    {
+        $professor = $this->getProfessorById($id);
+        if($professor){
+            $professor->check_status = Professor::APPROVE_CHECK;
+            $professor->save();
+        }
+    }
+
+    public function rejectProfessorById($id)
+    {
+        $professor = $this->getProfessorById($id);
+        if($professor){
+            $professor->delete();
+            //待处理是删除相关的教授点评等操作
+        }
+    }
+
+    public function getProfessorById($id)
+    {
+        $professor = Professor::where('professor_id',$id)->first();
+        return $professor;
+    }
 }

@@ -47,7 +47,7 @@ class SchoolDistrictController extends Controller
 
         }
 
-        $schools = $this->schoolService->getSchoolsGroupCountry();
+        $schools = $this->schoolService->getAllCheckedSchoolsGroupCountry();
         return view('district.add', [
           'schools' => $schools
         ]);

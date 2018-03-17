@@ -78,9 +78,9 @@ class SchoolServiceConcrete implements SchoolServiceAbstract
         return $schools;
     }
 
-    public function getSchoolsGroupCountry()
+    public function getAllCheckedSchoolsGroupCountry()
     {
-        $schools = $this->getAllSchools();
+        $schools = $this->getAllCheckedSchools();
         $res = [];
         foreach ($schools as $school){
             $res[$school->country->country_name][] = [

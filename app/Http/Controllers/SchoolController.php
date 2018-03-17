@@ -44,14 +44,14 @@ class SchoolController extends Controller
 
     public function addSchool(Request $request)
     {
-        if($request->isMethod('POST')){
+        if ($request->isMethod('POST')) {
 
             $data = $request->all();
             $data['your_email'] = Auth::user()->email;
             $data['create_user_id'] = Auth::user()->id;
             $data['check_status'] = School::APPROVE_CHECK;
             $validator = $this->schoolService->validatorForCreate($data);
-            if($validator !== true){
+            if ($validator !== true) {
                 return redirect(route('backend.school.add.get'))
                   ->withErrors($validator);
             }
@@ -67,14 +67,16 @@ class SchoolController extends Controller
         ]);
     }
 
-    public function approve(Request $request){
+    public function approve(Request $request)
+    {
 
         $school_id = $request->get('school_id');
         $this->schoolService->approveSchoolById($school_id);
         return redirect(route('backend.school.index'));
     }
 
-    public function reject(Request $request){
+    public function reject(Request $request)
+    {
 
         $school_id = $request->get('school_id');
         $this->schoolService->rejectSchoolById($school_id);
@@ -112,5 +114,18 @@ class SchoolController extends Controller
         ];
 
         return \Response::json($data);
+    }
+
+    public function getAllcheckedSchoolByCountry()
+    {
+
+        $shcools = $this->schoolService->getAllCheckedSchoolsGroupCountry();
+        $data = [
+          'success' => true,
+          'data' => $shcools
+        ];
+        return \Response::json($data);
+
+
     }
 }

@@ -49,7 +49,7 @@ class CollegeController extends Controller
 
         }
 
-        $schools = $this->schoolService->getSchoolsGroupCountry();
+        $schools = $this->schoolService->getAllCheckedSchoolsGroupCountry();
         return view('college.add', [
           'schools' => $schools
         ]);

@@ -19,4 +19,6 @@ interface CollegeServiceAbstract
     public function createCollege($data);
 
     public function getCollegesBySchoolId($schoolId);
+
+    public function getCollegeById($id);
 }

@@ -17,4 +17,11 @@ interface ProfessorServiceAbstract
     public function validatorForCreate($data);
 
     public function createProfessor($data);
+
+    public function approveProfessorById($id);
+
+    public function rejectProfessorById($id);
+
+    public function getProfessorById($id);
+
 }

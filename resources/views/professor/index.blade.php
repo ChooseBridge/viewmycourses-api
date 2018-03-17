@@ -19,6 +19,7 @@
                 <th>所属学院</th>
                 <th>创建者</th>
                 <th>审核状态</th>
+                <th>操作</th>
             </tr>
             @foreach ($professors as $professor)
                 <tr>
@@ -28,7 +29,7 @@
                     <td>{{$professor->school->school_name}}</td>
                     <td>{{$professor->college->college_name}}</td>
                     @if(!empty($professor->student))
-                        <td>{{$professor->student->student_name}}</td>
+                        <td>{{$professor->student->name}}</td>
                     @elseif(!empty($professor->user))
                         <td>{{$professor->user->name}}</td>
                     @else
@@ -38,9 +39,9 @@
                     <td>
                         @if($professor->check_status == \App\Professor::PENDING_CHECK)
                             <a class="btn btn-success"
-                               href="{{route('backend.professor.aprove.get',['school_id' => $professor->professor_id])}}">通过</a>
+                               href="{{route('backend.professor.aprove.get',['professor_id' => $professor->professor_id])}}">通过</a>
                             <a class="btn btn-danger"
-                               href="{{route('backend.professor.reject.get',['school_id' => $professor->professor_id])}}">拒绝</a>
+                               href="{{route('backend.professor.reject.get',['professor_id' => $professor->professor_id])}}">拒绝</a>
                         @endif
                     </td>
                 </tr>
