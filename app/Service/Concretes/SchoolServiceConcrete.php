@@ -86,6 +86,7 @@ class SchoolServiceConcrete implements SchoolServiceAbstract
             $res[$school->country->country_name][] = [
               'school_id'=>$school->school_id,
               'school_name'=>$school->school_name,
+              'school_nick_name'=>$school->school_nick_name,
             ];
         }
         return $res;
