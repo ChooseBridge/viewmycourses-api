@@ -16,6 +16,8 @@ class CreateProfessorCourse20180318 extends Migration
         //
         Schema::create('professor_course', function (Blueprint $table) {
 
+
+            $table->increments('course_id');
             $table->integer('professor_id');
             $table->string('course_code');
             $table->unique(['professor_id', 'course_code']);

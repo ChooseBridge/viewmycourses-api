@@ -19,6 +19,10 @@ interface StudentServiceAbstract{
 
     public function getStudentByToken($token);
 
+    public function setPoints($delta);
+
+    public function getPoints();
+
 
 
 }

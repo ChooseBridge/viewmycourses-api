@@ -16,6 +16,7 @@ class CreateSchoolCourseCategory20180318 extends Migration
         //
         Schema::create('school_course_category', function (Blueprint $table) {
 
+            $table->increments('course_category_id');
             $table->integer('school_id');
             $table->string('course_category_name');
             $table->unique(['school_id', 'course_category_name']);

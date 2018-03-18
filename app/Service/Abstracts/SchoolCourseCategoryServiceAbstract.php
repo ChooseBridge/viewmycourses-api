@@ -11,5 +11,9 @@ namespace App\Service\Abstracts;
 
 interface SchoolCourseCategoryServiceAbstract
 {
+    public function createCourseCategory($data);
 
+    public function validatorForCreate($data);
+
+    public function schoolHasCourseCategory($schoolId,$courseCategory);
 }

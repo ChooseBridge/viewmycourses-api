@@ -11,5 +11,10 @@ namespace App\Service\Abstracts;
 
 interface ProfessorCourseServiceAbstract
 {
+    public function createCourse($data);
+
+    public function validatorForCreate($data);
+
+    public function professorHasCourse($professorId,$courseCode);
 
 }
