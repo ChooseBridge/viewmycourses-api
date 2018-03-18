@@ -63,7 +63,7 @@ class ProfessorRateServiceConcrete implements ProfessorRateServiceAbstract
         if($rate){
             $rate->check_status = ProfessorRate::APPROVE_CHECK;
             $rate->save();
-            //待处理添加课程 和课程类别
+            //待处理添加课程和课程类别 和添加积分
         }
     }
 
