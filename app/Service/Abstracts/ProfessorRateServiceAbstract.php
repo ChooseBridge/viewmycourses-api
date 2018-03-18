@@ -16,4 +16,11 @@ interface ProfessorRateServiceAbstract
     public function createRate($data);
 
     public function getRatesForPage($limit);
+
+    public function getRateById($id);
+
+    public function approveRateById($id);
+
+    public function rejectRateById($id);
+
 }

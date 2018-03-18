@@ -48,4 +48,28 @@ class SchoolRateServiceConcrete implements SchoolRateServiceAbstract
         return $rates;
     }
 
+    public function getRateById($id)
+    {
+        $rate = SchoolRate::where('school_rate_id',$id)->first();
+        return $rate;
+    }
+
+    public function approveRateById($id)
+    {
+        $rate = $this->getRateById($id);
+        if($rate){
+            $rate->check_status = SchoolRate::APPROVE_CHECK;
+            $rate->save();
+            //待处理添加积分
+        }
+    }
+
+    public function rejectRateById($id)
+    {
+        $rate = $this->getRateById($id);
+        if($rate){
+            $rate->delete();
+        }
+    }
+
 }

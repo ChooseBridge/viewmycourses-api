@@ -31,6 +31,30 @@ class ProfessorRateController extends Controller
         ]);
     }
 
+    public function detail(Request $request)
+    {
+        $professorRateId = $request->get('professor_rate_id');
+        $rate = $this->professorRateService->getRateById($professorRateId);
+        return view('professor_rate.detail', [
+          'rate' => $rate
+        ]);
+    }
+
+
+    public function approve(Request $request)
+    {
+        $professorRateId = $request->get('professor_rate_id');
+        $this->professorRateService->approveRateById($professorRateId);
+        return redirect(route('backend.professor-rate.index'));
+    }
+
+    public function reject(Request $request)
+    {
+        $professorRateId = $request->get('professor_rate_id');
+        $this->professorRateService->rejectRateById($professorRateId);
+        return redirect(route('backend.professor-rate.index'));
+    }
+
 //api
 
     public function createRate(Request $request)

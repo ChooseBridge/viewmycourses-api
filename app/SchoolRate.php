@@ -7,6 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class SchoolRate extends Model
 {
     //
+    const PENDING_CHECK = 0;
+    const APPROVE_CHECK = 1;
+//    const REJECT_CHECK = 2;
+
+    public static $checkStatusName = [
+      self::PENDING_CHECK => '等待审核',
+      self::APPROVE_CHECK => '审核通过',
+    ];
 
     protected $table = 'school_rate';
 
@@ -26,8 +34,18 @@ class SchoolRate extends Model
       'school_students_relations',
       'comment',
       'create_student_id',
+      'check_status',
 
     ];
+
+    protected $appends = ['check_status_name'];
+
+    public function getCheckStatusNameAttribute()
+    {
+        $value = $this->check_status;
+
+        return isset(self::$checkStatusName[$value]) ? self::$checkStatusName[$value] : "";
+    }
 
 
     public function schoolDistrict()

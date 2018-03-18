@@ -8,6 +8,15 @@ class ProfessorRate extends Model
 {
     //
 
+    const PENDING_CHECK = 0;
+    const APPROVE_CHECK = 1;
+//    const REJECT_CHECK = 2;
+
+    public static $checkStatusName = [
+      self::PENDING_CHECK => '等待审核',
+      self::APPROVE_CHECK => '审核通过',
+    ];
+
     protected $table = 'professor_rate';
 
     protected $primaryKey = 'professor_rate_id';
@@ -31,9 +40,19 @@ class ProfessorRate extends Model
       'comment',
       'tag',
       'create_student_id',
+      'check_status',
     ];
 
-    protected $appends = ['attend'];
+
+
+    protected $appends = ['check_status_name,attend'];
+
+    public function getCheckStatusNameAttribute()
+    {
+        $value = $this->check_status;
+
+        return isset(self::$checkStatusName[$value]) ? self::$checkStatusName[$value] : "";
+    }
 
     public function getAttendAttribute()
     {

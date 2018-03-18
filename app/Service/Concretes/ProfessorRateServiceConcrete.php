@@ -50,4 +50,28 @@ class ProfessorRateServiceConcrete implements ProfessorRateServiceAbstract
         $rates = ProfessorRate::paginate($limit);
         return $rates;
     }
+
+    public function getRateById($id)
+    {
+        $rate = ProfessorRate::where('professor_rate_id',$id)->first();
+        return $rate;
+    }
+
+    public function approveRateById($id)
+    {
+        $rate = $this->getRateById($id);
+        if($rate){
+            $rate->check_status = ProfessorRate::APPROVE_CHECK;
+            $rate->save();
+            //待处理添加课程 和课程类别
+        }
+    }
+
+    public function rejectRateById($id)
+    {
+        $rate = $this->getRateById($id);
+        if($rate){
+            $rate->delete();
+        }
+    }
 }

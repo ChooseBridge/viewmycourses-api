@@ -18,4 +18,5 @@ interface SchoolDistrictServiceAbstract
     public function createDistrict($data);
 
     public function getDistrictById($id);
+
 }

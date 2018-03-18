@@ -52,7 +52,15 @@ Route::group(['middleware' => 'admin.user', 'as' => 'backend.'], function () {
     Route::get('admin/professor/reject', ['uses' => 'ProfessorController@reject', 'as' => 'professor.reject.get']);
 
     Route::get('admin/professor-rate/index', ['uses' => 'ProfessorRateController@Index', 'as' => 'professor-rate.index']);
+    Route::get('admin/professor-rate/approve', ['uses' => 'ProfessorRateController@approve', 'as' => 'professor-rate.aprove.get']);
+    Route::get('admin/professor-rate/reject', ['uses' => 'ProfessorRateController@reject', 'as' => 'professor-rate.reject.get']);
+    Route::get('admin/professor-rate/detail', ['uses' => 'ProfessorRateController@detail', 'as' => 'professor-rate.detail']);
+
+
     Route::get('admin/school-rate/index', ['uses' => 'SchoolRateController@Index', 'as' => 'school-rate.index']);
+    Route::get('admin/school-rate/approve', ['uses' => 'SchoolRateController@approve', 'as' => 'school-rate.aprove.get']);
+    Route::get('admin/school-rate/reject', ['uses' => 'SchoolRateController@reject', 'as' => 'school-rate.reject.get']);
+    Route::get('admin/school-rate/detail', ['uses' => 'SchoolRateController@detail', 'as' => 'school-rate.detail']);
 
 
     Route::post('admin/api/get-college-by-school', ['uses' => 'CollegeController@getCollegeBySchool', 'as' => 'get-college-by-school']);

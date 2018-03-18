@@ -28,6 +28,8 @@
                 <th>文字点评</th>
                 <th>标签</th>
                 <th>点评学生</th>
+                <th>审核状态</th>
+                <th>操作</th>
             </tr>
             @foreach ($rates as $rate)
                 <tr>
@@ -48,6 +50,17 @@
                     <td>{{$rate->comment}}</td>
                     <td>{{$rate->tag}}</td>
                     <td>{{$rate->student->name}}</td>
+                    <td>{{$rate->checkStatusName}}</td>
+                    <td>
+                        <a class="btn btn-success"
+                           href="{{route('backend.professor-rate.detail',['professor_rate_id' => $rate->professor_rate_id])}}">详情</a>
+                        {{--@if($rate->check_status == \App\ProfessorRate::PENDING_CHECK)--}}
+                            {{--<a class="btn btn-success"--}}
+                               {{--href="{{route('backend.professor-rate.aprove.get',['professor_rate_id' => $rate->professor_rate_id])}}">通过</a>--}}
+                            {{--<a class="btn btn-danger"--}}
+                               {{--href="{{route('backend.professor-rate.reject.get',['professor_rate_id' => $rate->professor_rate_id])}}">拒绝</a>--}}
+                        {{--@endif--}}
+                    </td>
 
                 </tr>
             @endforeach

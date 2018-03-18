@@ -33,6 +33,31 @@ class SchoolRateController extends Controller
         ]);
     }
 
+    public function detail(Request $request)
+    {
+        $schoolRateId = $request->get('school_rate_id');
+        $rate = $this->schoolRateService->getRateById($schoolRateId);
+        return view('school_rate.detail', [
+          'rate' => $rate
+        ]);
+    }
+
+    public function approve(Request $request)
+    {
+        $schoolRateId = $request->get('school_rate_id');
+        $this->schoolRateService->approveRateById($schoolRateId);
+        return redirect(route('backend.school-rate.index'));
+    }
+
+    public function reject(Request $request)
+    {
+        $schoolRateId = $request->get('school_rate_id');
+        $this->schoolRateService->rejectRateById($schoolRateId);
+        return redirect(route('backend.school-rate.index'));
+    }
+
+//api
+
     public function createRate(Request $request)
     {
         //待处理用户权限处理
@@ -74,4 +99,6 @@ class SchoolRateController extends Controller
 
 
     }
+
+
 }

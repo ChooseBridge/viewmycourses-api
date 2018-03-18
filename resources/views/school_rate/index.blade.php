@@ -23,8 +23,10 @@
                 <th>校园基础设施</th>
                 <th>生活幸福指数</th>
                 <th>校方与学生群体关系</th>
-                <th>文字点评</th>
+                {{--<th>文字点评</th>--}}
                 <th>点评学生</th>
+                <th>审核状态</th>
+                <th>操作</th>
 
             </tr>
             @foreach ($rates as $rate)
@@ -41,8 +43,20 @@
                     <td>{{$rate->campus_infrastructure}}</td>
                     <td>{{$rate->life_happiness_index}}</td>
                     <td>{{$rate->school_students_relations}}</td>
-                    <td>{{$rate->comment}}</td>
+                    {{--<td>{{$rate->comment}}</td>--}}
                     <td>{{$rate->student->name}}</td>
+                    <td>{{$rate->checkStatusName}}</td>
+                    <td>
+
+                        <a class="btn btn-success"
+                           href="{{route('backend.school-rate.detail',['school_rate_id' => $rate->school_rate_id])}}">详情</a>
+                        {{--@if($rate->check_status == \App\SchoolRate::PENDING_CHECK)--}}
+                            {{--<a class="btn btn-success"--}}
+                               {{--href="{{route('backend.school-rate.aprove.get',['school_rate_id' => $rate->school_rate_id])}}">通过</a>--}}
+                            {{--<a class="btn btn-danger"--}}
+                               {{--href="{{route('backend.school-rate.reject.get',['school_rate_id' => $rate->school_rate_id])}}">拒绝</a>--}}
+                        {{--@endif--}}
+                    </td>
 
                 </tr>
             @endforeach
