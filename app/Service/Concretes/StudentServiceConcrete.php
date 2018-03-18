@@ -44,6 +44,11 @@ class StudentServiceConcrete implements StudentServiceAbstract
         return $student;
     }
 
+    public function refreshAccessToken()
+    {
+        // TODO: Implement refreshAccessToken() method.
+    }
+
 
     public function setPoints($delta)
     {
