@@ -47,12 +47,33 @@ class StudentServiceConcrete implements StudentServiceAbstract
 
     public function refreshAccessToken()
     {
-        // TODO: Implement refreshAccessToken() method.
+        $client = new \GuzzleHttp\Client([
+          'base_uri' => env('UCENTER_URL')
+        ]);
+        $response = $client->request('POST', env('UCENTER_URL') . 'oauth/access_token', [
+          'form_params' => [
+            "client_id" => env('CLIENT_ID'),
+            "client_secret" => env('CLIENT_SECRET'),
+            "grant_type" => "refresh_token",
+            "refresh_token" => $GLOBALS['gStudent']->refresh_token,
+          ]
+        ]);
+        $body = $response->getBody();
+        $tokenInfo = json_decode($body, true);
+        if (!empty($tokenInfo) && isset($tokenInfo['access_token'])) {
+            $arr = [
+              'access_token' => $tokenInfo['access_token'],
+              'refresh_token' => $tokenInfo['refresh_token'],
+              'access_token_expires_time' => date("Y-m-d H:i:s", time() + $tokenInfo['expires_in']),
+            ];
+            $this->updateStudent($GLOBALS['gStudent'], $arr);
+        }
     }
 
 
     public function setPoints($delta)
     {
+        a:
         try {
             $client = new \GuzzleHttp\Client([
               'base_uri' => env('UCENTER_URL')
@@ -70,14 +91,17 @@ class StudentServiceConcrete implements StudentServiceAbstract
             }
 
         } catch (ClientException $exception) {
-            var_dump($exception->getCode());
-            die;
+            if ($exception->getCode() == 401) {
+                $this->refreshAccessToken();
+                goto a;
+            }
         }
 
     }
 
     public function getPoints()
     {
+        a:
         try {
             $client = new \GuzzleHttp\Client([
               'base_uri' => env('UCENTER_URL')
@@ -93,8 +117,10 @@ class StudentServiceConcrete implements StudentServiceAbstract
                 return $pointsInfo['entities']['points'];
             }
         } catch (ClientException $exception) {
-            var_dump($exception->getCode());
-            die;
+            if ($exception->getCode() == 401) {
+                $this->refreshAccessToken();
+                goto a;
+            }
         }
 
     }
