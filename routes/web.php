@@ -165,6 +165,7 @@ Route::group(['prefix' => 'api', 'middleware' => [\App\Http\Middleware\CheckLogi
     Route::get('get-all-school-by-name', ['uses' => 'SchoolController@getAllSchoolByName', 'as' => 'api.get-all-school-by-name']);
 
     Route::get('get-professor-by-condition', ['uses' => 'ProfessorController@getProfessorByCondition', 'as' => 'api.get-professor-by-condition']);
+    Route::get('get-professor-detail', ['uses' => 'ProfessorController@getProfessorDetail', 'as' => 'api.get-professor-detail']);
 
 
 });

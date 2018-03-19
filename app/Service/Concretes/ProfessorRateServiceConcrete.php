@@ -75,13 +75,18 @@ class ProfessorRateServiceConcrete implements ProfessorRateServiceAbstract
         return $rate;
     }
 
+    public function getRatesByProfessorId($professorId)
+    {
+        $rates = ProfessorRate::where('professor_id', $professorId)->get();
+        return $rates;
+    }
+
     public function approveRateById($id)
     {
         $rate = $this->getRateById($id);
         if ($rate) {
             $rate->check_status = ProfessorRate::APPROVE_CHECK;
             //待处理添加课程和课程类别 和添加积分
-
 
 
             //代表用户手动填写course_code

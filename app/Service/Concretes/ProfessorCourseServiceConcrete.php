@@ -37,4 +37,10 @@ class ProfessorCourseServiceConcrete implements ProfessorCourseServiceAbstract
           ->first();
         return !empty($professorCourse)?true:false;
     }
+
+    public function getCoursesByProfessorId($professorId)
+    {
+        $courses = ProfessorCourse::where('professor_id',$professorId)->get();
+        return $courses;
+    }
 }
