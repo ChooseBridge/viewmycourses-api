@@ -15,6 +15,7 @@ use App\Service\Abstracts\ProfessorCourseServiceAbstract;
 use App\Service\Abstracts\ProfessorRateServiceAbstract;
 use App\Service\Abstracts\SchoolCourseCategoryServiceAbstract;
 use App\Service\Abstracts\StudentServiceAbstract;
+use App\Student;
 use Illuminate\Support\Facades\Validator;
 
 class ProfessorRateServiceConcrete implements ProfessorRateServiceAbstract
@@ -88,6 +89,7 @@ class ProfessorRateServiceConcrete implements ProfessorRateServiceAbstract
             $rate->check_status = ProfessorRate::APPROVE_CHECK;
             //待处理添加课程和课程类别 和添加积分
 
+            $this->studentService->setPoints(Student::RATE_GET_POINT);
 
             //代表用户手动填写course_code
             if ($rate->course_id == 0) {

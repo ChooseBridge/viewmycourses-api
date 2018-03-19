@@ -26,6 +26,10 @@
                     <input type="text" class="form-control" name="school_nick_name" placeholder="学校昵称">
                 </div>
                 <div class="form-group">
+                    <label>学校昵称2</label>
+                    <input type="text" class="form-control" value="" name="school_nick_name_two" placeholder="学校昵称2">
+                </div>
+                <div class="form-group">
                     <label>网站地址</label>
                     <input type="text" class="form-control" name="website_url" placeholder="网站地址">
                 </div>

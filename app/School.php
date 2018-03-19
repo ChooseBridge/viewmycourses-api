@@ -23,6 +23,7 @@ class School extends Model
     protected $fillable = [
       'school_name',
       'school_nick_name',
+      'school_nick_name_two',
       'country_id',
       'province_id',
       'city_id',

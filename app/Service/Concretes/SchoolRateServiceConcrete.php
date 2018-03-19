@@ -11,10 +11,18 @@ namespace App\Service\Concretes;
 
 use App\SchoolRate;
 use App\Service\Abstracts\SchoolRateServiceAbstract;
+use App\Service\Abstracts\StudentServiceAbstract;
+use App\Student;
 use Illuminate\Support\Facades\Validator;
 
 class SchoolRateServiceConcrete implements SchoolRateServiceAbstract
 {
+    protected $studentService;
+
+    public function __construct(StudentServiceAbstract $studentService)
+    {
+        $this->studentService = $studentService;
+    }
 
     public function validatorForCreate($data)
     {
@@ -61,6 +69,7 @@ class SchoolRateServiceConcrete implements SchoolRateServiceAbstract
             $rate->check_status = SchoolRate::APPROVE_CHECK;
             $rate->save();
             //待处理添加积分
+            $this->studentService->setPoints(Student::RATE_GET_POINT);
         }
     }
 

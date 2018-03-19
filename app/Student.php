@@ -8,6 +8,8 @@ class Student extends Model
 {
     //
 
+    const RATE_GET_POINT = 500;
+
     protected $table = 'student';
 
     protected $primaryKey = 'student_id';

@@ -52,6 +52,9 @@ class SchoolController extends Controller
             $data['your_email'] = Auth::user()->email;
             $data['create_user_id'] = Auth::user()->id;
             $data['check_status'] = School::APPROVE_CHECK;
+            if($data['school_nick_name_two'] == null){
+                $data['school_nick_name_two'] = "";
+            }
             $validator = $this->schoolService->validatorForCreate($data);
             if ($validator !== true) {
                 return redirect(route('backend.school.add.get'))
