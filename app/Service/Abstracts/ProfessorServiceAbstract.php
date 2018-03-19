@@ -12,7 +12,7 @@ namespace App\Service\Abstracts;
 interface ProfessorServiceAbstract
 {
 
-    public function getProfessorsForPage($limit);
+    public function getProfessorsForPage($limit,$queryCallBack);
 
     public function validatorForCreate($data);
 

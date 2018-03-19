@@ -95,11 +95,11 @@ class ProfessorController extends Controller
         }
 
         $college = $this->collegeService->getCollegeById($data['college_id']);
-        if(!$college || $college->school->school_id != $data['school_id']){
+        if (!$college || $college->school->school_id != $data['school_id']) {
             throw new APIException('非法操作', APIException::ILLGAL_OPERATION);
         }
 
-        $data['professor_full_name'] = $data['professor_fisrt_name'].$data['professor_second_name'];
+        $data['professor_full_name'] = $data['professor_fisrt_name'] . $data['professor_second_name'];
         $data['create_student_id'] = $GLOBALS['gStudent']->student_id;
         $data['check_status'] = Professor::PENDING_CHECK;
         $professor = $this->professorService->createProfessor($data);
@@ -112,6 +112,63 @@ class ProfessorController extends Controller
           'data' => '创建成功'
         ];
 
+        return \Response::json($data);
+    }
+
+    /*
+     * 根据查询条件获取教授分页信息
+     */
+    public function getProfessorByCondition(Request $request)
+    {
+
+        $professors = [];
+        $schoolId = $request->get('school_id');
+        $professorName = $request->get('professor_name');
+        $collegeId = $request->get('college_id');
+
+        $queryCallBack = function ($query) use ($schoolId, $professorName, $collegeId) {
+
+            if ($schoolId) {
+                $query->where('school_id', $schoolId);
+            }
+            if ($professorName) {
+                $query->where('professor_full_name', 'like',"%$professorName%");
+            }
+            if ($collegeId) {
+                $query->where('college_id', $collegeId);
+            }
+
+        };
+        $result = $this->professorService->getProfessorsForPage(1, $queryCallBack);
+        foreach ($result as $professor) {
+            $professors[] = [
+              'professor_id' => $professor->professor_id,
+              'professor_full_name' => $professor->professor_full_name,
+              'professor_web_site' => $professor->professor_web_site,
+            ];
+        }
+
+        $pageInfo = $result->appends([
+          'school_id' => $schoolId,
+          'professor_name' => $professorName,
+          'college_id' => $collegeId,
+        ])->toArray();
+        $tmp = [];
+        $tmp['first_page_url'] = $pageInfo['first_page_url'];
+        $tmp['last_page_url'] = $pageInfo['last_page_url'];
+        $tmp['prev_page_url'] = $pageInfo['prev_page_url'];
+        $tmp['next_page_url'] = $pageInfo['next_page_url'];
+        $tmp['last_page_url'] = $pageInfo['last_page_url'];
+        $tmp['total'] = $pageInfo['total'];
+        $pageInfo = $tmp;
+
+        $data = [
+          'success' => true,
+          'data' => [
+            'professors' => $professors,
+            'pageInfo' => $pageInfo,
+          ]
+        ];
         return \Response::json($data);
     }
 }

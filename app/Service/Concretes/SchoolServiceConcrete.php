@@ -54,9 +54,14 @@ class SchoolServiceConcrete implements SchoolServiceAbstract
         }
     }
 
-    public function getSchoolsForPage($limit = 10)
+    public function getSchoolsForPage($limit = 10,$queryCallBack=null)
     {
-        $schools = School::paginate($limit);
+        if($queryCallBack){
+            $schools = School::where($queryCallBack)->paginate($limit);
+        }else{
+            $schools = School::paginate($limit);
+        }
+
         return $schools;
     }
 
@@ -66,9 +71,14 @@ class SchoolServiceConcrete implements SchoolServiceAbstract
         return $school;
     }
 
-    public function getAllSchools()
+    public function getAllSchools($queryCallBack=null)
     {
-        $schools = School::All();
+        if($queryCallBack){
+            $schools = School::where($queryCallBack)->get();
+        }else{
+            $schools = School::All();
+        }
+
         return $schools;
     }
 

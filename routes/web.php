@@ -160,6 +160,13 @@ Route::group(['prefix' => 'api', 'middleware' => [\App\Http\Middleware\CheckLogi
     Route::get('test-set-ponits', ['uses' => 'StudentController@setPoints', 'as' => 'api.test-set-ponits']);
     Route::get('test-get-ponits', ['uses' => 'StudentController@getPoints', 'as' => 'api.test-get-ponits']);
 
+//
+    Route::get('get-school-by-condition', ['uses' => 'SchoolController@getSchoolByCondition', 'as' => 'api.get-school-by-condition']);
+    Route::get('get-all-school-by-name', ['uses' => 'SchoolController@getAllSchoolByName', 'as' => 'api.get-all-school-by-name']);
+
+    Route::get('get-professor-by-condition', ['uses' => 'ProfessorController@getProfessorByCondition', 'as' => 'api.get-professor-by-condition']);
+
+
 });
 
 

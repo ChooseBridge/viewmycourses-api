@@ -19,11 +19,11 @@ interface SchoolServiceAbstract
 
     public function rejectSchoolById($id);
 
-    public function getSchoolsForPage($limit);
+    public function getSchoolsForPage($limit,$queryCallBack);
 
     public function getSchoolById($id);
 
-    public function getAllSchools();
+    public function getAllSchools($queryCallBack);
 
     public function getAllCheckedSchools();
 

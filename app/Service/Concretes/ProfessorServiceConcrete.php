@@ -16,9 +16,14 @@ use Illuminate\Support\Facades\Validator;
 class ProfessorServiceConcrete implements ProfessorServiceAbstract
 {
 
-    public function getProfessorsForPage($limit = 10)
+    public function getProfessorsForPage($limit = 10,$queryCallBack=null)
     {
-        $professors = Professor::paginate($limit);
+        if($queryCallBack){
+            $professors = Professor::where($queryCallBack)->paginate($limit);
+        }else{
+            $professors = Professor::paginate($limit);
+        }
+
         return $professors;
     }
 
