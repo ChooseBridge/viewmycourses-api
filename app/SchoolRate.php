@@ -22,6 +22,7 @@ class SchoolRate extends Model
 
     protected $fillable = [
       'school_district_id',
+      'school_id',
       'social_reputation',
       'academic_level',
       'network_services',
