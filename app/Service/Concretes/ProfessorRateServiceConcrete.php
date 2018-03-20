@@ -82,10 +82,38 @@ class ProfessorRateServiceConcrete implements ProfessorRateServiceAbstract
         return $rates;
     }
 
+    public function getEffortBySchoolId($schoolId)
+    {
+        $rates = $this->getCheckedRatesBySchoolId($schoolId);
+        $effort = 0;
+        $calculateAllEffort = [];
+        foreach ($rates as $rate) {
+            if (!isset($calculateAllEffort['effort'])) {
+                $calculateAllEffort['effort'] = $rate->effort;
+                $calculateAllEffort['num'] = 1;
+            } else {
+                $calculateAllEffort['effort'] += $rate->effort;
+                $calculateAllEffort['num'] += 1;
+            }
+        }
+        if (isset($calculateAllEffort['effort'])) {
+            $effort = $calculateAllEffort['effort'] / $calculateAllEffort['num'];
+        }
+        return $effort;
+    }
+
+    public function getCheckedRatesBySchoolId($schoolId)
+    {
+        $rates = ProfessorRate::where('school_id', $schoolId)
+          ->where('check_status', ProfessorRate::APPROVE_CHECK)
+          ->get();
+        return $rates;
+    }
+
     public function getCheckedRatesByProfessorId($professorId)
     {
         $rates = ProfessorRate::where('professor_id', $professorId)
-          ->where('check_status',ProfessorRate::APPROVE_CHECK)
+          ->where('check_status', ProfessorRate::APPROVE_CHECK)
           ->get();
         return $rates;
     }

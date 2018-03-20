@@ -6,7 +6,9 @@ use App\Exceptions\APIException;
 use App\School;
 use App\Service\Abstracts\CityServiceAbstract;
 use App\Service\Abstracts\CountryServiceAbstract;
+use App\Service\Abstracts\ProfessorRateServiceAbstract;
 use App\Service\Abstracts\ProvinceServiceAbstract;
+use App\Service\Abstracts\SchoolDistrictServiceAbstract;
 use App\Service\Abstracts\SchoolRateServiceAbstract;
 use App\Service\Abstracts\SchoolServiceAbstract;
 use function foo\func;
@@ -23,19 +25,25 @@ class SchoolController extends Controller
     protected $provinceService;
     protected $cityService;
     protected $schoolRateService;
+    protected $professorRateService;
+    protected $schoolDistrictService;
 
     public function __construct(
       SchoolServiceAbstract $schoolService,
       CountryServiceAbstract $countryService,
       ProvinceServiceAbstract $provinceService,
       CityServiceAbstract $cityService,
-      SchoolRateServiceAbstract $schoolRateService
+      SchoolRateServiceAbstract $schoolRateService,
+      ProfessorRateServiceAbstract $professorRateService,
+      SchoolDistrictServiceAbstract $schoolDistrictService
     ) {
         $this->schoolService = $schoolService;
         $this->countryService = $countryService;
         $this->provinceService = $provinceService;
         $this->cityService = $cityService;
         $this->schoolRateService = $schoolRateService;
+        $this->professorRateService = $professorRateService;
+        $this->schoolDistrictService = $schoolDistrictService;
     }
 
 // backend
@@ -259,37 +267,93 @@ class SchoolController extends Controller
         if (!$school) {
             throw new APIException("未知的学校", APIException::DATA_EXCEPTION);
         }
-        $schoolInfo = [
-            'school_name'=>$school->school_name,
-            'country'=>$school->country->country_name,
-            'province'=>$school->province->province_name,
-            'city'=>$school->city->city_name,
-            'website_url'=>$school->city->website_url,
-        ];
+
+
+        $effort = $this->professorRateService->getEffortBySchoolId($schoolId);
 
         $rates = $this->schoolRateService->getCheckedRatesBySchoolId($schoolId);
         $ratesInfo = [];
-        foreach ($rates as $rate){
+
+        $allScore = [];
+        $schoolDistrictScore = [];
+        foreach ($rates as $rate) {
+
+            if (!isset($allScore['score'])) {
+                $allScore['score'] = $rate->score;
+                $allScore['num'] = 1;
+            } else {
+                $allScore['score'] += $rate->score;
+                $allScore['num'] += 1;
+            }
+
+            if (!isset($schoolDistrictScore[$rate->school_district_id]['score'])) {
+                $schoolDistrictScore[$rate->school_district_id]['score'] = $rate->score;
+                $schoolDistrictScore[$rate->school_district_id]['num'] = 1;
+            } else {
+                $schoolDistrictScore[$rate->school_district_id]['score'] += $rate->score;
+                $schoolDistrictScore[$rate->school_district_id]['num'] += 1;
+            }
+
             $ratesInfo[] = [
-                'school_district_name'=>$rate->schoolDistrict->school_district_name,
-                'social_reputation'=>$rate->social_reputation,
-                'academic_level'=>$rate->academic_level,
-                'network_services'=>$rate->network_services,
-                'accommodation'=>$rate->accommodation,
-                'food_quality'=>$rate->food_quality,
-                'campus_location'=>$rate->campus_location,
-                'extracurricular_activities'=>$rate->extracurricular_activities,
-                'campus_infrastructure'=>$rate->campus_infrastructure,
-                'life_happiness_index'=>$rate->life_happiness_index,
-                'school_students_relations'=>$rate->school_students_relations,
-                'comment'=>$rate->comment,
-                'student_name'=>$rate->student->name,
+              'school_district_name' => $rate->schoolDistrict->school_district_name,
+              'social_reputation' => $rate->social_reputation,
+              'academic_level' => $rate->academic_level,
+              'network_services' => $rate->network_services,
+              'accommodation' => $rate->accommodation,
+              'food_quality' => $rate->food_quality,
+              'campus_location' => $rate->campus_location,
+              'extracurricular_activities' => $rate->extracurricular_activities,
+              'campus_infrastructure' => $rate->campus_infrastructure,
+              'life_happiness_index' => $rate->life_happiness_index,
+              'school_students_relations' => $rate->school_students_relations,
+              'comment' => $rate->comment,
+              'student_name' => $rate->student->name,
+              'score' => $rate->score,
+            ];
+        }
+
+        $schoolDistricts = $this->schoolDistrictService->getDistrictsBySchoolId($schoolId);
+        $schoolDistrictInfo = [];
+
+        foreach ($schoolDistricts as $schoolDistrict) {
+            $score = 0;
+            
+            if (isset($schoolDistrictScore[$schoolDistrict->school_district_id]['score'])) {
+                $score = $schoolDistrictScore[$schoolDistrict->school_district_id]['score'] / $schoolDistrictScore[$schoolDistrict->school_district_id]['num'];
+            }
+
+            $schoolDistrictInfo[] = [
+              'school_district_id' => $schoolDistrict->school_district_id,
+              'school_district_name' => $schoolDistrict->school_district_name,
+              'school_district_score' => $score,
             ];
         }
 
 
+        $schoolScore = 0;
+        if (isset($allScore['score'])) {
+            $schoolScore = $allScore['score'] / $allScore['num'];
+        }
+
+        $schoolInfo = [
+          'school_name' => $school->school_name,
+          'country' => $school->country->country_name,
+          'province' => $school->province->province_name,
+          'city' => $school->city->city_name,
+          'website_url' => $school->city->website_url,
+          'effort' => $effort,
+          'school_score' => $schoolScore,
+        ];
 
 
-        return \Response::json($ratesInfo);
+        $data = [
+          'success' => true,
+          'data' => [
+            'schoolInfo' => $schoolInfo,
+            'schoolDistrictInfo' => $schoolDistrictInfo,
+            'ratesInfo' => $ratesInfo,
+          ]
+        ];
+        return \Response::json($data);
     }
 }

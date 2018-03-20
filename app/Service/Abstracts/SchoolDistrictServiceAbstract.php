@@ -19,4 +19,6 @@ interface SchoolDistrictServiceAbstract
 
     public function getDistrictById($id);
 
+    public function getDistrictsBySchoolId($schoolId);
+
 }

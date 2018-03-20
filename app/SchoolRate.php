@@ -38,7 +38,24 @@ class SchoolRate extends Model
 
     ];
 
-    protected $appends = ['check_status_name'];
+    protected $appends = ['check_status_name', 'score'];
+
+    public function getScoreAttribute()
+    {
+        $total = 0;
+        $total += $this->social_reputation;
+        $total += $this->academic_level;
+        $total += $this->network_services;
+        $total += $this->accommodation;
+        $total += $this->food_quality;
+        $total += $this->campus_location;
+        $total += $this->extracurricular_activities;
+        $total += $this->campus_infrastructure;
+        $total += $this->life_happiness_index;
+        $total += $this->school_students_relations;
+        return $total / 10;
+
+    }
 
     public function getCheckStatusNameAttribute()
     {
