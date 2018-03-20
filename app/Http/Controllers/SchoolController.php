@@ -151,6 +151,7 @@ class SchoolController extends Controller
         $queryCallBack = function ($query) use ($schoolName) {
             $query->where('school_name', 'like', "%$schoolName%");
             $query->orWhere('school_nick_name', 'like', "%$schoolName%");
+            $query->orWhere('school_nick_name_two', 'like', "%$schoolName%");
         };
         $result = $this->schoolService->getAllSchools($queryCallBack);
 
@@ -192,6 +193,7 @@ class SchoolController extends Controller
                 $query->where(function ($query) use ($schoolName) {
                     $query->where('school_name', 'like', "%$schoolName%");
                     $query->orWhere('school_nick_name', 'like', "%$schoolName%");
+                    $query->orWhere('school_nick_name_two', 'like', "%$schoolName%");
                 });
             }
             if ($countryId) {

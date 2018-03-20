@@ -195,19 +195,48 @@ class ProfessorController extends Controller
         if (!$professor) {
             throw new APIException('未知的教授', APIException::DATA_EXCEPTION);
         }
-        $professorInfo = [
-          'professor_full_name' => $professor->professor_full_name,
-          'school' => $professor->school->school_name,
-          'country' => $professor->school->country->country_name,
-          'province' => $professor->school->province->province_name,
-          'city' => $professor->school->city->city_name,
-        ];
+
 
         $rateInfo = [];
         $rates = $this->professorRateService->getRatesByProfessorId($professorId);
 
         $tagsStr = "";
+        $calculateAllEffort = [];
+        $calculateCourseEffort = [];
+
         foreach ($rates as $rate) {
+
+            if (!isset($calculateAllEffort['effort'])) {
+                $calculateAllEffort['effort'] = $rate->effort;
+                $calculateAllEffort['num'] = 1;
+            } else {
+                $calculateAllEffort['effort'] += $rate->effort;
+                $calculateAllEffort['num'] += 1;
+            }
+
+            if (!isset($calculateCourseEffort[$rate->course_code]['effort'])) {
+                $calculateCourseEffort[$rate->course_code]['effort'] = $rate->effort;
+                $calculateCourseEffort[$rate->course_code]['num'] = 1;
+            } else {
+                $calculateCourseEffort[$rate->course_code]['effort'] += $rate->effort;
+                $calculateCourseEffort[$rate->course_code]['num'] += 1;
+            }
+
+            $professorEffort = 0;
+            if(isset($calculateAllEffort['effort'])){
+                $professorEffort = $calculateAllEffort['effort']/$calculateAllEffort['num'];
+            }
+
+            $professorInfo = [
+              'professor_full_name' => $professor->professor_full_name,
+              'school' => $professor->school->school_name,
+              'country' => $professor->school->country->country_name,
+              'province' => $professor->school->province->province_name,
+              'city' => $professor->school->city->city_name,
+              'effort' => $professorEffort,
+            ];
+
+
             $rateInfo[] = [
               'course_code' => $rate->course_code,
               'course_name' => $rate->course_name,
@@ -221,28 +250,34 @@ class ProfessorController extends Controller
               'grade' => $rate->grade,
               'comment' => $rate->comment,
               'tag' => $rate->tag,
+              'effort' => $rate->effort,
             ];
-            $tagsStr .=$rate->tag.",";
+            $tagsStr .= $rate->tag . ",";
         }
 
-        $tags = explode(',',rtrim($tagsStr,','));
+
+        $tags = explode(',', rtrim($tagsStr, ','));
         $tagsInfo = [];
-        foreach ($tags as $tag){
-            if(!isset($tagsInfo[$tag])){
+        foreach ($tags as $tag) {
+            if (!isset($tagsInfo[$tag])) {
                 $tagsInfo[$tag] = 1;
-            }else{
+            } else {
                 $tagsInfo[$tag] += 1;
             }
         }
 
 
-
         $coursesInfo = [];
         $courses = $this->professorCourseService->getCoursesByProfessorId($professorId);
         foreach ($courses as $course) {
+            $effort = 0;
+            if(isset($calculateCourseEffort[$course->course_code])){
+                $effort = $calculateCourseEffort[$course->course_code]['effort']/$calculateCourseEffort[$course->course_code]['num'];
+            }
             $coursesInfo = [
               'course_id' => $course->course_id,
               'course_code' => $course->course_code,
+              'effort' => $effort,
             ];
         }
 

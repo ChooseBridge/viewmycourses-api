@@ -44,8 +44,12 @@ class ProfessorRate extends Model
     ];
 
 
+    protected $appends = ['check_status_name,attend,effort'];
 
-    protected $appends = ['check_status_name,attend'];
+    public function getEffortAttribute()
+    {
+        return $this->difficult_level*$this->spend_course_time_at_week*$this->quiz_num*(5/$this->course_related_quiz);
+    }
 
     public function getCheckStatusNameAttribute()
     {
