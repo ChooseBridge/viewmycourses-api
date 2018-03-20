@@ -17,6 +17,10 @@ interface SchoolRateServiceAbstract
 
     public function getRatesForPage($limit);
 
+    public function getRatesBySchoolId($schoolId);
+
+    public function getCheckedRatesBySchoolId($schoolId);
+
     public function getRateById($id);
 
     public function approveRateById($id);

@@ -21,6 +21,8 @@ interface ProfessorRateServiceAbstract
 
     public function getRatesByProfessorId($professorId);
 
+    public function getCheckedRatesByProfessorId($professorId);
+
     public function approveRateById($id);
 
     public function rejectRateById($id);

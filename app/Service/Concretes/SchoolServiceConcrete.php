@@ -40,7 +40,7 @@ class SchoolServiceConcrete implements SchoolServiceAbstract
     public function approveSchoolById($id)
     {
         $school = $this->getSchoolById($id);
-        if($school){
+        if ($school) {
             $school->check_status = School::APPROVE_CHECK;
             $school->save();
         }
@@ -49,19 +49,29 @@ class SchoolServiceConcrete implements SchoolServiceAbstract
     public function rejectSchoolById($id)
     {
         $school = $this->getSchoolById($id);
-        if($school){
+        if ($school) {
             $school->delete();
         }
     }
 
-    public function getSchoolsForPage($limit = 10,$queryCallBack=null)
+    public function getSchoolsForPage($limit = 10, $queryCallBack = null)
     {
-        if($queryCallBack){
+        if ($queryCallBack) {
             $schools = School::where($queryCallBack)->paginate($limit);
-        }else{
+        } else {
             $schools = School::paginate($limit);
         }
 
+        return $schools;
+    }
+
+    public function getAllCheckedSchoolsForPage($limit, $queryCallBack)
+    {
+        $bulider = School::where('check_status', School::APPROVE_CHECK);
+        if ($queryCallBack) {
+            $bulider->where($queryCallBack);
+        }
+        $schools = $bulider->paginate($limit);
         return $schools;
     }
 
@@ -71,20 +81,25 @@ class SchoolServiceConcrete implements SchoolServiceAbstract
         return $school;
     }
 
-    public function getAllSchools($queryCallBack=null)
+    public function getAllSchools($queryCallBack = null)
     {
-        if($queryCallBack){
+        if ($queryCallBack) {
             $schools = School::where($queryCallBack)->get();
-        }else{
+        } else {
             $schools = School::All();
         }
 
         return $schools;
     }
 
-    public function getAllCheckedSchools()
+    public function getAllCheckedSchools($queryCallBack = null)
     {
-        $schools = School::where('check_status',School::APPROVE_CHECK)->get();
+
+        $bulider = School::where('check_status', School::APPROVE_CHECK);
+        if ($queryCallBack) {
+            $bulider->where($queryCallBack);
+        }
+        $schools = $bulider->get();
         return $schools;
     }
 
@@ -92,13 +107,22 @@ class SchoolServiceConcrete implements SchoolServiceAbstract
     {
         $schools = $this->getAllCheckedSchools();
         $res = [];
-        foreach ($schools as $school){
+        foreach ($schools as $school) {
             $res[$school->country->country_name][] = [
-              'school_id'=>$school->school_id,
-              'school_name'=>$school->school_name,
-              'school_nick_name'=>$school->school_nick_name,
+              'school_id' => $school->school_id,
+              'school_name' => $school->school_name,
+              'school_nick_name' => $school->school_nick_name,
             ];
         }
         return $res;
+    }
+
+    public function isCheckedById($id)
+    {
+        $school = $this->getSchoolById($id);
+        if ($school && $school->check_status == School::APPROVE_CHECK) {
+            return true;
+        }
+        return false;
     }
 }

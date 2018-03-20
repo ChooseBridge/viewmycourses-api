@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\APIException;
 use App\Service\Abstracts\SchoolDistrictServiceAbstract;
 use App\Service\Abstracts\SchoolRateServiceAbstract;
+use App\Service\Abstracts\SchoolServiceAbstract;
 use Illuminate\Http\Request;
 
 class SchoolRateController extends Controller
@@ -13,13 +14,16 @@ class SchoolRateController extends Controller
 
     protected $schoolRateService;
     protected $schoolDistrictService;
+    protected $schoolService;
 
     public function __construct(
       SchoolRateServiceAbstract $schoolRateService,
-      SchoolDistrictServiceAbstract $schoolDistrictService
+      SchoolDistrictServiceAbstract $schoolDistrictService,
+      SchoolServiceAbstract $schoolService
     ) {
         $this->schoolRateService = $schoolRateService;
         $this->schoolDistrictService = $schoolDistrictService;
+        $this->schoolService = $schoolService;
     }
 
 
@@ -67,9 +71,17 @@ class SchoolRateController extends Controller
         if (!isset($data['school_district_id'])) {
             throw new APIException("school district id 参数缺失", APIException::MISS_PARAM);
         }
+        if (!isset($data['school_id'])) {
+            throw new APIException("school id 参数缺失", APIException::MISS_PARAM);
+        }
+
+        $isChecked = $this->schoolService->isCheckedById($data['school_id']);
+        if (!$isChecked) {
+            throw new APIException("未被审核的学校不能点评", APIException::DATA_EXCEPTION);
+        }
+
 
         $district = $this->schoolDistrictService->getDistrictById($data['school_district_id']);
-
         if (!$district) {
             throw new APIException("未知的校区", APIException::DATA_EXCEPTION);
         }

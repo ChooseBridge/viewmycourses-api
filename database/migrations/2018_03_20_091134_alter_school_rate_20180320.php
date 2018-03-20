@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AlterSchool20180319 extends Migration
+class AlterSchoolRate20180320 extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,8 @@ class AlterSchool20180319 extends Migration
     public function up()
     {
         //
-        Schema::table('school', function (Blueprint $table) {
-            $table->string('school_nick_name_two')->after('school_nick_name')->default("");
+        Schema::table('school_rate', function (Blueprint $table) {
+            $table->integer('school_id')->after('school_rate_id');
         });
     }
 
@@ -27,8 +27,8 @@ class AlterSchool20180319 extends Migration
     public function down()
     {
         //
-        Schema::table('school', function (Blueprint $table) {
-            $table->dropColumn('school_nick_name_two')->default(0);
+        Schema::table('school_rate', function (Blueprint $table) {
+            $table->dropColumn('school_id')->default(0);
         });
     }
 }

@@ -56,16 +56,29 @@ class SchoolRateServiceConcrete implements SchoolRateServiceAbstract
         return $rates;
     }
 
+    public function getRatesBySchoolId($schoolId)
+    {
+        $rates = SchoolRate::where('school_id', $schoolId)->get();
+        return $rates;
+    }
+
+    public function getCheckedRatesBySchoolId($schoolId)
+    {
+        $rates = SchoolRate::where('school_id', $schoolId)
+          ->where('check_status', SchoolRate::APPROVE_CHECK)->get();
+        return $rates;
+    }
+
     public function getRateById($id)
     {
-        $rate = SchoolRate::where('school_rate_id',$id)->first();
+        $rate = SchoolRate::where('school_rate_id', $id)->first();
         return $rate;
     }
 
     public function approveRateById($id)
     {
         $rate = $this->getRateById($id);
-        if($rate){
+        if ($rate) {
             $rate->check_status = SchoolRate::APPROVE_CHECK;
             $rate->save();
             //待处理添加积分
@@ -76,7 +89,7 @@ class SchoolRateServiceConcrete implements SchoolRateServiceAbstract
     public function rejectRateById($id)
     {
         $rate = $this->getRateById($id);
-        if($rate){
+        if ($rate) {
             $rate->delete();
         }
     }

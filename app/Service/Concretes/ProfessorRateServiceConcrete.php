@@ -82,6 +82,14 @@ class ProfessorRateServiceConcrete implements ProfessorRateServiceAbstract
         return $rates;
     }
 
+    public function getCheckedRatesByProfessorId($professorId)
+    {
+        $rates = ProfessorRate::where('professor_id', $professorId)
+          ->where('check_status',ProfessorRate::APPROVE_CHECK)
+          ->get();
+        return $rates;
+    }
+
     public function approveRateById($id)
     {
         $rate = $this->getRateById($id);

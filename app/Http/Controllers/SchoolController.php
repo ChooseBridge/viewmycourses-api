@@ -7,6 +7,7 @@ use App\School;
 use App\Service\Abstracts\CityServiceAbstract;
 use App\Service\Abstracts\CountryServiceAbstract;
 use App\Service\Abstracts\ProvinceServiceAbstract;
+use App\Service\Abstracts\SchoolRateServiceAbstract;
 use App\Service\Abstracts\SchoolServiceAbstract;
 use function foo\func;
 use Illuminate\Http\Request;
@@ -21,17 +22,20 @@ class SchoolController extends Controller
     protected $countryService;
     protected $provinceService;
     protected $cityService;
+    protected $schoolRateService;
 
     public function __construct(
       SchoolServiceAbstract $schoolService,
       CountryServiceAbstract $countryService,
       ProvinceServiceAbstract $provinceService,
-      CityServiceAbstract $cityService
+      CityServiceAbstract $cityService,
+      SchoolRateServiceAbstract $schoolRateService
     ) {
         $this->schoolService = $schoolService;
         $this->countryService = $countryService;
         $this->provinceService = $provinceService;
         $this->cityService = $cityService;
+        $this->schoolRateService = $schoolRateService;
     }
 
 // backend
@@ -52,7 +56,7 @@ class SchoolController extends Controller
             $data['your_email'] = Auth::user()->email;
             $data['create_user_id'] = Auth::user()->id;
             $data['check_status'] = School::APPROVE_CHECK;
-            if($data['school_nick_name_two'] == null){
+            if ($data['school_nick_name_two'] == null) {
                 $data['school_nick_name_two'] = "";
             }
             $validator = $this->schoolService->validatorForCreate($data);
@@ -153,7 +157,7 @@ class SchoolController extends Controller
             $query->orWhere('school_nick_name', 'like', "%$schoolName%");
             $query->orWhere('school_nick_name_two', 'like', "%$schoolName%");
         };
-        $result = $this->schoolService->getAllSchools($queryCallBack);
+        $result = $this->schoolService->getAllCheckedSchools($queryCallBack);
 
         foreach ($result as $school) {
             $shcools[] = [
@@ -207,7 +211,7 @@ class SchoolController extends Controller
             }
 
         };
-        $result = $this->schoolService->getSchoolsForPage(1, $queryCallBack);
+        $result = $this->schoolService->getAllCheckedSchoolsForPage(1, $queryCallBack);
 
         foreach ($result as $school) {
             $shcools[] = [
@@ -241,5 +245,51 @@ class SchoolController extends Controller
           ]
         ];
         return \Response::json($data);
+    }
+
+    public function getSchoolDetail(Request $request)
+    {
+        //待处理每日推荐的教授是什么逻辑  努力指数是什么意思
+
+        $schoolId = $request->get('school_id', null);
+        if (!$schoolId) {
+            throw new APIException("参数school id缺失", APIException::MISS_PARAM);
+        }
+        $school = $this->schoolService->getSchoolById($schoolId);
+        if (!$school) {
+            throw new APIException("未知的学校", APIException::DATA_EXCEPTION);
+        }
+        $schoolInfo = [
+            'school_name'=>$school->school_name,
+            'country'=>$school->country->country_name,
+            'province'=>$school->province->province_name,
+            'city'=>$school->city->city_name,
+            'website_url'=>$school->city->website_url,
+        ];
+
+        $rates = $this->schoolRateService->getCheckedRatesBySchoolId($schoolId);
+        $ratesInfo = [];
+        foreach ($rates as $rate){
+            $ratesInfo[] = [
+                'school_district_name'=>$rate->schoolDistrict->school_district_name,
+                'social_reputation'=>$rate->social_reputation,
+                'academic_level'=>$rate->academic_level,
+                'network_services'=>$rate->network_services,
+                'accommodation'=>$rate->accommodation,
+                'food_quality'=>$rate->food_quality,
+                'campus_location'=>$rate->campus_location,
+                'extracurricular_activities'=>$rate->extracurricular_activities,
+                'campus_infrastructure'=>$rate->campus_infrastructure,
+                'life_happiness_index'=>$rate->life_happiness_index,
+                'school_students_relations'=>$rate->school_students_relations,
+                'comment'=>$rate->comment,
+                'student_name'=>$rate->student->name,
+            ];
+        }
+
+
+
+
+        return \Response::json($ratesInfo);
     }
 }

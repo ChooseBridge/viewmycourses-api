@@ -21,13 +21,17 @@ interface SchoolServiceAbstract
 
     public function getSchoolsForPage($limit,$queryCallBack);
 
+    public function getAllCheckedSchoolsForPage($limit,$queryCallBack);
+
     public function getSchoolById($id);
 
     public function getAllSchools($queryCallBack);
 
-    public function getAllCheckedSchools();
+    public function getAllCheckedSchools($queryCallBack);
 
     public function getAllCheckedSchoolsGroupCountry();
+
+    public function isCheckedById($id);
 
 
 }

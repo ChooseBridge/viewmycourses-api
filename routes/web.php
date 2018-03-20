@@ -151,6 +151,7 @@ Route::group(['prefix' => 'api', 'middleware' => [\App\Http\Middleware\CheckLogi
     Route::post('school/create', ['uses' => 'SchoolController@createSchool', 'as' => 'school.create']);
     Route::post('professor/create', ['uses' => 'ProfessorController@createProfessor', 'as' => 'professor.create']);
     Route::post('professor-rate/create', ['uses' => 'ProfessorRateController@createRate', 'as' => 'professor-rate.create']);
+    //接口修改
     Route::post('school-rate/create', ['uses' => 'SchoolRateController@createRate', 'as' => 'school-rate.create']);
 
     Route::post('get-college-by-school', ['uses' => 'CollegeController@getCollegeBySchool', 'as' => 'api.get-college-by-school']);
@@ -163,6 +164,7 @@ Route::group(['prefix' => 'api', 'middleware' => [\App\Http\Middleware\CheckLogi
 //
     Route::get('get-school-by-condition', ['uses' => 'SchoolController@getSchoolByCondition', 'as' => 'api.get-school-by-condition']);
     Route::get('get-all-school-by-name', ['uses' => 'SchoolController@getAllSchoolByName', 'as' => 'api.get-all-school-by-name']);
+    Route::get('get-school-detail', ['uses' => 'SchoolController@getSchoolDetail', 'as' => 'api.get-school-detail']);
 
     Route::get('get-professor-by-condition', ['uses' => 'ProfessorController@getProfessorByCondition', 'as' => 'api.get-professor-by-condition']);
     Route::get('get-professor-detail', ['uses' => 'ProfessorController@getProfessorDetail', 'as' => 'api.get-professor-detail']);
