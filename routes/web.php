@@ -129,10 +129,10 @@ Route::get('/callback', function (\App\Service\Abstracts\StudentServiceAbstract 
                       'refresh_token' => $tokenInfo['refresh_token'],
                       'access_token_expires_time' => date("Y-m-d H:i:s", time() + $tokenInfo['expires_in']),
                       'ucenter_uid' => $ucenterId,
-                      'mobile' => (string)$userInfo['profile']['mobile'],
-                      'mobile_verified' => $userInfo['profile']['mobile_verified'],
-                      'email_verified' => $userInfo['profile']['email_verified'],
-                      'is_email_edu' => (int)$userInfo['profile']['is_email_edu'],
+                      'mobile' => (string)$userInfo['entities'][0]['profile']['mobile'],
+                      'mobile_verified' => $userInfo['entities'][0]['profile']['mobile_verified'],
+                      'email_verified' => $userInfo['entities'][0]['profile']['email_verified'],
+                      'is_email_edu' => (int)$userInfo['entities'][0]['profile']['is_email_edu'],
 
                     ];
 
@@ -162,31 +162,31 @@ Route::get('/callback', function (\App\Service\Abstracts\StudentServiceAbstract 
                     ];
 
                     //说明之前没有验证邮箱 现在验证了
-                    if($student->email_verified == 0 && $userInfo['profile']['email_verified']){
+                    if($student->email_verified == 0 && $userInfo['entities'][0]['profile']['email_verified']){
 
                         //如果是edu邮箱 并且第一次为vip
                         if($student->is_email_edu && $student->vip_expire_time == '1970-01-01 00:00:00'){
                             $arr['is_vip'] = 1;
                             $arr['vip_expire_time'] = date("Y-m-d H:i:s",strtotime("+6 month",time()));
-                            $arr['email_verified'] = $userInfo['profile']['email_verified'];
+                            $arr['email_verified'] = $userInfo['entities'][0]['profile']['email_verified'];
                         }elseif ($student->is_email_edu){
                             //有可能是微信登录的未验证的edu邮箱用户
                             $arr['is_vip'] = 1;
-                            $arr['vip_expire_time'] = date("Y-m-d H:i:s",strtotime("+5 month 2 week",strtotime($arr['vip_expire_time'])));
-                            $arr['email_verified'] = $userInfo['profile']['email_verified'];
+                            $arr['vip_expire_time'] = date("Y-m-d H:i:s",strtotime("+5 month 2 week",strtotime($student->vip_expire_time)));
+                            $arr['email_verified'] = $userInfo['entities'][0]['profile']['email_verified'];
                         }else{
-                            $arr['email_verified'] = $userInfo['profile']['email_verified'];
+                            $arr['email_verified'] = $userInfo['entities'][0]['profile']['email_verified'];
                         }
 
-                        if($student->mobile != (string)$userInfo['profile']['mobile']){
-                            $arr['mobile'] = $userInfo['profile']['mobile'];
+                        if($student->mobile != (string)$userInfo['entities'][0]['profile']['mobile']){
+                            $arr['mobile'] = $userInfo['entities'][0]['profile']['mobile'];
                         }
-                        if($student->mobile_verified != $userInfo['profile']['mobile_verified']){
-                            $arr['mobile_verified'] = $userInfo['profile']['mobile_verified'];
+                        if($student->mobile_verified != $userInfo['entities'][0]['profile']['mobile_verified']){
+                            $arr['mobile_verified'] = $userInfo['entities'][0]['profile']['mobile_verified'];
                         }
 
                         //vip失效
-                        if(time() > strtotime($arr['vip_expire_time'])){
+                        if(time() > strtotime($student->vip_expire_time)){
                             $arr['is_vip'] = 0;
                         }
 
