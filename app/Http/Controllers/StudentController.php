@@ -103,7 +103,7 @@ class StudentController extends Controller
     public function setPoints()
     {
         $delta = $_GET['delta'];
-        $data = $this->studentService->setPoints($delta,'',$GLOBALS['gStudent']);
+        $data = $this->studentService->setPoints($delta,'11',$GLOBALS['gStudent']);
         var_dump($data);
     }
 
