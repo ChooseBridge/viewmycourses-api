@@ -80,7 +80,7 @@ class StudentServiceConcrete implements StudentServiceAbstract
             ]);
             $response = $client->request('PUT', env('UCENTER_URL') . self::SET_POINTS_URL, [
               'headers' => [
-                'Authorization' => $student->access_token,
+                'Authorization' => "Bearer " .$student->access_token,
               ],
               'json' => [
                 'comment' =>$comment,
@@ -110,7 +110,7 @@ class StudentServiceConcrete implements StudentServiceAbstract
             ]);
             $response = $client->request('GET', env('UCENTER_URL') . self::GET_POINTS_URL, [
               'headers' => [
-                'Authorization' => $student->access_token
+                'Authorization' => "Bearer " .$student->access_token
               ]
             ]);
             $content = $response->getBody()->getContents();
