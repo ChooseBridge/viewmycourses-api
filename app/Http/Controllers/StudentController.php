@@ -109,7 +109,7 @@ class StudentController extends Controller
 
     public function getPoints()
     {
-        $data = $this->studentService->getPoints();
+        $data = $this->studentService->getPoints($GLOBALS['gStudent']);
         var_dump($data);
     }
 
