@@ -77,7 +77,7 @@ Route::get('/callback', function (\App\Service\Abstracts\StudentServiceAbstract 
         $client = new \GuzzleHttp\Client([
           'base_uri' => env('UCENTER_URL')
         ]);
-        $response = $client->request('POST', env('UCENTER_URL') . 'oauth/access_token', [
+        $response = $client->request('POST', env('UCENTER_URL') . 'oauth/token', [
           'form_params' => [
             "client_id" => env('CLIENT_ID'),
             "client_secret" => env('CLIENT_SECRET'),
