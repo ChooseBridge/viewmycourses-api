@@ -92,7 +92,7 @@ Route::get('/callback', function (\App\Service\Abstracts\StudentServiceAbstract 
             $response = $client->request('GET',
               env('UCENTER_URL') . '/api/user/basic',[
                 'headers' => [
-                  'Authorization' => $tokenInfo['access_token'],
+                  'Authorization' => "Bearer".$tokenInfo['access_token'],
                 ]
               ]);
             $content = $response->getBody()->getContents();
