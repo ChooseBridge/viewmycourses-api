@@ -118,6 +118,14 @@ class ProfessorRateServiceConcrete implements ProfessorRateServiceAbstract
         return $rates;
     }
 
+    public function getRatesByStudentId($studentId,$orderBy=["professor_rate_id","desc"])
+    {
+        $rates = ProfessorRate::where('create_student_id', $studentId)
+          ->orderBy($orderBy[0],$orderBy[1])
+          ->get();
+        return $rates;
+    }
+
     public function approveRateById($id)
     {
         $rate = $this->getRateById($id);

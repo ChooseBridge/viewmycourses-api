@@ -69,6 +69,14 @@ class SchoolRateServiceConcrete implements SchoolRateServiceAbstract
         return $rates;
     }
 
+    public function getRatesByStudentId($studentId,$orderBy=['school_rate_id','desc'])
+    {
+        $rates = SchoolRate::where('create_student_id', $studentId)
+          ->orderBy($orderBy[0],$orderBy[1])
+          ->get();
+        return $rates;
+    }
+
     public function getRateById($id)
     {
         $rate = SchoolRate::where('school_rate_id', $id)->first();

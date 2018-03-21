@@ -69,6 +69,11 @@ class ProfessorRate extends Model
         return $this->belongsTo('App\Professor', 'professor_id', 'professor_id');
     }
 
+    public function school()
+    {
+        return $this->belongsTo('App\School', 'school_id', 'school_id');
+    }
+
     public function student()
     {
         return $this->belongsTo('App\Student', 'create_student_id', 'student_id');

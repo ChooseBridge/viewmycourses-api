@@ -21,6 +21,8 @@ interface SchoolRateServiceAbstract
 
     public function getCheckedRatesBySchoolId($schoolId);
 
+    public function getRatesByStudentId($studentId,$orderBy);
+
     public function getRateById($id);
 
     public function approveRateById($id);

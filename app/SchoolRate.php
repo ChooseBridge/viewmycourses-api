@@ -71,6 +71,11 @@ class SchoolRate extends Model
         return $this->belongsTo('App\SchoolDistrict', 'school_district_id', 'school_district_id');
     }
 
+    public function school()
+    {
+        return $this->belongsTo('App\School', 'school_id', 'school_id');
+    }
+
     public function student()
     {
         return $this->belongsTo('App\Student', 'create_student_id', 'student_id');
