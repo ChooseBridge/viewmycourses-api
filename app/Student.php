@@ -23,6 +23,12 @@ class Student extends Model
       'access_token',
       'refresh_token',
       'access_token_expires_time',
-      'ucenter_uid'
+      'ucenter_uid',
+      'is_vip',
+      'vip_expire_time',
+      'mobile',
+      'mobile_verified',
+      'email_verified',
+      'is_email_edu',
     ];
 }
