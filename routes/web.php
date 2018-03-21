@@ -90,7 +90,11 @@ Route::get('/callback', function (\App\Service\Abstracts\StudentServiceAbstract 
         $tokenInfo = json_decode($body, true);
         if (!empty($tokenInfo) && isset($tokenInfo['access_token'])) {
             $response = $client->request('GET',
-              env('UCENTER_URL') . '/api/user/basic?access_token=' . $tokenInfo['access_token']);
+              env('UCENTER_URL') . '/api/user/basic',[
+                'headers' => [
+                  'Authorization' => $tokenInfo['access_token'],
+                ]
+              ]);
             $content = $response->getBody()->getContents();
             $userInfo = json_decode($content, true);
             if (!empty($userInfo) && $userInfo['success']) {

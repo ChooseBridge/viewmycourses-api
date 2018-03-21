@@ -26,7 +26,12 @@
                     <td>{{$professor->professor_id}}</td>
                     <td>{{$professor->professor_full_name}}</td>
                     <td>{{$professor->professor_web_site}}</td>
-                    <td>{{$professor->school->school_name}}</td>
+                    @if($professor->school)
+                        <td>{{$professor->school->school_name}}</td>
+                    @else
+                        <td></td>
+                    @endif
+
                     <td>{{$professor->college->college_name}}</td>
                     @if(!empty($professor->student))
                         <td>{{$professor->student->name}}</td>

@@ -19,11 +19,11 @@ interface StudentServiceAbstract{
 
     public function getStudentByToken($token);
 
-    public function refreshAccessToken();
+    public function refreshAccessToken($student);
 
-    public function setPoints($delta);
+    public function setPoints($delta,$comment,$student);
 
-    public function getPoints();
+    public function getPoints($student);
 
 
 

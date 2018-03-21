@@ -45,7 +45,7 @@ class StudentServiceConcrete implements StudentServiceAbstract
         return $student;
     }
 
-    public function refreshAccessToken()
+    public function refreshAccessToken($student)
     {
         $client = new \GuzzleHttp\Client([
           'base_uri' => env('UCENTER_URL')
@@ -55,7 +55,7 @@ class StudentServiceConcrete implements StudentServiceAbstract
             "client_id" => env('CLIENT_ID'),
             "client_secret" => env('CLIENT_SECRET'),
             "grant_type" => "refresh_token",
-            "refresh_token" => $GLOBALS['gStudent']->refresh_token,
+            "refresh_token" => $student->refresh_token,
           ]
         ]);
         $body = $response->getBody();
@@ -66,12 +66,12 @@ class StudentServiceConcrete implements StudentServiceAbstract
               'refresh_token' => $tokenInfo['refresh_token'],
               'access_token_expires_time' => date("Y-m-d H:i:s", time() + $tokenInfo['expires_in']),
             ];
-            $this->updateStudent($GLOBALS['gStudent'], $arr);
+            $this->updateStudent($student, $arr);
         }
     }
 
 
-    public function setPoints($delta)
+    public function setPoints($delta,$comment,$student)
     {
         a:
         try {
@@ -79,27 +79,29 @@ class StudentServiceConcrete implements StudentServiceAbstract
               'base_uri' => env('UCENTER_URL')
             ]);
             $response = $client->request('PUT', env('UCENTER_URL') . self::SET_POINTS_URL, [
+              'headers' => [
+                'Authorization' => $student->access_token,
+              ],
               'json' => [
-                'access_token' => $GLOBALS['gStudent']->access_token,
+                'comment' =>$comment,
                 'delta' => $delta,
               ]
             ]);
             $content = $response->getBody()->getContents();
             $pointsInfo = json_decode($content, true);
-            if ($pointsInfo['success']) {
-                return $pointsInfo['entities'];
-            }
+
+            return $pointsInfo['success'];
 
         } catch (ClientException $exception) {
             if ($exception->getCode() == 401) {
-                $this->refreshAccessToken();
+                $this->refreshAccessToken($student);
                 goto a;
             }
         }
 
     }
 
-    public function getPoints()
+    public function getPoints($student)
     {
         a:
         try {
@@ -107,8 +109,8 @@ class StudentServiceConcrete implements StudentServiceAbstract
               'base_uri' => env('UCENTER_URL')
             ]);
             $response = $client->request('GET', env('UCENTER_URL') . self::GET_POINTS_URL, [
-              'query' => [
-                'access_token' => $GLOBALS['gStudent']->access_token
+              'headers' => [
+                'Authorization' => $student->access_token
               ]
             ]);
             $content = $response->getBody()->getContents();
@@ -118,7 +120,7 @@ class StudentServiceConcrete implements StudentServiceAbstract
             }
         } catch (ClientException $exception) {
             if ($exception->getCode() == 401) {
-                $this->refreshAccessToken();
+                $this->refreshAccessToken($student);
                 goto a;
             }
         }

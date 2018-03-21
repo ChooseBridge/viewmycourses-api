@@ -9,8 +9,10 @@
 namespace App\Service\Concretes;
 
 
+use App\Exceptions\APIException;
 use App\ProfessorRate;
 use App\SchoolCourseCategory;
+use App\Service\Abstracts\MessageServiceAbstract;
 use App\Service\Abstracts\ProfessorCourseServiceAbstract;
 use App\Service\Abstracts\ProfessorRateServiceAbstract;
 use App\Service\Abstracts\SchoolCourseCategoryServiceAbstract;
@@ -24,15 +26,18 @@ class ProfessorRateServiceConcrete implements ProfessorRateServiceAbstract
     protected $professorCourseService;
     protected $schoolCourseCategoryService;
     protected $studentService;
+    protected $messageService;
 
     public function __construct(
       ProfessorCourseServiceAbstract $professorCourseService,
       SchoolCourseCategoryServiceAbstract $schoolCourseCategoryService,
-      StudentServiceAbstract $studentService
+      StudentServiceAbstract $studentService,
+      MessageServiceAbstract $messageService
     ) {
         $this->professorCourseService = $professorCourseService;
         $this->schoolCourseCategoryService = $schoolCourseCategoryService;
         $this->studentService = $studentService;
+        $this->messageService = $messageService;
     }
 
     public function validatorForCreate($data)
@@ -118,10 +123,10 @@ class ProfessorRateServiceConcrete implements ProfessorRateServiceAbstract
         return $rates;
     }
 
-    public function getRatesByStudentId($studentId,$orderBy=["professor_rate_id","desc"])
+    public function getRatesByStudentId($studentId, $orderBy = ["professor_rate_id", "desc"])
     {
         $rates = ProfessorRate::where('create_student_id', $studentId)
-          ->orderBy($orderBy[0],$orderBy[1])
+          ->orderBy($orderBy[0], $orderBy[1])
           ->get();
         return $rates;
     }
@@ -133,41 +138,72 @@ class ProfessorRateServiceConcrete implements ProfessorRateServiceAbstract
             $rate->check_status = ProfessorRate::APPROVE_CHECK;
             //待处理添加课程和课程类别 和添加积分
 
-            $this->studentService->setPoints(Student::RATE_GET_POINT);
+            try {
+                \DB::beginTransaction();
 
-            //代表用户手动填写course_code
-            if ($rate->course_id == 0) {
-                $hasCourse = $this->professorCourseService->professorHasCourse($rate->professor_id, $rate->course_code);
-                if (!$hasCourse) {
-                    $data = [
-                      'professor_id' => $rate->professor_id,
-                      'course_code' => $rate->course_code,
-                    ];
-                    if ($this->professorCourseService->validatorForCreate($data)) {
-                        $course = $this->professorCourseService->createCourse($data);
-                        $rate->course_id = $course->course_id;
-                    }
+                //代表用户手动填写course_code
+                if ($rate->course_id == 0) {
+                    $hasCourse = $this->professorCourseService->professorHasCourse($rate->professor_id,
+                      $rate->course_code);
+                    if (!$hasCourse) {
+                        $data = [
+                          'professor_id' => $rate->professor_id,
+                          'course_code' => $rate->course_code,
+                        ];
+                        if ($this->professorCourseService->validatorForCreate($data)) {
+                            $course = $this->professorCourseService->createCourse($data);
+                            if (!$course) {
+                                throw new  APIException("操作异常 课程添加失败", APIException::OPERATION_EXCEPTION);
+                            }
+                            $rate->course_id = $course->course_id;
+                        }
 
-                }
-            }
-
-            //代表用户手动填写course_category_name
-            if ($rate->course_category_id == 0) {
-                $hasCourseCategory = $this->schoolCourseCategoryService->schoolHasCourseCategory($rate->school_id,
-                  $rate->course_category_name);
-                if (!$hasCourseCategory) {
-                    $data = [
-                      'school_id' => $rate->school_id,
-                      'course_category_name' => $rate->course_category_name,
-                    ];
-                    if ($this->schoolCourseCategoryService->validatorForCreate($data)) {
-                        $category = $this->schoolCourseCategoryService->createCourseCategory($data);
-                        $rate->course_category_id = $category->course_category_id;
                     }
                 }
-            }
 
-            $rate->save();
+                //代表用户手动填写course_category_name
+                if ($rate->course_category_id == 0) {
+                    $hasCourseCategory = $this->schoolCourseCategoryService->schoolHasCourseCategory($rate->school_id,
+                      $rate->course_category_name);
+                    if (!$hasCourseCategory) {
+                        $data = [
+                          'school_id' => $rate->school_id,
+                          'course_category_name' => $rate->course_category_name,
+                        ];
+                        if ($this->schoolCourseCategoryService->validatorForCreate($data)) {
+                            $category = $this->schoolCourseCategoryService->createCourseCategory($data);
+                            if (!$category) {
+                                throw new  APIException("操作异常 课程类别添加失败", APIException::OPERATION_EXCEPTION);
+                            }
+                            $rate->course_category_id = $category->course_category_id;
+                        }
+                    }
+                }
+
+                $isApprove = $rate->save();
+                if (!$isApprove) {
+                    throw new  APIException("操作异常 审核失败", APIException::OPERATION_EXCEPTION);
+                }
+
+                $isset = $this->studentService->setPoints(Student::RATE_GET_POINT, '点评教授', $rate->student);
+                if (!$isset) {
+                    throw new  APIException("操作异常 设置积分失败", APIException::OPERATION_EXCEPTION);
+                }
+
+                $content = "你点评的教授" . $rate->professor->professor_full_name . "审核成功，添加了" . Student::RATE_GET_POINT . "积分";
+                $student_id = $rate->create_student_id;
+                $data = [
+                  'message_content' => $content,
+                  'to_student_id' => $student_id
+                ];
+                $this->messageService->createMessage($data);
+
+                \DB::commit();
+
+            } catch (APIException $exception) {
+                \DB::rollBack();
+                throw $exception;
+            }
 
         }
     }
@@ -176,7 +212,17 @@ class ProfessorRateServiceConcrete implements ProfessorRateServiceAbstract
     {
         $rate = $this->getRateById($id);
         if ($rate) {
-            $rate->delete();
+            $isReject = $rate->delete();
+            if ($isReject) {
+                $content = "你点评的教授" . $rate->professor->professor_full_name . "审核失败";
+                $student_id = $rate->create_student_id;
+                $data = [
+                  'message_content' => $content,
+                  'to_student_id' => $student_id
+                ];
+                $this->messageService->createMessage($data);
+            }
+
         }
     }
 }

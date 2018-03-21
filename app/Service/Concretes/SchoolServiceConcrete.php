@@ -10,11 +10,19 @@ namespace App\Service\Concretes;
 
 
 use App\School;
+use App\Service\Abstracts\MessageServiceAbstract;
 use App\Service\Abstracts\SchoolServiceAbstract;
 use Illuminate\Support\Facades\Validator;
 
 class SchoolServiceConcrete implements SchoolServiceAbstract
 {
+
+    protected $messageService;
+
+    public function __construct(MessageServiceAbstract $messageService)
+    {
+        $this->messageService = $messageService;
+    }
 
     public function createSchool($data)
     {
@@ -42,7 +50,16 @@ class SchoolServiceConcrete implements SchoolServiceAbstract
         $school = $this->getSchoolById($id);
         if ($school) {
             $school->check_status = School::APPROVE_CHECK;
-            $school->save();
+            $isApprove = $school->save();
+            if ($isApprove) {
+                $content = "您创建的学校" . $school->school_name . "审核通过";
+                $student_id = $school->create_student_id;
+                $data = [
+                  'message_content' => $content,
+                  'to_student_id' => $student_id
+                ];
+                $this->messageService->createMessage($data);
+            }
         }
     }
 
@@ -50,7 +67,16 @@ class SchoolServiceConcrete implements SchoolServiceAbstract
     {
         $school = $this->getSchoolById($id);
         if ($school) {
-            $school->delete();
+            $content = "您创建的学校" . $school->school_name . "审核失败";
+            $student_id = $school->create_student_id;
+            $isReject = $school->delete();
+            if($isReject){
+                $data = [
+                  'message_content' => $content,
+                  'to_student_id' => $student_id
+                ];
+                $this->messageService->createMessage($data);
+            }
         }
     }
 

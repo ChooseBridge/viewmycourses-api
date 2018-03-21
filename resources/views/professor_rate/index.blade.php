@@ -35,7 +35,7 @@
                 <tr>
                     <td>{{$rate->professor_rate_id}}</td>
                     <td>{{$rate->professor->professor_full_name}}</td>
-                    <td>{{$rate->professor->school->school_name}}</td>
+                    <td>{{ $rate->professor->school?$rate->professor->school->school_name:''}}</td>
                     <td>{{$rate->professor->college->college_name}}</td>
                     <td>{{$rate->course_code}}</td>
                     <td>{{$rate->course_name}}</td>

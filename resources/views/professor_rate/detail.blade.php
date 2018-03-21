@@ -21,7 +21,7 @@
             </tr>
             <tr>
                 <td>学校</td>
-                <td>{{$rate->professor->school->school_name}}</td>
+                <td>{{$rate->professor->school?$rate->professor->school->school_name:''}}</td>
             </tr>
             <tr>
                 <td>学院</td>

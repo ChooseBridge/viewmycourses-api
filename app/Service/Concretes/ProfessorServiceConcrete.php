@@ -10,17 +10,25 @@ namespace App\Service\Concretes;
 
 
 use App\Professor;
+use App\Service\Abstracts\MessageServiceAbstract;
 use App\Service\Abstracts\ProfessorServiceAbstract;
 use Illuminate\Support\Facades\Validator;
 
 class ProfessorServiceConcrete implements ProfessorServiceAbstract
 {
 
-    public function getProfessorsForPage($limit = 10,$queryCallBack=null)
+    protected $messageService;
+
+    public function __construct(MessageServiceAbstract $messageService)
     {
-        if($queryCallBack){
+        $this->messageService = $messageService;
+    }
+
+    public function getProfessorsForPage($limit = 10, $queryCallBack = null)
+    {
+        if ($queryCallBack) {
             $professors = Professor::where($queryCallBack)->paginate($limit);
-        }else{
+        } else {
             $professors = Professor::paginate($limit);
         }
 
@@ -48,24 +56,43 @@ class ProfessorServiceConcrete implements ProfessorServiceAbstract
     public function approveProfessorById($id)
     {
         $professor = $this->getProfessorById($id);
-        if($professor){
+        if ($professor) {
             $professor->check_status = Professor::APPROVE_CHECK;
-            $professor->save();
+            $isApprove = $professor->save();
+            if ($isApprove) {
+                $content = "你创建的教授" . $professor->professor_full_name . "审核通过";
+                $student_id = $professor->create_student_id;
+                $data = [
+                  'message_content' => $content,
+                  'to_student_id' => $student_id
+                ];
+                $this->messageService->createMessage($data);
+            }
         }
     }
 
     public function rejectProfessorById($id)
     {
         $professor = $this->getProfessorById($id);
-        if($professor){
-            $professor->delete();
-            //待处理是删除相关的教授点评等操作
+        if ($professor) {
+            $isReject = $professor->delete();
+            if ($isReject) {
+                //待处理是删除相关的教授点评等操作
+                $content = "你创建的教授" . $professor->professor_full_name . "审核失败";
+                $student_id = $professor->create_student_id;
+                $data = [
+                  'message_content' => $content,
+                  'to_student_id' => $student_id
+                ];
+                $this->messageService->createMessage($data);
+            }
+
         }
     }
 
     public function getProfessorById($id)
     {
-        $professor = Professor::where('professor_id',$id)->first();
+        $professor = Professor::where('professor_id', $id)->first();
         return $professor;
     }
 }

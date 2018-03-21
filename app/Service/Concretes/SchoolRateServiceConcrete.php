@@ -9,19 +9,25 @@
 namespace App\Service\Concretes;
 
 
+use App\Exceptions\APIException;
 use App\SchoolRate;
+use App\Service\Abstracts\MessageServiceAbstract;
 use App\Service\Abstracts\SchoolRateServiceAbstract;
 use App\Service\Abstracts\StudentServiceAbstract;
 use App\Student;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class SchoolRateServiceConcrete implements SchoolRateServiceAbstract
 {
     protected $studentService;
 
-    public function __construct(StudentServiceAbstract $studentService)
-    {
+    public function __construct(
+      StudentServiceAbstract $studentService,
+      MessageServiceAbstract $messageService
+    ) {
         $this->studentService = $studentService;
+        $this->messageService = $messageService;
     }
 
     public function validatorForCreate($data)
@@ -69,10 +75,10 @@ class SchoolRateServiceConcrete implements SchoolRateServiceAbstract
         return $rates;
     }
 
-    public function getRatesByStudentId($studentId,$orderBy=['school_rate_id','desc'])
+    public function getRatesByStudentId($studentId, $orderBy = ['school_rate_id', 'desc'])
     {
         $rates = SchoolRate::where('create_student_id', $studentId)
-          ->orderBy($orderBy[0],$orderBy[1])
+          ->orderBy($orderBy[0], $orderBy[1])
           ->get();
         return $rates;
     }
@@ -88,9 +94,35 @@ class SchoolRateServiceConcrete implements SchoolRateServiceAbstract
         $rate = $this->getRateById($id);
         if ($rate) {
             $rate->check_status = SchoolRate::APPROVE_CHECK;
-            $rate->save();
-            //待处理添加积分
-            $this->studentService->setPoints(Student::RATE_GET_POINT);
+            try {
+                \DB::beginTransaction();
+
+                $isApprove = $rate->save();
+                if (!$isApprove) {
+                    throw new  APIException("操作异常 审核失败", APIException::OPERATION_EXCEPTION);
+                }
+                //待处理添加积分
+                $isset = $this->studentService->setPoints(Student::RATE_GET_POINT, '点评学校', $rate->student);
+                if (!$isset) {
+                    throw new  APIException("操作异常 设置积分失败", APIException::OPERATION_EXCEPTION);
+                }
+
+                $content = "你点评的学校" . $rate->school->school_name . "审核成功，添加了" . Student::RATE_GET_POINT . "积分";
+                $student_id = $rate->create_student_id;
+                $data = [
+                  'message_content' => $content,
+                  'to_student_id' => $student_id
+                ];
+                $this->messageService->createMessage($data);
+
+                DB::commit();
+
+            } catch (APIException $exception) {
+                \DB::rollBack();
+                throw new $exception;
+            }
+
+
         }
     }
 
@@ -98,7 +130,16 @@ class SchoolRateServiceConcrete implements SchoolRateServiceAbstract
     {
         $rate = $this->getRateById($id);
         if ($rate) {
-            $rate->delete();
+            $isReject = $rate->delete();
+            if($isReject){
+                $content = "你点评的学校" . $rate->school->school_name . "审核失败";
+                $student_id = $rate->create_student_id;
+                $data = [
+                  'message_content' => $content,
+                  'to_student_id' => $student_id
+                ];
+                $this->messageService->createMessage($data);
+            }
         }
     }
 
