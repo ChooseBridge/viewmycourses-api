@@ -21,7 +21,7 @@ class InternalCheck
         $key = env('INTERNAL_KEY');
         $newToken = md5($time . $key);
         if ($token != $newToken) {
-            throw new APIException(APIException::ILLGAL_OPERATION, "非法的操作");
+            throw new APIException("非法的操作",APIException::ILLGAL_OPERATION,);
         }
         return $next($request);
     }
