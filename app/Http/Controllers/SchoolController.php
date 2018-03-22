@@ -7,6 +7,7 @@ use App\School;
 use App\Service\Abstracts\CityServiceAbstract;
 use App\Service\Abstracts\CountryServiceAbstract;
 use App\Service\Abstracts\ProfessorRateServiceAbstract;
+use App\Service\Abstracts\ProfessorServiceAbstract;
 use App\Service\Abstracts\ProvinceServiceAbstract;
 use App\Service\Abstracts\SchoolDistrictServiceAbstract;
 use App\Service\Abstracts\SchoolRateServiceAbstract;
@@ -27,6 +28,7 @@ class SchoolController extends Controller
     protected $schoolRateService;
     protected $professorRateService;
     protected $schoolDistrictService;
+    protected $professorService;
 
     public function __construct(
       SchoolServiceAbstract $schoolService,
@@ -35,7 +37,8 @@ class SchoolController extends Controller
       CityServiceAbstract $cityService,
       SchoolRateServiceAbstract $schoolRateService,
       ProfessorRateServiceAbstract $professorRateService,
-      SchoolDistrictServiceAbstract $schoolDistrictService
+      SchoolDistrictServiceAbstract $schoolDistrictService,
+      ProfessorServiceAbstract $professorService
     ) {
         $this->schoolService = $schoolService;
         $this->countryService = $countryService;
@@ -44,6 +47,7 @@ class SchoolController extends Controller
         $this->schoolRateService = $schoolRateService;
         $this->professorRateService = $professorRateService;
         $this->schoolDistrictService = $schoolDistrictService;
+        $this->professorService = $professorService;
     }
 
 // backend
@@ -258,6 +262,7 @@ class SchoolController extends Controller
     public function getSchoolDetail(Request $request)
     {
         //待处理每日推荐的教授是什么逻辑
+//        $this->professorService->get
 
         $schoolId = $request->get('school_id', null);
         if (!$schoolId) {
@@ -328,7 +333,7 @@ class SchoolController extends Controller
               'school_students_relations' => $rate->school_students_relations,
               'comment' => $rate->comment,
               'student_name' => $rate->student->name,
-              'score' => round($rate->score,1),
+              'score' => round($rate->score, 1),
             ];
         }
 
@@ -376,17 +381,17 @@ class SchoolController extends Controller
             $schoolDistrictInfo[] = [
               'school_district_id' => $schoolDistrict->school_district_id,
               'school_district_name' => $schoolDistrict->school_district_name,
-              'social_reputation' => round($socialReputation,1),
-              'academic_level' => round($academicLevel,1),
-              'network_services' => round($networkServices,1),
-              'accommodation' => round($accommodation,1),
-              'food_quality' => round($foodQuality,1),
-              'campus_location' => round($campusLocation,1),
-              'extracurricular_activities' => round($extracurricularActivities,1),
-              'life_happiness_index' => round($lifeHappinessIndex,1),
-              'school_students_relations' => round($schoolStudentsRelations,1),
-              'school_district_score' => round($score,1),
-              'campus_infrastructure' => round($campusInfrastructure,1),
+              'social_reputation' => round($socialReputation, 1),
+              'academic_level' => round($academicLevel, 1),
+              'network_services' => round($networkServices, 1),
+              'accommodation' => round($accommodation, 1),
+              'food_quality' => round($foodQuality, 1),
+              'campus_location' => round($campusLocation, 1),
+              'extracurricular_activities' => round($extracurricularActivities, 1),
+              'life_happiness_index' => round($lifeHappinessIndex, 1),
+              'school_students_relations' => round($schoolStudentsRelations, 1),
+              'school_district_score' => round($score, 1),
+              'campus_infrastructure' => round($campusInfrastructure, 1),
             ];
         }
 
@@ -403,7 +408,7 @@ class SchoolController extends Controller
           'city' => $school->city->city_name,
           'website_url' => $school->city->website_url,
           'effort' => $effort,
-          'school_score' => round($schoolScore,1),
+          'school_score' => round($schoolScore, 1),
         ];
 
 

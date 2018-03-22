@@ -95,4 +95,9 @@ class ProfessorServiceConcrete implements ProfessorServiceAbstract
         $professor = Professor::where('professor_id', $id)->first();
         return $professor;
     }
+
+    public function getRandomProfessorBySchoolId($schoolId)
+    {
+
+    }
 }
