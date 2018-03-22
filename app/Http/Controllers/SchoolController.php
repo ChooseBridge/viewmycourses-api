@@ -288,9 +288,27 @@ class SchoolController extends Controller
 
             if (!isset($schoolDistrictScore[$rate->school_district_id]['score'])) {
                 $schoolDistrictScore[$rate->school_district_id]['score'] = $rate->score;
+                $schoolDistrictScore[$rate->school_district_id]['social_reputation'] = $rate->social_reputation;
+                $schoolDistrictScore[$rate->school_district_id]['academic_level'] = $rate->academic_level;
+                $schoolDistrictScore[$rate->school_district_id]['network_services'] = $rate->network_services;
+                $schoolDistrictScore[$rate->school_district_id]['accommodation'] = $rate->accommodation;
+                $schoolDistrictScore[$rate->school_district_id]['food_quality'] = $rate->food_quality;
+                $schoolDistrictScore[$rate->school_district_id]['campus_location'] = $rate->campus_location;
+                $schoolDistrictScore[$rate->school_district_id]['extracurricular_activities'] = $rate->extracurricular_activities;
+                $schoolDistrictScore[$rate->school_district_id]['life_happiness_index'] = $rate->life_happiness_index;
+                $schoolDistrictScore[$rate->school_district_id]['school_students_relations'] = $rate->school_students_relations;
                 $schoolDistrictScore[$rate->school_district_id]['num'] = 1;
             } else {
                 $schoolDistrictScore[$rate->school_district_id]['score'] += $rate->score;
+                $schoolDistrictScore[$rate->school_district_id]['social_reputation'] += $rate->social_reputation;
+                $schoolDistrictScore[$rate->school_district_id]['academic_level'] += $rate->academic_level;
+                $schoolDistrictScore[$rate->school_district_id]['network_services'] += $rate->network_services;
+                $schoolDistrictScore[$rate->school_district_id]['accommodation'] += $rate->accommodation;
+                $schoolDistrictScore[$rate->school_district_id]['food_quality'] += $rate->food_quality;
+                $schoolDistrictScore[$rate->school_district_id]['campus_location'] += $rate->campus_location;
+                $schoolDistrictScore[$rate->school_district_id]['extracurricular_activities'] += $rate->extracurricular_activities;
+                $schoolDistrictScore[$rate->school_district_id]['life_happiness_index'] += $rate->life_happiness_index;
+                $schoolDistrictScore[$rate->school_district_id]['school_students_relations'] += $rate->school_students_relations;
                 $schoolDistrictScore[$rate->school_district_id]['num'] += 1;
             }
 
@@ -317,14 +335,50 @@ class SchoolController extends Controller
 
         foreach ($schoolDistricts as $schoolDistrict) {
             $score = 0;
-            
+
             if (isset($schoolDistrictScore[$schoolDistrict->school_district_id]['score'])) {
                 $score = $schoolDistrictScore[$schoolDistrict->school_district_id]['score'] / $schoolDistrictScore[$schoolDistrict->school_district_id]['num'];
+            }
+            if (isset($schoolDistrictScore[$schoolDistrict->school_district_id]['social_reputation'])) {
+                $socialReputation = $schoolDistrictScore[$schoolDistrict->school_district_id]['social_reputation'] / $schoolDistrictScore[$schoolDistrict->school_district_id]['num'];
+            }
+            if (isset($schoolDistrictScore[$schoolDistrict->school_district_id]['academic_level'])) {
+                $academicLevel = $schoolDistrictScore[$schoolDistrict->school_district_id]['academic_level'] / $schoolDistrictScore[$schoolDistrict->school_district_id]['num'];
+            }
+            if (isset($schoolDistrictScore[$schoolDistrict->school_district_id]['network_services'])) {
+                $networkServices = $schoolDistrictScore[$schoolDistrict->school_district_id]['network_services'] / $schoolDistrictScore[$schoolDistrict->school_district_id]['num'];
+            }
+            if (isset($schoolDistrictScore[$schoolDistrict->school_district_id]['accommodation'])) {
+                $accommodation = $schoolDistrictScore[$schoolDistrict->school_district_id]['accommodation'] / $schoolDistrictScore[$schoolDistrict->school_district_id]['num'];
+            }
+            if (isset($schoolDistrictScore[$schoolDistrict->school_district_id]['food_quality'])) {
+                $foodQuality = $schoolDistrictScore[$schoolDistrict->school_district_id]['food_quality'] / $schoolDistrictScore[$schoolDistrict->school_district_id]['num'];
+            }
+            if (isset($schoolDistrictScore[$schoolDistrict->school_district_id]['campus_location'])) {
+                $campusLocation = $schoolDistrictScore[$schoolDistrict->school_district_id]['campus_location'] / $schoolDistrictScore[$schoolDistrict->school_district_id]['num'];
+            }
+            if (isset($schoolDistrictScore[$schoolDistrict->school_district_id]['extracurricular_activities'])) {
+                $extracurricularActivities = $schoolDistrictScore[$schoolDistrict->school_district_id]['extracurricular_activities'] / $schoolDistrictScore[$schoolDistrict->school_district_id]['num'];
+            }
+            if (isset($schoolDistrictScore[$schoolDistrict->school_district_id]['life_happiness_index'])) {
+                $lifeHappinessIndex = $schoolDistrictScore[$schoolDistrict->school_district_id]['life_happiness_index'] / $schoolDistrictScore[$schoolDistrict->school_district_id]['num'];
+            }
+            if (isset($schoolDistrictScore[$schoolDistrict->school_district_id]['school_students_relations'])) {
+                $schoolStudentsRelations = $schoolDistrictScore[$schoolDistrict->school_district_id]['school_students_relations'] / $schoolDistrictScore[$schoolDistrict->school_district_id]['num'];
             }
 
             $schoolDistrictInfo[] = [
               'school_district_id' => $schoolDistrict->school_district_id,
               'school_district_name' => $schoolDistrict->school_district_name,
+              'social_reputation' => $socialReputation,
+              'academic_level' => $academicLevel,
+              'network_services' => $networkServices,
+              'accommodation' => $accommodation,
+              'food_quality' => $foodQuality,
+              'campus_location' => $campusLocation,
+              'extracurricular_activities' => $extracurricularActivities,
+              'life_happiness_index' => $lifeHappinessIndex,
+              'school_students_relations' => $schoolStudentsRelations,
               'school_district_score' => $score,
             ];
         }
