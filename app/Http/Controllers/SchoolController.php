@@ -257,7 +257,7 @@ class SchoolController extends Controller
 
     public function getSchoolDetail(Request $request)
     {
-        //待处理每日推荐的教授是什么逻辑  努力指数是什么意思
+        //待处理每日推荐的教授是什么逻辑
 
         $schoolId = $request->get('school_id', null);
         if (!$schoolId) {
@@ -297,6 +297,7 @@ class SchoolController extends Controller
                 $schoolDistrictScore[$rate->school_district_id]['extracurricular_activities'] = $rate->extracurricular_activities;
                 $schoolDistrictScore[$rate->school_district_id]['life_happiness_index'] = $rate->life_happiness_index;
                 $schoolDistrictScore[$rate->school_district_id]['school_students_relations'] = $rate->school_students_relations;
+                $schoolDistrictScore[$rate->school_district_id]['campus_infrastructure'] = $rate->campus_infrastructure;
                 $schoolDistrictScore[$rate->school_district_id]['num'] = 1;
             } else {
                 $schoolDistrictScore[$rate->school_district_id]['score'] += $rate->score;
@@ -309,6 +310,7 @@ class SchoolController extends Controller
                 $schoolDistrictScore[$rate->school_district_id]['extracurricular_activities'] += $rate->extracurricular_activities;
                 $schoolDistrictScore[$rate->school_district_id]['life_happiness_index'] += $rate->life_happiness_index;
                 $schoolDistrictScore[$rate->school_district_id]['school_students_relations'] += $rate->school_students_relations;
+                $schoolDistrictScore[$rate->school_district_id]['campus_infrastructure'] += $rate->campus_infrastructure;
                 $schoolDistrictScore[$rate->school_district_id]['num'] += 1;
             }
 
@@ -366,6 +368,10 @@ class SchoolController extends Controller
             if (isset($schoolDistrictScore[$schoolDistrict->school_district_id]['school_students_relations'])) {
                 $schoolStudentsRelations = $schoolDistrictScore[$schoolDistrict->school_district_id]['school_students_relations'] / $schoolDistrictScore[$schoolDistrict->school_district_id]['num'];
             }
+            if (isset($schoolDistrictScore[$schoolDistrict->school_district_id]['campus_infrastructure'])) {
+                $campusInfrastructure = $schoolDistrictScore[$schoolDistrict->school_district_id]['campus_infrastructure'] / $schoolDistrictScore[$schoolDistrict->school_district_id]['num'];
+            }
+
 
             $schoolDistrictInfo[] = [
               'school_district_id' => $schoolDistrict->school_district_id,
@@ -380,6 +386,7 @@ class SchoolController extends Controller
               'life_happiness_index' => $lifeHappinessIndex,
               'school_students_relations' => $schoolStudentsRelations,
               'school_district_score' => $score,
+              'campus_infrastructure' => $campusInfrastructure,
             ];
         }
 
