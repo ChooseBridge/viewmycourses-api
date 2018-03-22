@@ -137,9 +137,9 @@ Route::get('/callback', function (\App\Service\Abstracts\StudentServiceAbstract 
                     ];
 
                     //如果是edu邮箱并且验证了邮箱
-                    if($arr['is_email_edu'] && $arr['email_verified']){
+                    if ($arr['is_email_edu'] && $arr['email_verified']) {
                         $arr['is_vip'] = 1;
-                        $arr['vip_expire_time'] = date("Y-m-d H:i:s",strtotime("+6 month",time()));
+                        $arr['vip_expire_time'] = date("Y-m-d H:i:s", strtotime("+6 month", time()));
                     }
 
 
@@ -162,31 +162,32 @@ Route::get('/callback', function (\App\Service\Abstracts\StudentServiceAbstract 
                     ];
 
                     //说明之前没有验证邮箱 现在验证了
-                    if($student->email_verified == 0 && $userInfo['entities'][0]['profile']['email_verified']){
+                    if ($student->email_verified == 0 && $userInfo['entities'][0]['profile']['email_verified']) {
 
                         //如果是edu邮箱 并且第一次为vip
-                        if($student->is_email_edu && $student->vip_expire_time == '1970-01-01 00:00:00'){
+                        if ($student->is_email_edu && $student->vip_expire_time == '1970-01-01 00:00:00') {
                             $arr['is_vip'] = 1;
-                            $arr['vip_expire_time'] = date("Y-m-d H:i:s",strtotime("+6 month",time()));
+                            $arr['vip_expire_time'] = date("Y-m-d H:i:s", strtotime("+6 month", time()));
                             $arr['email_verified'] = $userInfo['entities'][0]['profile']['email_verified'];
-                        }elseif ($student->is_email_edu){
+                        } elseif ($student->is_email_edu) {
                             //有可能是微信登录的未验证的edu邮箱用户
                             $arr['is_vip'] = 1;
-                            $arr['vip_expire_time'] = date("Y-m-d H:i:s",strtotime("+5 month 2 week",strtotime($student->vip_expire_time)));
+                            $arr['vip_expire_time'] = date("Y-m-d H:i:s",
+                              strtotime("+5 month 2 week", strtotime($student->vip_expire_time)));
                             $arr['email_verified'] = $userInfo['entities'][0]['profile']['email_verified'];
-                        }else{
+                        } else {
                             $arr['email_verified'] = $userInfo['entities'][0]['profile']['email_verified'];
                         }
 
-                        if($student->mobile != (string)$userInfo['entities'][0]['profile']['mobile']){
+                        if ($student->mobile != (string)$userInfo['entities'][0]['profile']['mobile']) {
                             $arr['mobile'] = $userInfo['entities'][0]['profile']['mobile'];
                         }
-                        if($student->mobile_verified != $userInfo['entities'][0]['profile']['mobile_verified']){
+                        if ($student->mobile_verified != $userInfo['entities'][0]['profile']['mobile_verified']) {
                             $arr['mobile_verified'] = $userInfo['entities'][0]['profile']['mobile_verified'];
                         }
 
                         //vip失效
-                        if(time() > strtotime($student->vip_expire_time)){
+                        if (time() > strtotime($student->vip_expire_time)) {
                             $arr['is_vip'] = 0;
                         }
 
@@ -216,7 +217,20 @@ Route::group(['prefix' => 'open-api'], function () {
     Route::post('geo/get-city-by-province',
       ['uses' => 'GeoController@getCityByProvince', 'as' => 'geo.get-city-by-province']);
 
+    Route::get('get-professor-detail',
+      ['uses' => 'ProfessorController@getProfessorDetail', 'as' => 'api.get-professor-detail']);
+    Route::get('get-school-detail', ['uses' => 'SchoolController@getSchoolDetail', 'as' => 'api.get-school-detail']);
+
+
 });
+
+Route::group(['prefix' => 'internal'], function () {
+
+    Route::post('get-school-by-condition',
+      ['uses' => 'InternalController@getSchoolByCondition', 'as' => 'internal.get-school-by-condition']);
+
+});
+
 
 Route::group(['prefix' => 'api', 'middleware' => [\App\Http\Middleware\CheckLogin::class]], function () {
 
@@ -241,12 +255,9 @@ Route::group(['prefix' => 'api', 'middleware' => [\App\Http\Middleware\CheckLogi
       ['uses' => 'SchoolController@getSchoolByCondition', 'as' => 'api.get-school-by-condition']);
     Route::get('get-all-school-by-name',
       ['uses' => 'SchoolController@getAllSchoolByName', 'as' => 'api.get-all-school-by-name']);
-    Route::get('get-school-detail', ['uses' => 'SchoolController@getSchoolDetail', 'as' => 'api.get-school-detail']);
 
     Route::get('get-professor-by-condition',
       ['uses' => 'ProfessorController@getProfessorByCondition', 'as' => 'api.get-professor-by-condition']);
-    Route::get('get-professor-detail',
-      ['uses' => 'ProfessorController@getProfessorDetail', 'as' => 'api.get-professor-detail']);
 
 
 });
