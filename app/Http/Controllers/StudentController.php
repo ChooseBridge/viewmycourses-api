@@ -30,7 +30,6 @@ class StudentController extends Controller
     public function getStudent()
     {
 
-        $GLOBALS['gStudent'] = $this->studentService->getStudentByToken('add005a2611d120c1099fb1cd1fbb176');
         $student = [
           'name' => $GLOBALS['gStudent']->name,
           'email' => $GLOBALS['gStudent']->email,
