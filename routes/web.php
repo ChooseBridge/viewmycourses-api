@@ -224,10 +224,10 @@ Route::group(['prefix' => 'open-api'], function () {
 
 });
 
-Route::group(['prefix' => 'internal'], function () {
+Route::group(['prefix' => 'internal', 'middleware' => [\App\Http\Middleware\InternalCheck::class]], function () {
 
-    Route::post('get-school-by-condition',
-      ['uses' => 'InternalController@getSchoolByCondition', 'as' => 'internal.get-school-by-condition']);
+    Route::get('get-all-school-by-name',
+      ['uses' => 'InternalController@getAllSchoolByName', 'as' => 'internal.get-all-school-by-name']);
 
 });
 
