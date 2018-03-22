@@ -41,5 +41,12 @@ class SchoolCourseCategoryServiceConcrete implements SchoolCourseCategoryService
 
     }
 
+    public function getCourseCategorysBySchoolId($schoolId)
+    {
+        $schoolCourseCategorys = SchoolCourseCategory::where('school_id',$schoolId)
+          ->get();
+        return $schoolCourseCategorys;
+    }
+
 
 }

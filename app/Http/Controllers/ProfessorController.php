@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\College;
 use App\Exceptions\APIException;
 use App\Professor;
+use App\SchoolCourseCategory;
 use App\Service\Abstracts\CollegeServiceAbstract;
 use App\Service\Abstracts\ProfessorCourseServiceAbstract;
 use App\Service\Abstracts\ProfessorRateServiceAbstract;
 use App\Service\Abstracts\ProfessorServiceAbstract;
+use App\Service\Abstracts\SchoolCourseCategoryServiceAbstract;
 use App\Service\Abstracts\SchoolServiceAbstract;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,19 +24,22 @@ class ProfessorController extends Controller
     protected $collegeService;
     protected $professorRateService;
     protected $professorCourseService;
+    protected $schoolCourseCategory;
 
     public function __construct(
       ProfessorServiceAbstract $professorService,
       SchoolServiceAbstract $schoolService,
       CollegeServiceAbstract $collegeService,
       ProfessorRateServiceAbstract $professorRateService,
-      ProfessorCourseServiceAbstract $professorCourseService
+      ProfessorCourseServiceAbstract $professorCourseService,
+      SchoolCourseCategoryServiceAbstract $schoolCourseCategory
     ) {
         $this->professorService = $professorService;
         $this->schoolService = $schoolService;
         $this->collegeService = $collegeService;
         $this->professorRateService = $professorRateService;
         $this->professorCourseService = $professorCourseService;
+        $this->schoolCourseCategory = $schoolCourseCategory;
     }
 
 
@@ -281,11 +286,22 @@ class ProfessorController extends Controller
             ];
         }
 
+        $schoolCategorys = $this->schoolCourseCategory->getCourseCategorysBySchoolId($professor->school_id);
+        $schoolCategoryInfo = [];
+
+        foreach ($schoolCategorys as $schoolCategory){
+            $schoolCategoryInfo[] = [
+                'course_category_id'=>$schoolCategory->course_category_id,
+                'course_category_name'=>$schoolCategory->course_category_name,
+            ];
+        }
+
         $data = [
           'success' => true,
           'data' => [
             'professorInfo' => $professorInfo,
             'coursesInfo' => $coursesInfo,
+            'schoolCategoryInfo' => $schoolCategoryInfo,
             'rateInfo' => $rateInfo,
             'tagsInfo' => $tagsInfo,
           ]

@@ -328,7 +328,7 @@ class SchoolController extends Controller
               'school_students_relations' => $rate->school_students_relations,
               'comment' => $rate->comment,
               'student_name' => $rate->student->name,
-              'score' => $rate->score,
+              'score' => round($rate->score,1),
             ];
         }
 
@@ -376,17 +376,17 @@ class SchoolController extends Controller
             $schoolDistrictInfo[] = [
               'school_district_id' => $schoolDistrict->school_district_id,
               'school_district_name' => $schoolDistrict->school_district_name,
-              'social_reputation' => $socialReputation,
-              'academic_level' => $academicLevel,
-              'network_services' => $networkServices,
-              'accommodation' => $accommodation,
-              'food_quality' => $foodQuality,
-              'campus_location' => $campusLocation,
-              'extracurricular_activities' => $extracurricularActivities,
-              'life_happiness_index' => $lifeHappinessIndex,
-              'school_students_relations' => $schoolStudentsRelations,
-              'school_district_score' => $score,
-              'campus_infrastructure' => $campusInfrastructure,
+              'social_reputation' => round($socialReputation,1),
+              'academic_level' => round($academicLevel,1),
+              'network_services' => round($networkServices,1),
+              'accommodation' => round($accommodation,1),
+              'food_quality' => round($foodQuality,1),
+              'campus_location' => round($campusLocation,1),
+              'extracurricular_activities' => round($extracurricularActivities,1),
+              'life_happiness_index' => round($lifeHappinessIndex,1),
+              'school_students_relations' => round($schoolStudentsRelations,1),
+              'school_district_score' => round($score,1),
+              'campus_infrastructure' => round($campusInfrastructure,1),
             ];
         }
 
@@ -403,7 +403,7 @@ class SchoolController extends Controller
           'city' => $school->city->city_name,
           'website_url' => $school->city->website_url,
           'effort' => $effort,
-          'school_score' => $schoolScore,
+          'school_score' => round($schoolScore,1),
         ];
 
 

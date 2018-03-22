@@ -16,4 +16,6 @@ interface SchoolCourseCategoryServiceAbstract
     public function validatorForCreate($data);
 
     public function schoolHasCourseCategory($schoolId,$courseCategory);
+
+    public function getCourseCategorysBySchoolId($schoolId);
 }
