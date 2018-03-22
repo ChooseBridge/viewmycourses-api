@@ -238,14 +238,15 @@ Route::group(['prefix' => 'api', 'middleware' => [\App\Http\Middleware\CheckLogi
     Route::post('professor/create', ['uses' => 'ProfessorController@createProfessor', 'as' => 'professor.create']);
     Route::post('professor-rate/create',
       ['uses' => 'ProfessorRateController@createRate', 'as' => 'professor-rate.create']);
-    //接口修改
     Route::post('school-rate/create', ['uses' => 'SchoolRateController@createRate', 'as' => 'school-rate.create']);
 
     Route::post('get-college-by-school',
       ['uses' => 'CollegeController@getCollegeBySchool', 'as' => 'api.get-college-by-school']);
     Route::get('get-school-group-by-country',
       ['uses' => 'SchoolController@getAllcheckedSchoolByCountry', 'as' => 'api.get-school-group-by-country']);
+
     Route::get('get-student', ['uses' => 'StudentController@getStudent', 'as' => 'api.get-student']);
+    Route::get('get-student-message', ['uses' => 'StudentController@getStudentMessage', 'as' => 'api.get-student-message']);
 
     Route::get('test-set-ponits', ['uses' => 'StudentController@setPoints', 'as' => 'api.test-set-ponits']);
     Route::get('test-get-ponits', ['uses' => 'StudentController@getPoints', 'as' => 'api.test-get-ponits']);

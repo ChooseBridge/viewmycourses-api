@@ -17,6 +17,13 @@ class MessageServiceConcrete implements MessageServiceAbstract
     public function createMessage($data)
     {
         $message = Message::create($data);
+        return $message;
+    }
+
+    public function getMessagesByStudentId($studentId)
+    {
+        $messages = Message::where('to_student_id',$studentId)->get();
+        return $messages;
     }
 
 }

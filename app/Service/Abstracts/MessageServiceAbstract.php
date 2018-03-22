@@ -12,4 +12,6 @@ namespace App\Service\Abstracts;
 Interface MessageServiceAbstract
 {
     public function createMessage($data);
+
+    public function getMessagesByStudentId($studentId);
 }

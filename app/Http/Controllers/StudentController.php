@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\ProfessorRate;
 use App\SchoolRate;
+use App\Service\Abstracts\MessageServiceAbstract;
 use App\Service\Abstracts\ProfessorRateServiceAbstract;
 use App\Service\Abstracts\SchoolRateServiceAbstract;
 use App\Service\Abstracts\StudentServiceAbstract;
@@ -15,15 +16,18 @@ class StudentController extends Controller
     protected $studentService;
     protected $professorRateService;
     protected $schoolRateService;
+    protected $messageService;
 
     public function __construct(
       StudentServiceAbstract $studentService,
       ProfessorRateServiceAbstract $professorRateService,
-      SchoolRateServiceAbstract $schoolRateService
+      SchoolRateServiceAbstract $schoolRateService,
+      MessageServiceAbstract $messageService
     ) {
         $this->studentService = $studentService;
         $this->professorRateService = $professorRateService;
         $this->schoolRateService = $schoolRateService;
+        $this->messageService = $messageService;
     }
 
 //api
@@ -89,8 +93,8 @@ class StudentController extends Controller
         $data = [
           'success' => true,
           'data' => [
-            'student'=>$student,
-            'ratesInfo'=>$ratesInfo,
+            'student' => $student,
+            'ratesInfo' => $ratesInfo,
           ]
         ];
 
@@ -99,10 +103,33 @@ class StudentController extends Controller
     }
 
 
+    public function getStudentMessage()
+    {
+        $student = $GLOBALS['gStudent'];
+        $messages = $this->messageService->getMessagesByStudentId($student->id);
+        $messageInfo = [];
+        foreach ($messages as $message){
+            $messageInfo[] = [
+              'message_content'=>$message->message_content,
+              'created_at'=>$message->created_at,
+            ];
+        }
+
+        $data = [
+          'success' => true,
+          'data' => [
+            'messageInfo' => $messageInfo,
+          ]
+        ];
+
+        return \Response::json($data);
+    }
+
+
     public function setPoints()
     {
         $delta = $_GET['delta'];
-        $data = $this->studentService->setPoints($delta,'11',$GLOBALS['gStudent']);
+        $data = $this->studentService->setPoints($delta, '11', $GLOBALS['gStudent']);
         var_dump($data);
     }
 
