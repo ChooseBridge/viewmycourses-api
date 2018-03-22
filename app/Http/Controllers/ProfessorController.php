@@ -274,7 +274,7 @@ class ProfessorController extends Controller
             if(isset($calculateCourseEffort[$course->course_code])){
                 $effort = $calculateCourseEffort[$course->course_code]['effort']/$calculateCourseEffort[$course->course_code]['num'];
             }
-            $coursesInfo = [
+            $coursesInfo[] = [
               'course_id' => $course->course_id,
               'course_code' => $course->course_code,
               'effort' => $effort,
