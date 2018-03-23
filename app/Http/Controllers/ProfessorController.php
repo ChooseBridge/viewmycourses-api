@@ -149,19 +149,23 @@ class ProfessorController extends Controller
 
         $queryCallBack = function ($query) use ($professorName) {
 
+
             if ($professorName) {
                 $query->where('professor_full_name', 'like', "%$professorName%");
             }
 
         };
-        $with = [
-            'school'=>function($query)use($schoolName){
-                $query->where('',$schoolName);
-                $query->orWhere('',$schoolName);
-                $query->orWhere('',$schoolName);
-            }
+        $join = [
+          'school' => function ($query) use ($schoolName) {
+              $query->where('school_name', 'like', "%" . $schoolName."%");
+              $query->orWhere('school_nick_name', 'like', "%" . $schoolName."%");
+              $query->orWhere('school_nick_name_two', 'like', "%" . $schoolName."%");
+          },
+          'college' => function ($query) use ($collegeName) {
+              $query->where('college_name', 'like', "%" . $collegeName."%");
+          }
         ];
-        $result = $this->professorService->getProfessorsForPage(1, $queryCallBack, $with);
+        $result = $this->professorService->getProfessorsForPage(1, $queryCallBack, $join);
         foreach ($result as $professor) {
             $professors[] = [
               'professor_id' => $professor->professor_id,

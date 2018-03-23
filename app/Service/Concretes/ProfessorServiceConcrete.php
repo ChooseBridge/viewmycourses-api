@@ -24,14 +24,18 @@ class ProfessorServiceConcrete implements ProfessorServiceAbstract
         $this->messageService = $messageService;
     }
 
-    public function getProfessorsForPage($limit = 10, $queryCallBack = null, $with = null)
+    public function getProfessorsForPage($limit = 10, $queryCallBack = null, $join = null)
     {
-        if ($queryCallBack == null && $with == null) {
+        if ($queryCallBack == null && $join == null) {
             $professors = Professor::paginate($limit);
-        } elseif ($queryCallBack && $with) {
-            $professors = Professor::where($queryCallBack)->with($with)->paginate($limit);
-        } elseif ($with) {
-            $professors = Professor::with($with)->paginate($limit);
+        } elseif ($queryCallBack && $join) {
+            $builder = Professor::where($queryCallBack);
+            foreach ($join as $key =>$value){
+                $builder ->whereHas($key,$value);
+            }
+            $professors = $builder->paginate($limit);
+        } elseif ($join) {
+            $professors = Professor::with($join)->paginate($limit);
         } else {
             $professors = Professor::where($queryCallBack)->paginate($limit);
         }
