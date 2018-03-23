@@ -41,6 +41,8 @@ class ProfessorRate extends Model
       'tag',
       'create_student_id',
       'check_status',
+      'thumbs_up',
+      'thumbs_down',
     ];
 
 

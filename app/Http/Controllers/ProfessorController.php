@@ -310,4 +310,26 @@ class ProfessorController extends Controller
 
 
     }
+
+    public function thumbsUpProfessor(Request $request){
+
+        $professorId = $request->get('professor_id');
+        if(!$professorId){
+            throw new APIException("miss param professor id ",APIException::MISS_PARAM);
+        }
+        $student = $GLOBALS['gStudent'];
+        $res = $this->professorService->thumbsUpProfessorById($professorId,$student);
+        if ($res){
+            $data = [
+              'success' => true,
+              'data' => 'thumbs up success'
+            ];
+        }else{
+            $data = [
+              'success' => false,
+              'data' => 'thumbs up false'
+            ];
+        }
+        return \Response::json($data);
+    }
 }

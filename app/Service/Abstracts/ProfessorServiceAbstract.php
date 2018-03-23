@@ -25,4 +25,6 @@ interface ProfessorServiceAbstract
     public function getProfessorById($id);
 
     public function getRandomProfessorBySchoolId($id);
+
+    public function thumbsUpProfessorById($id,$student);
 }

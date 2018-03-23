@@ -99,5 +99,36 @@ class ProfessorServiceConcrete implements ProfessorServiceAbstract
     public function getRandomProfessorBySchoolId($schoolId)
     {
 
+
+    }
+
+    public function thumbsUpProfessorById($id, $student)
+    {
+        $professor = $this->getProfessorById($id);
+        if ($professor) {
+            if ($professor->thumbs_up == "") {
+                $professor->thumbs_up = "," . $student->student_id . ",";
+            } else {
+
+                $studentIds = explode(',',trim($professor->thumbs_up, ','));
+
+                if(in_array($student->student_id,$studentIds)){
+                    //cancel thumbs up
+                    $studentIds = array_flip($studentIds);
+                    unset($studentIds[$student->student_id]);
+                    if(count($studentIds) == 0){
+                        $professor->thumbs_up = "";
+                    }else{
+                        $professor->thumbs_up = "," . implode(',',array_keys($studentIds)). ",";
+                    }
+
+                }else{
+                    array_push($studentIds,$student->student_id);
+                    $professor->thumbs_up = "," . implode(',',$studentIds). ",";
+                }
+
+            }
+            return $professor->save();
+        }
     }
 }

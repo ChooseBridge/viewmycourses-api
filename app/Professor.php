@@ -31,6 +31,7 @@ class Professor extends Model
       'create_student_id',
       'create_user_id',
       'check_status',
+      'thumbs_up',
     ];
 
 

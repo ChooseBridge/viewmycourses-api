@@ -246,7 +246,8 @@ Route::group(['prefix' => 'api', 'middleware' => [\App\Http\Middleware\CheckLogi
       ['uses' => 'SchoolController@getAllcheckedSchoolByCountry', 'as' => 'api.get-school-group-by-country']);
 
     Route::get('get-student', ['uses' => 'StudentController@getStudent', 'as' => 'api.get-student']);
-    Route::get('get-student-message', ['uses' => 'StudentController@getStudentMessage', 'as' => 'api.get-student-message']);
+    Route::get('get-student-message',
+      ['uses' => 'StudentController@getStudentMessage', 'as' => 'api.get-student-message']);
 
     Route::get('test-set-ponits', ['uses' => 'StudentController@setPoints', 'as' => 'api.test-set-ponits']);
     Route::get('test-get-ponits', ['uses' => 'StudentController@getPoints', 'as' => 'api.test-get-ponits']);
@@ -256,10 +257,11 @@ Route::group(['prefix' => 'api', 'middleware' => [\App\Http\Middleware\CheckLogi
       ['uses' => 'SchoolController@getSchoolByCondition', 'as' => 'api.get-school-by-condition']);
     Route::get('get-all-school-by-name',
       ['uses' => 'SchoolController@getAllSchoolByName', 'as' => 'api.get-all-school-by-name']);
-
     Route::get('get-professor-by-condition',
       ['uses' => 'ProfessorController@getProfessorByCondition', 'as' => 'api.get-professor-by-condition']);
 
+    Route::get('thumbs-up-professor',
+      ['uses' => 'ProfessorController@thumbsUpProfessor', 'as' => 'api.thumbs-up-professor']);
 
 });
 
