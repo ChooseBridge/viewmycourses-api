@@ -27,11 +27,15 @@ interface ProfessorRateServiceAbstract
 
     public function getCheckedRatesByProfessorId($professorId);
 
-    public function getRatesByStudentId($studentId,$orderBy);
+    public function getRatesByStudentId($studentId, $orderBy);
 
     public function approveRateById($id);
 
     public function rejectRateById($id);
+
+    public function thumbsUpRateById($id,$student);
+
+    public function thumbsDownRateById($id,$student);
 
 
 }

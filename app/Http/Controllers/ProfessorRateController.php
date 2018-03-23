@@ -125,4 +125,52 @@ class ProfessorRateController extends Controller
         return \Response::json($data);
 
     }
+
+    public function thumbsUpRate(Request $request)
+    {
+
+        $student = $GLOBALS['gStudent'];
+        $professorRateId = $request->get('professor_rate_id');
+        if (!$professorRateId) {
+            throw new APIException("miss params professor rate id");
+        }
+        $res = $this->professorRateService->thumbsUpRateById($professorRateId,$student);
+        if ($res){
+            $data = [
+              'success' => true,
+              'data' => 'thumbs up success'
+            ];
+        }else{
+            $data = [
+              'success' => false,
+              'data' => 'thumbs up false'
+            ];
+        }
+        return \Response::json($data);
+
+    }
+
+
+    public function thumbsDownRate(Request $request)
+    {
+        $student = $GLOBALS['gStudent'];
+        $professorRateId = $request->get('professor_rate_id');
+        if (!$professorRateId) {
+            throw new APIException("miss params professor rate id");
+        }
+        $res = $this->professorRateService->thumbsDownRateById($professorRateId,$student);
+        if ($res){
+            $data = [
+              'success' => true,
+              'data' => 'thumbs down success'
+            ];
+        }else{
+            $data = [
+              'success' => false,
+              'data' => 'thumbs dowm false'
+            ];
+        }
+        return \Response::json($data);
+    }
+
 }

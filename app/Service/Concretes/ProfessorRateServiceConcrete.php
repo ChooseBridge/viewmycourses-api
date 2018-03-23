@@ -225,4 +225,65 @@ class ProfessorRateServiceConcrete implements ProfessorRateServiceAbstract
 
         }
     }
+
+    public function thumbsDownRateById($id, $student)
+    {
+        $rate = $this->getRateById($id);
+        if ($rate) {
+            if ($rate->thumbs_down == "") {
+                $rate->thumbs_down = "," . $student->student_id . ",";
+            } else {
+
+                $studentIds = explode(',', trim($rate->thumbs_down, ','));
+
+                if (in_array($student->student_id, $studentIds)) {
+                    //cancel thumbs up
+                    $studentIds = array_flip($studentIds);
+                    unset($studentIds[$student->student_id]);
+                    if (count($studentIds) == 0) {
+                        $rate->thumbs_down = "";
+                    } else {
+                        $rate->thumbs_down = "," . implode(',', array_keys($studentIds)) . ",";
+                    }
+
+                } else {
+                    array_push($studentIds, $student->student_id);
+                    $rate->thumbs_down = "," . implode(',', $studentIds) . ",";
+                }
+
+            }
+            return $rate->save();
+        }
+    }
+
+    public function thumbsUpRateById($id, $student)
+    {
+        $rate = $this->getRateById($id);
+        if ($rate) {
+            if ($rate->thumbs_up == "") {
+                $rate->thumbs_up = "," . $student->student_id . ",";
+            } else {
+
+                $studentIds = explode(',', trim($rate->thumbs_up, ','));
+
+                if (in_array($student->student_id, $studentIds)) {
+                    //cancel thumbs up
+                    $studentIds = array_flip($studentIds);
+                    unset($studentIds[$student->student_id]);
+                    if (count($studentIds) == 0) {
+                        $rate->thumbs_up = "";
+                    } else {
+                        $rate->thumbs_up = "," . implode(',', array_keys($studentIds)) . ",";
+                    }
+
+                } else {
+                    array_push($studentIds, $student->student_id);
+                    $rate->thumbs_up = "," . implode(',', $studentIds) . ",";
+                }
+
+            }
+            return $rate->save();
+        }
+    }
+
 }

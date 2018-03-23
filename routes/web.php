@@ -262,6 +262,11 @@ Route::group(['prefix' => 'api', 'middleware' => [\App\Http\Middleware\CheckLogi
 
     Route::get('thumbs-up-professor',
       ['uses' => 'ProfessorController@thumbsUpProfessor', 'as' => 'api.thumbs-up-professor']);
+    Route::get('thumbs-up-professor-rate',
+      ['uses' => 'ProfessoRateController@thumbsUpRate', 'as' => 'api.thumbs-up-professor-rate']);
+    Route::get('thumbs-down-professor-rate',
+      ['uses' => 'ProfessoRateController@thumbsDownRate', 'as' => 'api.thumbs-down-professor-rate']);
+
 
 });
 
