@@ -264,11 +264,11 @@ class SchoolController extends Controller
         //待处理每日推荐的教授是什么逻辑
 //        $this->professorService->get
 
-        $schoolId = $request->get('school_id', null);
-        if (!$schoolId) {
-            throw new APIException("参数school id缺失", APIException::MISS_PARAM);
+        $schoolName = $request->get('school_name', null);
+        if (!$schoolName) {
+            throw new APIException("参数school name缺失", APIException::MISS_PARAM);
         }
-        $school = $this->schoolService->getSchoolById($schoolId);
+        $school = $this->schoolService->getSchoolByName($schoolName);
         if (!$school) {
             throw new APIException("未知的学校", APIException::DATA_EXCEPTION);
         }

@@ -25,6 +25,8 @@ interface SchoolServiceAbstract
 
     public function getSchoolById($id);
 
+    public function getSchoolByName($name);
+
     public function getAllSchools($queryCallBack);
 
     public function getAllCheckedSchools($queryCallBack);

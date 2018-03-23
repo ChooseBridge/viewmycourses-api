@@ -107,6 +107,12 @@ class SchoolServiceConcrete implements SchoolServiceAbstract
         return $school;
     }
 
+    public function getSchoolByName($name)
+    {
+        $school = School::where('school_name', $name)->first();
+        return $school;
+    }
+
     public function getAllSchools($queryCallBack = null)
     {
         if ($queryCallBack) {
