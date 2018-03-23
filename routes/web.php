@@ -196,7 +196,12 @@ Route::get('/callback', function (\App\Service\Abstracts\StudentServiceAbstract 
 
                     $isUpdate = $studentService->updateStudent($student, $arr);
                     if ($isUpdate) {
-                        return Redirect::to($redirectUrl . "?token=" . $student->token, 301);
+                        if(strpos($redirectUrl,"?") === false){
+                            return Redirect::to($redirectUrl . "?token=" . $student->token, 301);
+                        }else{
+                            return Redirect::to($redirectUrl . "&token=" . $student->token, 301);
+                        }
+
                     }
                 }
 

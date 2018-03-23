@@ -229,6 +229,7 @@ class ProfessorController extends Controller
 
 
             $rateInfo[] = [
+              'professor_rate_id' => $rate->professor_rate_id,
               'course_code' => $rate->course_code,
               'course_name' => $rate->course_name,
               'course_category_name' => $rate->course_category_name,
@@ -247,8 +248,8 @@ class ProfessorController extends Controller
         }
 
         $professorEffort = 0;
-        if(isset($calculateAllEffort['effort'])){
-            $professorEffort = $calculateAllEffort['effort']/$calculateAllEffort['num'];
+        if (isset($calculateAllEffort['effort'])) {
+            $professorEffort = $calculateAllEffort['effort'] / $calculateAllEffort['num'];
         }
 
         $professorInfo = [
@@ -259,6 +260,20 @@ class ProfessorController extends Controller
           'city' => $professor->school->city->city_name,
           'effort' => $professorEffort,
         ];
+
+        if ($professor->thumbs_up == "") {
+            $professor['thumbs_up_num'] = 0;
+        } else {
+            $professor['thumbs_up_num'] = count(explode(',', trim($professor->thumbs_up, ',')));
+        }
+
+        if (isset($GLOBALS['gStudent'])) {
+            if (strpos($professor->thumbs_up, ",{$GLOBALS['gStudent']->student_id},") === false) {
+                $professorInfo["is_thumbs_up"] = false;
+            } else {
+                $professorInfo["is_thumbs_up"] = true;
+            }
+        }
 
 
         $tags = explode(',', rtrim($tagsStr, ','));
@@ -276,8 +291,8 @@ class ProfessorController extends Controller
         $courses = $this->professorCourseService->getCoursesByProfessorId($professorId);
         foreach ($courses as $course) {
             $effort = 0;
-            if(isset($calculateCourseEffort[$course->course_code])){
-                $effort = $calculateCourseEffort[$course->course_code]['effort']/$calculateCourseEffort[$course->course_code]['num'];
+            if (isset($calculateCourseEffort[$course->course_code])) {
+                $effort = $calculateCourseEffort[$course->course_code]['effort'] / $calculateCourseEffort[$course->course_code]['num'];
             }
             $coursesInfo[] = [
               'course_id' => $course->course_id,
@@ -289,10 +304,10 @@ class ProfessorController extends Controller
         $schoolCategorys = $this->schoolCourseCategory->getCourseCategorysBySchoolId($professor->school_id);
         $schoolCategoryInfo = [];
 
-        foreach ($schoolCategorys as $schoolCategory){
+        foreach ($schoolCategorys as $schoolCategory) {
             $schoolCategoryInfo[] = [
-                'course_category_id'=>$schoolCategory->course_category_id,
-                'course_category_name'=>$schoolCategory->course_category_name,
+              'course_category_id' => $schoolCategory->course_category_id,
+              'course_category_name' => $schoolCategory->course_category_name,
             ];
         }
 
@@ -311,21 +326,22 @@ class ProfessorController extends Controller
 
     }
 
-    public function thumbsUpProfessor(Request $request){
+    public function thumbsUpProfessor(Request $request)
+    {
 
         $professorId = $request->get('professor_id');
-        if(!$professorId){
-            throw new APIException("miss param professor id ",APIException::MISS_PARAM);
+        if (!$professorId) {
+            throw new APIException("miss param professor id ", APIException::MISS_PARAM);
         }
         $student = $GLOBALS['gStudent'];
-        $res = $this->professorService->thumbsUpProfessorById($professorId,$student);
+        $res = $this->professorService->thumbsUpProfessorById($professorId, $student);
         if ($res['res']) {
             $data = [
               'success' => true,
               'num' => $res['num'],
               'data' => 'thumbs up success'
             ];
-        }else{
+        } else {
             $data = [
               'success' => false,
               'data' => 'thumbs up false'

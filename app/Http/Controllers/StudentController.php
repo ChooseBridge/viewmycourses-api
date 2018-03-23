@@ -44,6 +44,7 @@ class StudentController extends Controller
         foreach ($professorRates as $rate) {
             $professorRatesInfo["$rate->created_at"] = [
               'rate_type' => 'professor',
+              'professor_rate_id' => $rate->school->professor_rate_id,
               'school_name' => $rate->school->school_name,
               'professor_name' => $rate->professor->professor_full_name,
               'course_code' => $rate->course_code,
@@ -68,6 +69,7 @@ class StudentController extends Controller
         foreach ($schoolRates as $rate) {
             $schoolRatesInfo["$rate->created_at"] = [
               'rate_type' => 'school',
+              'school_rate_id' => $rate->schoolDistrict->school_rate_id,
               'school_district_name' => $rate->schoolDistrict->school_district_name,
               'school_name' => $rate->school->school_name,
               'social_reputation' => $rate->social_reputation,
