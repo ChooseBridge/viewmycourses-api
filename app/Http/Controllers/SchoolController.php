@@ -272,6 +272,7 @@ class SchoolController extends Controller
         if (!$school) {
             throw new APIException("未知的学校", APIException::DATA_EXCEPTION);
         }
+        $schoolId = $school->school_id;
 
 
         $effort = $this->professorRateService->getEffortBySchoolId($schoolId);
