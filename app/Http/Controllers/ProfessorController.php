@@ -319,9 +319,10 @@ class ProfessorController extends Controller
         }
         $student = $GLOBALS['gStudent'];
         $res = $this->professorService->thumbsUpProfessorById($professorId,$student);
-        if ($res){
+        if ($res['res']) {
             $data = [
               'success' => true,
+              'num' => $res['num'],
               'data' => 'thumbs up success'
             ];
         }else{

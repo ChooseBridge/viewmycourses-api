@@ -135,9 +135,10 @@ class ProfessorRateController extends Controller
             throw new APIException("miss params professor rate id");
         }
         $res = $this->professorRateService->thumbsUpRateById($professorRateId,$student);
-        if ($res){
+        if ($res['res']) {
             $data = [
               'success' => true,
+              'num' => $res['num'],
               'data' => 'thumbs up success'
             ];
         }else{
@@ -159,10 +160,11 @@ class ProfessorRateController extends Controller
             throw new APIException("miss params professor rate id");
         }
         $res = $this->professorRateService->thumbsDownRateById($professorRateId,$student);
-        if ($res){
+        if ($res['res']) {
             $data = [
               'success' => true,
-              'data' => 'thumbs down success'
+              'num' => $res['num'],
+              'data' => 'thumbs up success'
             ];
         }else{
             $data = [

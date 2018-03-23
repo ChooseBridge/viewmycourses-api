@@ -232,6 +232,7 @@ class ProfessorRateServiceConcrete implements ProfessorRateServiceAbstract
         if ($rate) {
             if ($rate->thumbs_down == "") {
                 $rate->thumbs_down = "," . $student->student_id . ",";
+                $num = 1;
             } else {
 
                 $studentIds = explode(',', trim($rate->thumbs_down, ','));
@@ -245,15 +246,19 @@ class ProfessorRateServiceConcrete implements ProfessorRateServiceAbstract
                     } else {
                         $rate->thumbs_down = "," . implode(',', array_keys($studentIds)) . ",";
                     }
-
+                    $num = -1;
                 } else {
                     array_push($studentIds, $student->student_id);
                     $rate->thumbs_down = "," . implode(',', $studentIds) . ",";
+                    $num = 1;
                 }
 
             }
-            return $rate->save();
+            if($rate->save()){
+                return ['res'=>true,'num'=>$num];
+            }
         }
+        return ['res'=>false,'num'=>0];
     }
 
     public function thumbsUpRateById($id, $student)
@@ -262,6 +267,7 @@ class ProfessorRateServiceConcrete implements ProfessorRateServiceAbstract
         if ($rate) {
             if ($rate->thumbs_up == "") {
                 $rate->thumbs_up = "," . $student->student_id . ",";
+                $num = 1;
             } else {
 
                 $studentIds = explode(',', trim($rate->thumbs_up, ','));
@@ -275,15 +281,19 @@ class ProfessorRateServiceConcrete implements ProfessorRateServiceAbstract
                     } else {
                         $rate->thumbs_up = "," . implode(',', array_keys($studentIds)) . ",";
                     }
-
+                    $num = -1;
                 } else {
                     array_push($studentIds, $student->student_id);
                     $rate->thumbs_up = "," . implode(',', $studentIds) . ",";
+                    $num = 1;
                 }
 
             }
-            return $rate->save();
+            if($rate->save()){
+                return ['res'=>true,'num'=>$num];
+            }
         }
+        return ['res'=>false,'num'=>0];
     }
 
 }

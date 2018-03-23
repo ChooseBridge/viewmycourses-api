@@ -112,5 +112,52 @@ class SchoolRateController extends Controller
 
     }
 
+    public function thumbsUpRate(Request $request)
+    {
+        $student = $GLOBALS['gStudent'];
+        $schoolRateId = $request->get('school_rate_id');
+        if (!$schoolRateId) {
+            throw new APIException("miss params school rate id");
+        }
+        $res = $this->schoolRateService->thumbsUpRateById($schoolRateId, $student);
+        if ($res['res']) {
+            $data = [
+              'success' => true,
+              'num' => $res['num'],
+              'data' => 'thumbs up success'
+            ];
+        } else {
+            $data = [
+              'success' => false,
+              'data' => 'thumbs up false'
+            ];
+        }
+        return \Response::json($data);
+    }
+
+
+    public function thumbsDownRate(Request $request)
+    {
+        $student = $GLOBALS['gStudent'];
+        $schoolRateId = $request->get('school_rate_id');
+        if (!$schoolRateId) {
+            throw new APIException("miss params school rate id");
+        }
+        $res = $this->schoolRateService->thumbsDownRateById($schoolRateId, $student);
+        if ($res['res']) {
+            $data = [
+              'success' => true,
+              'num' => $res['num'],
+              'data' => 'thumbs up success'
+            ];
+        } else {
+            $data = [
+              'success' => false,
+              'data' => 'thumbs dowm false'
+            ];
+        }
+        return \Response::json($data);
+    }
+
 
 }

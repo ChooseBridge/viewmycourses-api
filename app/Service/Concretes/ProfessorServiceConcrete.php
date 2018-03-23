@@ -108,6 +108,7 @@ class ProfessorServiceConcrete implements ProfessorServiceAbstract
         if ($professor) {
             if ($professor->thumbs_up == "") {
                 $professor->thumbs_up = "," . $student->student_id . ",";
+                $num = 1;
             } else {
 
                 $studentIds = explode(',',trim($professor->thumbs_up, ','));
@@ -121,14 +122,18 @@ class ProfessorServiceConcrete implements ProfessorServiceAbstract
                     }else{
                         $professor->thumbs_up = "," . implode(',',array_keys($studentIds)). ",";
                     }
-
+                    $num = -1;
                 }else{
                     array_push($studentIds,$student->student_id);
                     $professor->thumbs_up = "," . implode(',',$studentIds). ",";
+                    $num = 1;
                 }
 
             }
-            return $professor->save();
+            if($professor->save()){
+                return ['res'=>true,'num'=>$num];
+            }
         }
+        return ['res'=>false,'num'=>0];
     }
 }

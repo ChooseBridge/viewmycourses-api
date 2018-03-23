@@ -29,5 +29,9 @@ interface SchoolRateServiceAbstract
 
     public function rejectRateById($id);
 
+    public function thumbsUpRateById($id,$student);
+
+    public function thumbsDownRateById($id,$student);
+
 
 }
