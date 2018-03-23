@@ -139,20 +139,20 @@ class ProfessorController extends Controller
         //待处理搜索权限
 
         $professors = [];
-        $schoolId = $request->get('school_id');
+        $schoolName = $request->get('school_name');
         $professorName = $request->get('professor_name');
-        $collegeId = $request->get('college_id');
+        $collegeName = $request->get('college_name');
 
-        $queryCallBack = function ($query) use ($schoolId, $professorName, $collegeId) {
+        $queryCallBack = function ($query) use ($schoolName, $professorName, $collegeName) {
 
-            if ($schoolId) {
-                $query->where('school_id', $schoolId);
+            if ($schoolName) {
+                $query->where('school_id', $schoolName);
             }
             if ($professorName) {
                 $query->where('professor_full_name', 'like', "%$professorName%");
             }
-            if ($collegeId) {
-                $query->where('college_id', $collegeId);
+            if ($collegeName) {
+                $query->where('college_id', $collegeName);
             }
 
         };
@@ -166,9 +166,9 @@ class ProfessorController extends Controller
         }
 
         $pageInfo = $result->appends([
-          'school_id' => $schoolId,
+          'school_name' => $schoolName,
           'professor_name' => $professorName,
-          'college_id' => $collegeId,
+          'college_name' => $collegeName,
         ])->toArray();
         $tmp = [];
         $tmp['first_page_url'] = $pageInfo['first_page_url'];
@@ -262,9 +262,9 @@ class ProfessorController extends Controller
         ];
 
         if ($professor->thumbs_up == "") {
-            $professor['thumbs_up_num'] = 0;
+            $professorInfo['thumbs_up_num'] = 0;
         } else {
-            $professor['thumbs_up_num'] = count(explode(',', trim($professor->thumbs_up, ',')));
+            $professorInfo['thumbs_up_num'] = count(explode(',', trim($professor->thumbs_up, ',')));
         }
 
         if (isset($GLOBALS['gStudent'])) {
