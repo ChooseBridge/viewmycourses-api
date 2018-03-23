@@ -12,6 +12,7 @@ use App\Service\Abstracts\ProfessorRateServiceAbstract;
 use App\Service\Abstracts\ProfessorServiceAbstract;
 use App\Service\Abstracts\SchoolCourseCategoryServiceAbstract;
 use App\Service\Abstracts\SchoolServiceAbstract;
+use App\Service\Abstracts\StudentServiceAbstract;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,6 +26,7 @@ class ProfessorController extends Controller
     protected $professorRateService;
     protected $professorCourseService;
     protected $schoolCourseCategory;
+    protected $studentService;
 
     public function __construct(
       ProfessorServiceAbstract $professorService,
@@ -32,7 +34,8 @@ class ProfessorController extends Controller
       CollegeServiceAbstract $collegeService,
       ProfessorRateServiceAbstract $professorRateService,
       ProfessorCourseServiceAbstract $professorCourseService,
-      SchoolCourseCategoryServiceAbstract $schoolCourseCategory
+      SchoolCourseCategoryServiceAbstract $schoolCourseCategory,
+      StudentServiceAbstract $studentService
     ) {
         $this->professorService = $professorService;
         $this->schoolService = $schoolService;
@@ -40,6 +43,7 @@ class ProfessorController extends Controller
         $this->professorRateService = $professorRateService;
         $this->professorCourseService = $professorCourseService;
         $this->schoolCourseCategory = $schoolCourseCategory;
+        $this->studentService = $studentService;
     }
 
 
@@ -143,20 +147,21 @@ class ProfessorController extends Controller
         $professorName = $request->get('professor_name');
         $collegeName = $request->get('college_name');
 
-        $queryCallBack = function ($query) use ($schoolName, $professorName, $collegeName) {
+        $queryCallBack = function ($query) use ($professorName) {
 
-            if ($schoolName) {
-                $query->where('school_id', $schoolName);
-            }
             if ($professorName) {
                 $query->where('professor_full_name', 'like', "%$professorName%");
             }
-            if ($collegeName) {
-                $query->where('college_id', $collegeName);
-            }
 
         };
-        $result = $this->professorService->getProfessorsForPage(1, $queryCallBack);
+        $with = [
+            'school'=>function($query)use($schoolName){
+                $query->where('',$schoolName);
+                $query->orWhere('',$schoolName);
+                $query->orWhere('',$schoolName);
+            }
+        ];
+        $result = $this->professorService->getProfessorsForPage(1, $queryCallBack, $with);
         foreach ($result as $professor) {
             $professors[] = [
               'professor_id' => $professor->professor_id,
@@ -267,7 +272,7 @@ class ProfessorController extends Controller
             $professorInfo['thumbs_up_num'] = count(explode(',', trim($professor->thumbs_up, ',')));
         }
 
-        if (isset($GLOBALS['gStudent'])) {
+        if ($this->studentService->getCurrentStudent()) {
             if (strpos($professor->thumbs_up, ",{$GLOBALS['gStudent']->student_id},") === false) {
                 $professorInfo["is_thumbs_up"] = false;
             } else {

@@ -20,6 +20,13 @@ class StudentServiceConcrete implements StudentServiceAbstract
     const GET_POINTS_URL = "api/user/points/get";
     const SET_POINTS_URL = "api/user/points/set";
 
+    protected $request;
+
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
+    }
+
     public function createStudent($data)
     {
         $student = Student::create($data);
@@ -71,7 +78,7 @@ class StudentServiceConcrete implements StudentServiceAbstract
     }
 
 
-    public function setPoints($delta,$comment,$student)
+    public function setPoints($delta, $comment, $student)
     {
         a:
         try {
@@ -80,10 +87,10 @@ class StudentServiceConcrete implements StudentServiceAbstract
             ]);
             $response = $client->request('PUT', env('UCENTER_URL') . self::SET_POINTS_URL, [
               'headers' => [
-                'Authorization' => "Bearer " .$student->access_token,
+                'Authorization' => "Bearer " . $student->access_token,
               ],
               'json' => [
-                'comment' =>$comment,
+                'comment' => $comment,
                 'delta' => $delta,
               ]
             ]);
@@ -110,7 +117,7 @@ class StudentServiceConcrete implements StudentServiceAbstract
             ]);
             $response = $client->request('GET', env('UCENTER_URL') . self::GET_POINTS_URL, [
               'headers' => [
-                'Authorization' => "Bearer " .$student->access_token
+                'Authorization' => "Bearer " . $student->access_token
               ]
             ]);
             $content = $response->getBody()->getContents();
@@ -125,6 +132,20 @@ class StudentServiceConcrete implements StudentServiceAbstract
             }
         }
 
+    }
+
+    public function getCurrentStudent()
+    {
+        if (isset($GLOBALS['gStudent'])) {
+            return $GLOBALS['gStudent'];
+        }
+        $token = $this->request->header('token');
+        $student = $this->getStudentByToken($token);
+        if ($student) {
+            $GLOBALS['gStudent'] = $student;
+            return $student;
+        }
+        return null;
     }
 
 

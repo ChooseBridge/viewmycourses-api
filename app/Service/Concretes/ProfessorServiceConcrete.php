@@ -24,13 +24,18 @@ class ProfessorServiceConcrete implements ProfessorServiceAbstract
         $this->messageService = $messageService;
     }
 
-    public function getProfessorsForPage($limit = 10, $queryCallBack = null)
+    public function getProfessorsForPage($limit = 10, $queryCallBack = null, $with = null)
     {
-        if ($queryCallBack) {
-            $professors = Professor::where($queryCallBack)->paginate($limit);
-        } else {
+        if ($queryCallBack == null && $with == null) {
             $professors = Professor::paginate($limit);
+        } elseif ($queryCallBack && $with) {
+            $professors = Professor::where($queryCallBack)->with($with)->paginate($limit);
+        } elseif ($with) {
+            $professors = Professor::with($with)->paginate($limit);
+        } else {
+            $professors = Professor::where($queryCallBack)->paginate($limit);
         }
+
 
         return $professors;
     }
@@ -111,29 +116,29 @@ class ProfessorServiceConcrete implements ProfessorServiceAbstract
                 $num = 1;
             } else {
 
-                $studentIds = explode(',',trim($professor->thumbs_up, ','));
+                $studentIds = explode(',', trim($professor->thumbs_up, ','));
 
-                if(in_array($student->student_id,$studentIds)){
+                if (in_array($student->student_id, $studentIds)) {
                     //cancel thumbs up
                     $studentIds = array_flip($studentIds);
                     unset($studentIds[$student->student_id]);
-                    if(count($studentIds) == 0){
+                    if (count($studentIds) == 0) {
                         $professor->thumbs_up = "";
-                    }else{
-                        $professor->thumbs_up = "," . implode(',',array_keys($studentIds)). ",";
+                    } else {
+                        $professor->thumbs_up = "," . implode(',', array_keys($studentIds)) . ",";
                     }
                     $num = -1;
-                }else{
-                    array_push($studentIds,$student->student_id);
-                    $professor->thumbs_up = "," . implode(',',$studentIds). ",";
+                } else {
+                    array_push($studentIds, $student->student_id);
+                    $professor->thumbs_up = "," . implode(',', $studentIds) . ",";
                     $num = 1;
                 }
 
             }
-            if($professor->save()){
-                return ['res'=>true,'num'=>$num];
+            if ($professor->save()) {
+                return ['res' => true, 'num' => $num];
             }
         }
-        return ['res'=>false,'num'=>0];
+        return ['res' => false, 'num' => 0];
     }
 }

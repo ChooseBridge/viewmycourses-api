@@ -25,6 +25,8 @@ interface StudentServiceAbstract{
 
     public function getPoints($student);
 
+    public function getCurrentStudent();
+
 
 
 }
