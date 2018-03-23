@@ -45,7 +45,7 @@ class StudentController extends Controller
             $professorRatesInfo["$rate->created_at"] = [
               'rate_type' => 'professor',
               'school_name' => $rate->school->school_name,
-              'professor_name' => $rate->professor->professor_name,
+              'professor_name' => $rate->professor->professor_full_name,
               'course_code' => $rate->course_code,
               'course_name' => $rate->course_name,
               'course_category_name' => $rate->course_category_name,

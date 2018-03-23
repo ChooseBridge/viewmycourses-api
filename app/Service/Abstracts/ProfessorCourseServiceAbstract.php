@@ -19,4 +19,6 @@ interface ProfessorCourseServiceAbstract
 
     public function getCoursesByProfessorId($professorId);
 
+    public function getCourseById($id);
+
 }

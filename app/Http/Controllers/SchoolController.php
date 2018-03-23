@@ -252,7 +252,7 @@ class SchoolController extends Controller
         $data = [
           'success' => true,
           'data' => [
-            'shcools' => $shcools,
+            'schools' => $shcools,
             'pageInfo' => $pageInfo,
           ]
         ];

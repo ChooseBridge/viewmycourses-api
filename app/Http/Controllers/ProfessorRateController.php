@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\APIException;
+use App\Service\Abstracts\ProfessorCourseServiceAbstract;
 use App\Service\Abstracts\ProfessorRateServiceAbstract;
 use App\Service\Abstracts\ProfessorServiceAbstract;
+use App\Service\Abstracts\SchoolCourseCategoryServiceAbstract;
 use Illuminate\Http\Request;
 
 class ProfessorRateController extends Controller
@@ -12,13 +14,19 @@ class ProfessorRateController extends Controller
 
     protected $professorRateService;
     protected $professorService;
+    protected $professorCourseService;
+    protected $schoolCourseCategoryService;
 
     public function __construct(
       ProfessorRateServiceAbstract $professorRateService,
-      ProfessorServiceAbstract $professorService
+      ProfessorServiceAbstract $professorService,
+      ProfessorCourseServiceAbstract $professorCourseService,
+      SchoolCourseCategoryServiceAbstract $schoolCourseCategoryService
     ) {
         $this->professorRateService = $professorRateService;
         $this->professorService = $professorService;
+        $this->professorCourseService = $professorCourseService;
+        $this->schoolCourseCategoryService = $schoolCourseCategoryService;
     }
 
 //backend
@@ -77,11 +85,21 @@ class ProfessorRateController extends Controller
         $data['college_id'] = $professor->college_id;
 
         if (isset($data['course_id'])) {
-            //待处理
+
+            $course = $this->professorCourseService->getCourseById($data['course_id']);
+            if (!$course) {
+                throw new APIException("未知course code", APIException::DATA_EXCEPTION);
+            }
+            $data['course_code'] = $course->course_code;
+
         }
 
         if (isset($data['course_category_id'])) {
-            //待处理
+            $courseCategory = $this->schoolCourseCategoryService->getCourseCategoryById($data['course_category_id']);
+            if (!$courseCategory) {
+                throw new APIException("未知course category name", APIException::DATA_EXCEPTION);
+            }
+            $data['course_category_name'] = $courseCategory->course_category_name;
         }
 
 

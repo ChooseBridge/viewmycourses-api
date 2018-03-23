@@ -18,4 +18,6 @@ interface SchoolCourseCategoryServiceAbstract
     public function schoolHasCourseCategory($schoolId,$courseCategory);
 
     public function getCourseCategorysBySchoolId($schoolId);
+
+    public function getCourseCategoryById($id);
 }

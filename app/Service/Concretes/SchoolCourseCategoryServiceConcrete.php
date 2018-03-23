@@ -34,18 +34,26 @@ class SchoolCourseCategoryServiceConcrete implements SchoolCourseCategoryService
 
     public function schoolHasCourseCategory($schoolId, $courseCategory)
     {
-        $schoolCourseCategory = SchoolCourseCategory::where('school_id',$schoolId)
-          ->where('course_category_name',$courseCategory)
+        $schoolCourseCategory = SchoolCourseCategory::where('school_id', $schoolId)
+          ->where('course_category_name', $courseCategory)
           ->first();
-        return !empty($schoolCourseCategory)?true:false;
+        return !empty($schoolCourseCategory) ? true : false;
 
     }
 
     public function getCourseCategorysBySchoolId($schoolId)
     {
-        $schoolCourseCategorys = SchoolCourseCategory::where('school_id',$schoolId)
+        $schoolCourseCategorys = SchoolCourseCategory::where('school_id', $schoolId)
           ->get();
         return $schoolCourseCategorys;
+    }
+
+    public function getCourseCategoryById($id)
+    {
+
+        $schoolCourseCategory = SchoolCourseCategory::where('course_category_id', $id)
+          ->first();
+        return $schoolCourseCategory;
     }
 
 
