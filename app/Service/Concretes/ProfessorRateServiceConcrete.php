@@ -230,6 +230,11 @@ class ProfessorRateServiceConcrete implements ProfessorRateServiceAbstract
     public function thumbsDownRateById($id, $student)
     {
         $rate = $this->getRateById($id);
+
+        if (strpos($rate->thumbs_up, ",$student->student_id},") !== false) {
+            throw  new  APIException("已经点击过有用", APIException::OPERATION_EXCEPTION);
+        }
+
         if ($rate) {
             if ($rate->thumbs_down == "") {
                 $rate->thumbs_down = "," . $student->student_id . ",";
@@ -255,16 +260,20 @@ class ProfessorRateServiceConcrete implements ProfessorRateServiceAbstract
                 }
 
             }
-            if($rate->save()){
-                return ['res'=>true,'num'=>$num];
+            if ($rate->save()) {
+                return ['res' => true, 'num' => $num];
             }
         }
-        return ['res'=>false,'num'=>0];
+        return ['res' => false, 'num' => 0];
     }
 
     public function thumbsUpRateById($id, $student)
     {
         $rate = $this->getRateById($id);
+
+        if (strpos($rate->thumbs_down, ",$student->student_id},") !== false) {
+            throw  new  APIException("已经点击过无用", APIException::OPERATION_EXCEPTION);
+        }
         if ($rate) {
             if ($rate->thumbs_up == "") {
                 $rate->thumbs_up = "," . $student->student_id . ",";
@@ -290,11 +299,11 @@ class ProfessorRateServiceConcrete implements ProfessorRateServiceAbstract
                 }
 
             }
-            if($rate->save()){
-                return ['res'=>true,'num'=>$num];
+            if ($rate->save()) {
+                return ['res' => true, 'num' => $num];
             }
         }
-        return ['res'=>false,'num'=>0];
+        return ['res' => false, 'num' => 0];
     }
 
 }

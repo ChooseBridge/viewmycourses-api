@@ -131,7 +131,7 @@ class SchoolRateServiceConcrete implements SchoolRateServiceAbstract
         $rate = $this->getRateById($id);
         if ($rate) {
             $isReject = $rate->delete();
-            if($isReject){
+            if ($isReject) {
                 $content = "你点评的学校" . $rate->school->school_name . "审核失败";
                 $student_id = $rate->create_student_id;
                 $data = [
@@ -147,6 +147,12 @@ class SchoolRateServiceConcrete implements SchoolRateServiceAbstract
     public function thumbsUpRateById($id, $student)
     {
         $rate = $this->getRateById($id);
+
+        if (strpos($rate->thumbs_down, ",$student->student_id},") !== false) {
+            throw  new  APIException("已经点击过无用", APIException::OPERATION_EXCEPTION);
+        }
+
+
         if ($rate) {
             if ($rate->thumbs_up == "") {
                 $rate->thumbs_up = "," . $student->student_id . ",";
@@ -172,17 +178,22 @@ class SchoolRateServiceConcrete implements SchoolRateServiceAbstract
                 }
 
             }
-            if($rate->save()){
-                return ['res'=>true,'num'=>$num];
+            if ($rate->save()) {
+                return ['res' => true, 'num' => $num];
             }
         }
-        return ['res'=>false,'num'=>0];
+        return ['res' => false, 'num' => 0];
     }
 
 
     public function thumbsDownRateById($id, $student)
     {
         $rate = $this->getRateById($id);
+
+        if (strpos($rate->thumbs_up, ",$student->student_id},") !== false) {
+            throw  new  APIException("已经点击过有用", APIException::OPERATION_EXCEPTION);
+        }
+
         if ($rate) {
             if ($rate->thumbs_down == "") {
                 $rate->thumbs_down = "," . $student->student_id . ",";
@@ -208,11 +219,11 @@ class SchoolRateServiceConcrete implements SchoolRateServiceAbstract
                 }
 
             }
-            if($rate->save()){
-                return ['res'=>true,'num'=>$num];
+            if ($rate->save()) {
+                return ['res' => true, 'num' => $num];
             }
         }
-        return ['res'=>false,'num'=>0];
+        return ['res' => false, 'num' => 0];
     }
 
 }
