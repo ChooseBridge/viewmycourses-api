@@ -256,7 +256,7 @@ class ProfessorController extends Controller
             ];
 
             //计算百分比
-            if ($rate->thumbs_up == "" && $rates->thumbs_down == "") {
+            if ($rate->thumbs_up == "" && $rate->thumbs_down == "") {
                 $tmp['thumbs_up_percent'] = 0;
                 $tmp['thumbs_down_percent'] = 0;
             } elseif ($rate->thumbs_up == "") {
@@ -266,8 +266,8 @@ class ProfessorController extends Controller
                 $tmp['thumbs_up_percent'] = 100;
                 $tmp['thumbs_down_percent'] = 0;
             } else {
-                $thumbsUpNum = explode(',', trim($rate->thumbs_up, ','));
-                $thumbsUpDown = explode(',', trim($rate->thumbs_down, ','));
+                $thumbsUpNum = count(explode(',', trim($rate->thumbs_up, ',')));
+                $thumbsUpDown = count(explode(',', trim($rate->thumbs_down, ',')));
                 $total = $thumbsUpNum + $thumbsUpDown;
                 $thumbsUpPercent = $thumbsUpNum*100/$total;
                 $tmp['thumbs_up_percent'] = floor($thumbsUpPercent);
