@@ -52,6 +52,7 @@ class ProfessorRateServiceConcrete implements ProfessorRateServiceAbstract
           'is_attend' => 'required|integer',
           'difficult_level' => 'required|numeric',
           'homework_num' => 'required|numeric',
+          'written_homework_num' => 'required|numeric',
           'quiz_num' => 'required|integer',
           'course_related_quiz' => 'required|numeric',
           'spend_course_time_at_week' => 'required|integer',

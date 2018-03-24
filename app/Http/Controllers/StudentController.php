@@ -53,6 +53,7 @@ class StudentController extends Controller
               'is_attend' => $rate->is_attend,
               'difficult_level' => $rate->difficult_level,
               'homework_num' => $rate->homework_num,
+              'written_homework_num' => $rate->written_homework_num,
               'quiz_num' => $rate->quiz_num,
               'course_related_quiz' => $rate->course_related_quiz,
               'spend_course_time_at_week' => $rate->spend_course_time_at_week,
