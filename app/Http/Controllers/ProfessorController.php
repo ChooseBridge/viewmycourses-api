@@ -252,7 +252,7 @@ class ProfessorController extends Controller
               'grade' => $rate->grade,
               'comment' => $rate->comment,
               'tag' => $rate->tag,
-              'effort' => $rate->effort,
+              'effort' => round($rate->effort,1),
               'created_at' => $rate->created_at,
             ];
 
@@ -304,7 +304,7 @@ class ProfessorController extends Controller
           'country' => $professor->school->country->country_name,
           'province' => $professor->school->province->province_name,
           'city' => $professor->school->city->city_name,
-          'effort' => $professorEffort,
+          'effort' => round($professorEffort,1),
         ];
 
         if ($professor->thumbs_up == "") {
@@ -343,7 +343,7 @@ class ProfessorController extends Controller
             $coursesInfo[] = [
               'course_id' => $course->course_id,
               'course_code' => $course->course_code,
-              'effort' => $effort,
+              'effort' => round($effort,1),
             ];
         }
 
