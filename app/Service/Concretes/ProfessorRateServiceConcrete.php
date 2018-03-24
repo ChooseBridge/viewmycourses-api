@@ -231,7 +231,7 @@ class ProfessorRateServiceConcrete implements ProfessorRateServiceAbstract
     {
         $rate = $this->getRateById($id);
 
-        if (strpos($rate->thumbs_up, ",$student->student_id},") !== false) {
+        if (strpos($rate->thumbs_up, ",{$student->student_id},") !== false) {
             throw  new  APIException("已经点击过有用", APIException::OPERATION_EXCEPTION);
         }
 
@@ -271,7 +271,7 @@ class ProfessorRateServiceConcrete implements ProfessorRateServiceAbstract
     {
         $rate = $this->getRateById($id);
 
-        if (strpos($rate->thumbs_down, ",$student->student_id},") !== false) {
+        if (strpos($rate->thumbs_down, ",{$student->student_id},") !== false) {
             throw  new  APIException("已经点击过无用", APIException::OPERATION_EXCEPTION);
         }
         if ($rate) {
