@@ -133,8 +133,19 @@ Route::get('/callback', function (\App\Service\Abstracts\StudentServiceAbstract 
                       'mobile_verified' => $userInfo['entities'][0]['profile']['mobile_verified'],
                       'email_verified' => $userInfo['entities'][0]['profile']['email_verified'],
                       'is_email_edu' => (int)$userInfo['entities'][0]['profile']['is_email_edu'],
+                      'gender' => $userInfo['entities'][0]['profile']['gender'],
+                      'education_status' => $userInfo['entities'][0]['profile']['education_status'],
 
                     ];
+
+                    if(isset($userInfo['entities'][0]['academic']) && $userInfo['entities'][0]['academic']){
+
+                        $arr['is_graduate'] = $userInfo['entities'][0]['academic']['status'];
+                        $arr['graduate_year'] = $userInfo['entities'][0]['academic']['graduate_year'];
+                        $arr['school_name'] = $userInfo['entities'][0]['academic']['school_name'];
+                        $arr['major'] = $userInfo['entities'][0]['academic']['major'];
+                        $arr['exam_province'] = $userInfo['entities'][0]['academic']['exam_province'];
+                    }
 
                     //如果是edu邮箱并且验证了邮箱
                     if ($arr['is_email_edu'] && $arr['email_verified']) {
@@ -158,8 +169,19 @@ Route::get('/callback', function (\App\Service\Abstracts\StudentServiceAbstract 
                       'access_token' => $tokenInfo['access_token'],
                       'refresh_token' => $tokenInfo['refresh_token'],
                       'access_token_expires_time' => date("Y-m-d H:i:s", time() + $tokenInfo['expires_in']),
+                      'gender' => $userInfo['entities'][0]['profile']['gender'],
+                      'education_status' => $userInfo['entities'][0]['profile']['education_status'],
 
                     ];
+
+                    if(isset($userInfo['entities'][0]['academic']) && $userInfo['entities'][0]['academic']){
+
+                        $arr['is_graduate'] = $userInfo['entities'][0]['academic']['status'];
+                        $arr['graduate_year'] = $userInfo['entities'][0]['academic']['graduate_year'];
+                        $arr['school_name'] = $userInfo['entities'][0]['academic']['school_name'];
+                        $arr['major'] = $userInfo['entities'][0]['academic']['major'];
+                        $arr['exam_province'] = $userInfo['entities'][0]['academic']['exam_province'];
+                    }
 
                     //说明之前没有验证邮箱 现在验证了
                     if ($student->email_verified == 0 && $userInfo['entities'][0]['profile']['email_verified']) {
@@ -179,19 +201,18 @@ Route::get('/callback', function (\App\Service\Abstracts\StudentServiceAbstract 
                             $arr['email_verified'] = $userInfo['entities'][0]['profile']['email_verified'];
                         }
 
-                        if ($student->mobile != (string)$userInfo['entities'][0]['profile']['mobile']) {
-                            $arr['mobile'] = $userInfo['entities'][0]['profile']['mobile'];
-                        }
-                        if ($student->mobile_verified != $userInfo['entities'][0]['profile']['mobile_verified']) {
-                            $arr['mobile_verified'] = $userInfo['entities'][0]['profile']['mobile_verified'];
-                        }
+                    }
 
-                        //vip失效
-                        if (time() > strtotime($student->vip_expire_time)) {
-                            $arr['is_vip'] = 0;
-                        }
+                    if ($student->mobile != (string)$userInfo['entities'][0]['profile']['mobile']) {
+                        $arr['mobile'] = $userInfo['entities'][0]['profile']['mobile'];
+                    }
+                    if ($student->mobile_verified != $userInfo['entities'][0]['profile']['mobile_verified']) {
+                        $arr['mobile_verified'] = $userInfo['entities'][0]['profile']['mobile_verified'];
+                    }
 
-
+                    //vip失效
+                    if (time() > strtotime($student->vip_expire_time)) {
+                        $arr['is_vip'] = 0;
                     }
 
                     $isUpdate = $studentService->updateStudent($student, $arr);

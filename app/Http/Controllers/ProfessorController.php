@@ -252,6 +252,7 @@ class ProfessorController extends Controller
               'comment' => $rate->comment,
               'tag' => $rate->tag,
               'effort' => $rate->effort,
+              'created_at' => $rate->created_at,
             ];
             $tagsStr .= $rate->tag . ",";
         }

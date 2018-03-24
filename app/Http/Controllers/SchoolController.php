@@ -336,6 +336,7 @@ class SchoolController extends Controller
               'comment' => $rate->comment,
               'student_name' => $rate->student->name,
               'score' => round($rate->score, 1),
+              'created_at' => $rate->created_at,
             ];
         }
 

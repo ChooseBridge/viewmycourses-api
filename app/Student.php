@@ -30,5 +30,12 @@ class Student extends Model
       'mobile_verified',
       'email_verified',
       'is_email_edu',
+      'gender',
+      'education_status',
+      'is_graduate',
+      'graduate_year',
+      'school_name',
+      'major',
+      'exam_province',
     ];
 }
