@@ -12,6 +12,7 @@ use App\Service\Abstracts\ProvinceServiceAbstract;
 use App\Service\Abstracts\SchoolDistrictServiceAbstract;
 use App\Service\Abstracts\SchoolRateServiceAbstract;
 use App\Service\Abstracts\SchoolServiceAbstract;
+use App\Service\Abstracts\StudentServiceAbstract;
 use function foo\func;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,6 +30,7 @@ class SchoolController extends Controller
     protected $professorRateService;
     protected $schoolDistrictService;
     protected $professorService;
+    protected $studentService;
 
     public function __construct(
       SchoolServiceAbstract $schoolService,
@@ -38,7 +40,8 @@ class SchoolController extends Controller
       SchoolRateServiceAbstract $schoolRateService,
       ProfessorRateServiceAbstract $professorRateService,
       SchoolDistrictServiceAbstract $schoolDistrictService,
-      ProfessorServiceAbstract $professorService
+      ProfessorServiceAbstract $professorService,
+      StudentServiceAbstract $studentService
     ) {
         $this->schoolService = $schoolService;
         $this->countryService = $countryService;
@@ -48,6 +51,7 @@ class SchoolController extends Controller
         $this->professorRateService = $professorRateService;
         $this->schoolDistrictService = $schoolDistrictService;
         $this->professorService = $professorService;
+        $this->studentService = $studentService;
     }
 
 // backend
@@ -264,15 +268,15 @@ class SchoolController extends Controller
         //待处理每日推荐的教授是什么逻辑
 //        $this->professorService->get
 
-        $schoolName = $request->get('school_name', null);
-        if (!$schoolName) {
-            throw new APIException("参数school name缺失", APIException::MISS_PARAM);
+        $schoolId = $request->get('school_id', null);
+        if (!$schoolId) {
+            throw new APIException("参数school id缺失", APIException::MISS_PARAM);
         }
-        $school = $this->schoolService->getSchoolByName($schoolName);
+        $school = $this->schoolService->getSchoolById($schoolId);
         if (!$school) {
             throw new APIException("未知的学校", APIException::DATA_EXCEPTION);
         }
-        $schoolId = $school->school_id;
+
 
 
         $effort = $this->professorRateService->getEffortBySchoolId($schoolId);
@@ -320,7 +324,7 @@ class SchoolController extends Controller
                 $schoolDistrictScore[$rate->school_district_id]['num'] += 1;
             }
 
-            $ratesInfo[] = [
+            $tmp = [
               'school_rate_id' => $rate->school_rate_id,
               'school_district_name' => $rate->schoolDistrict->school_district_name,
               'social_reputation' => $rate->social_reputation,
@@ -339,6 +343,41 @@ class SchoolController extends Controller
               'score' => round($rate->score, 1),
               'created_at' => $rate->created_at,
             ];
+
+            //计算百分比
+            if ($rate->thumbs_up == "" && $rate->thumbs_down == "") {
+                $tmp['thumbs_up_percent'] = 0;
+                $tmp['thumbs_down_percent'] = 0;
+            } elseif ($rate->thumbs_up == "") {
+                $tmp['thumbs_up_percent'] = 0;
+                $tmp['thumbs_down_percent'] = 100;
+            } elseif ($rate->thumbs_down == "") {
+                $tmp['thumbs_up_percent'] = 100;
+                $tmp['thumbs_down_percent'] = 0;
+            } else {
+                $thumbsUpNum = count(explode(',', trim($rate->thumbs_up, ',')));
+                $thumbsUpDown = count(explode(',', trim($rate->thumbs_down, ',')));
+                $total = $thumbsUpNum + $thumbsUpDown;
+                $thumbsUpPercent = $thumbsUpNum*100/$total;
+                $tmp['thumbs_up_percent'] = floor($thumbsUpPercent);
+                $tmp['thumbs_down_percent'] = 100 - $tmp['thumbs_up_percent'];
+            }
+
+            //检查是否 点击有用 点击无用
+            if ($this->studentService->getCurrentStudent()) {
+                if (strpos($rate->thumbs_up, ",{$GLOBALS['gStudent']->student_id},") === false) {
+                    $tmp["is_thumbs_up"] = false;
+                } else {
+                    $tmp["is_thumbs_up"] = true;
+                }
+                if (strpos($rate->thumbs_down, ",{$GLOBALS['gStudent']->student_id},") === false) {
+                    $tmp["is_thumbs_down"] = false;
+                } else {
+                    $tmp["is_thumbs_down"] = true;
+                }
+            }
+
+            $ratesInfo[] = $tmp;
         }
 
         $schoolDistricts = $this->schoolDistrictService->getDistrictsBySchoolId($schoolId);
