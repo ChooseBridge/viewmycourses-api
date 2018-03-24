@@ -321,7 +321,7 @@ class SchoolController extends Controller
             }
 
             $ratesInfo[] = [
-              'school_rate_id' => $rate->schoolDistrict->school_rate_id,
+              'school_rate_id' => $rate->school_rate_id,
               'school_district_name' => $rate->schoolDistrict->school_district_name,
               'social_reputation' => $rate->social_reputation,
               'academic_level' => $rate->academic_level,

@@ -138,13 +138,17 @@ class ProfessorRateController extends Controller
         if ($res['res']) {
             $data = [
               'success' => true,
-              'num' => $res['num'],
-              'data' => 'thumbs up success'
+              'data' => [
+                'msg' => 'thumbs up success',
+                'num' => $res['num'],
+              ]
             ];
-        }else{
+        } else {
             $data = [
               'success' => false,
-              'data' => 'thumbs up false'
+              'data' => [
+                'msg' => 'thumbs up false',
+              ]
             ];
         }
         return \Response::json($data);
@@ -163,13 +167,17 @@ class ProfessorRateController extends Controller
         if ($res['res']) {
             $data = [
               'success' => true,
-              'num' => $res['num'],
-              'data' => 'thumbs up success'
+              'data' => [
+                'msg' => 'thumbs down success',
+                'num' => $res['num'],
+              ]
             ];
-        }else{
+        } else {
             $data = [
               'success' => false,
-              'data' => 'thumbs dowm false'
+              'data' => [
+                'msg' => 'thumbs down false',
+              ]
             ];
         }
         return \Response::json($data);

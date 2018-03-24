@@ -157,12 +157,12 @@ class ProfessorController extends Controller
         };
         $join = [
           'school' => function ($query) use ($schoolName) {
-              $query->where('school_name', 'like', "%" . $schoolName."%");
-              $query->orWhere('school_nick_name', 'like', "%" . $schoolName."%");
-              $query->orWhere('school_nick_name_two', 'like', "%" . $schoolName."%");
+              $query->where('school_name', 'like', "%" . $schoolName . "%");
+              $query->orWhere('school_nick_name', 'like', "%" . $schoolName . "%");
+              $query->orWhere('school_nick_name_two', 'like', "%" . $schoolName . "%");
           },
           'college' => function ($query) use ($collegeName) {
-              $query->where('college_name', 'like', "%" . $collegeName."%");
+              $query->where('college_name', 'like', "%" . $collegeName . "%");
           }
         ];
         $result = $this->professorService->getProfessorsForPage(1, $queryCallBack, $join);
@@ -237,7 +237,7 @@ class ProfessorController extends Controller
             }
 
 
-            $rateInfo[] = [
+            $tmp = [
               'professor_rate_id' => $rate->professor_rate_id,
               'course_code' => $rate->course_code,
               'course_name' => $rate->course_name,
@@ -254,6 +254,39 @@ class ProfessorController extends Controller
               'effort' => $rate->effort,
               'created_at' => $rate->created_at,
             ];
+
+            //计算百分比
+            if ($rate->thumbs_up == "" && $rates->thumbs_down == "") {
+                $tmp['thumbs_up_percent'] = 0;
+                $tmp['thumbs_down_percent'] = 0;
+            } elseif ($rate->thumbs_up == "") {
+                $tmp['thumbs_up_percent'] = 0;
+                $tmp['thumbs_down_percent'] = 100;
+            } elseif ($rate->thumbs_down == "") {
+                $tmp['thumbs_up_percent'] = 100;
+                $tmp['thumbs_down_percent'] = 0;
+            } else {
+                $thumbsUpNum = explode(',', trim($rate->thumbs_up, ','));
+                $thumbsUpDown = explode(',', trim($rate->thumbs_down, ','));
+                $tmp['thumbs_up_percent'] = floor(($thumbsUpNum / ($thumbsUpNum + $thumbsUpDown)) * 100);
+                $tmp['thumbs_down_percent'] = 100 - $tmp['thumbs_up_percent'];
+            }
+
+            //检查是否 点击有用 点击无用
+            if ($this->studentService->getCurrentStudent()) {
+                if (strpos($rate->thumbs_up, ",{$GLOBALS['gStudent']->student_id},") === false) {
+                    $tmp["is_thumbs_up"] = false;
+                } else {
+                    $tmp["is_thumbs_up"] = true;
+                }
+                if (strpos($rate->thumbs_down, ",{$GLOBALS['gStudent']->student_id},") === false) {
+                    $tmp["is_thumbs_down"] = false;
+                } else {
+                    $tmp["is_thumbs_down"] = true;
+                }
+            }
+
+            $rateInfo[] = $tmp;
             $tagsStr .= $rate->tag . ",";
         }
 
@@ -348,13 +381,17 @@ class ProfessorController extends Controller
         if ($res['res']) {
             $data = [
               'success' => true,
-              'num' => $res['num'],
-              'data' => 'thumbs up success'
+              'data' => [
+                'msg' => 'thumbs up success',
+                'num' => $res['num'],
+              ]
             ];
         } else {
             $data = [
               'success' => false,
-              'data' => 'thumbs up false'
+              'data' => [
+                'msg' => 'thumbs up false',
+              ]
             ];
         }
         return \Response::json($data);
