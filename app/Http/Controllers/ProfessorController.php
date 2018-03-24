@@ -268,7 +268,9 @@ class ProfessorController extends Controller
             } else {
                 $thumbsUpNum = explode(',', trim($rate->thumbs_up, ','));
                 $thumbsUpDown = explode(',', trim($rate->thumbs_down, ','));
-                $tmp['thumbs_up_percent'] = floor(($thumbsUpNum / ($thumbsUpNum + $thumbsUpDown)) * 100);
+                $total = $thumbsUpNum + $thumbsUpDown;
+                $thumbsUpPercent = ($thumbsUpNum/$total)*100;
+                $tmp['thumbs_up_percent'] = floor($thumbsUpPercent);
                 $tmp['thumbs_down_percent'] = 100 - $tmp['thumbs_up_percent'];
             }
 
