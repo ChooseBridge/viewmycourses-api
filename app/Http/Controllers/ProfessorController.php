@@ -176,6 +176,7 @@ class ProfessorController extends Controller
               'professor_id' => $professor->professor_id,
               'professor_full_name' => $professor->professor_full_name,
               'professor_web_site' => $professor->professor_web_site,
+              'school_name' => $professor->school->school_name,
             ];
         }
 
