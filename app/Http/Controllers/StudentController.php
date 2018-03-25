@@ -244,11 +244,11 @@ sql;
                 $school = $this->schoolService->getSchoolById($item->col1);
                 $college = $this->collegeService->getCollegeById($item->col2);
                 $tmp[] = [
-                  'id' => $item->id,
-                  'name' => $item->name,
+                  'professor_id' => $item->id,
+                  'professor_full_name' => $item->name,
                   'school_name' => !empty($school) ? $school->school_name : "",
                   'college_name' => !empty($college) ? $college->college_name : "",
-                  'professor_web_site' => $item->professor_web_site,
+                  'professor_web_site' => $item->col3,
                   'type' => 'professor',
                 ];
             }
@@ -257,8 +257,8 @@ sql;
                 $province = $this->provinceService->getProvinceById($item->col2);
                 $city = $this->cityService->getCityById($item->col3);
                 $tmp[] = [
-                  'id' => $item->id,
-                  'name' => $item->name,
+                  'school_id' => $item->id,
+                  'school_name' => $item->name,
                   'country_name' => !empty($country) ? $country->country_name : "",
                   'province_name' => !empty($province) ? $province->province_name : "",
                   'city_name' => !empty($city) ? $city->city_name : "",
