@@ -266,16 +266,29 @@ class SchoolController extends Controller
 
     public function getSchoolDetail(Request $request)
     {
-        //待处理每日推荐的教授是什么逻辑
-//        $this->professorService->get
+
 
         $schoolId = $request->get('school_id', null);
         if (!$schoolId) {
             throw new APIException("参数school id缺失", APIException::MISS_PARAM);
         }
+
         $school = $this->schoolService->getSchoolById($schoolId);
         if (!$school) {
             throw new APIException("未知的学校", APIException::DATA_EXCEPTION);
+        }
+
+        //待处理每日推荐的教授是什么逻辑
+        $randomProfessor = $this->professorService->getRandomProfessorBySchoolId($schoolId);
+        if($randomProfessor){
+            $tmp = [
+              'professor_id'=>$randomProfessor->professor_id,
+              'professor_full_name'=>$randomProfessor->professor_full_name,
+              'professor_web_site'=>$randomProfessor->professor_web_site,
+              'school_name'=>$randomProfessor->school->school_name,
+              'college_name'=>$randomProfessor->college->college_name,
+            ];
+            $randomProfessor = $tmp;
         }
 
 
@@ -459,6 +472,7 @@ class SchoolController extends Controller
         $data = [
           'success' => true,
           'data' => [
+            'randomProfessor'=>$randomProfessor,
             'schoolInfo' => $schoolInfo,
             'schoolDistrictInfo' => $schoolDistrictInfo,
             'ratesInfo' => $ratesInfo,

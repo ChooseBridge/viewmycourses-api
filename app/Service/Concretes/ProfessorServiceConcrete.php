@@ -12,6 +12,7 @@ namespace App\Service\Concretes;
 use App\Professor;
 use App\Service\Abstracts\MessageServiceAbstract;
 use App\Service\Abstracts\ProfessorServiceAbstract;
+use Doctrine\Common\Cache\Cache;
 use Illuminate\Support\Facades\Validator;
 
 class ProfessorServiceConcrete implements ProfessorServiceAbstract
@@ -30,8 +31,8 @@ class ProfessorServiceConcrete implements ProfessorServiceAbstract
             $professors = Professor::paginate($limit);
         } elseif ($queryCallBack && $join) {
             $builder = Professor::where($queryCallBack);
-            foreach ($join as $key =>$value){
-                $builder ->whereHas($key,$value);
+            foreach ($join as $key => $value) {
+                $builder->whereHas($key, $value);
             }
             $professors = $builder->paginate($limit);
         } elseif ($join) {
@@ -107,6 +108,22 @@ class ProfessorServiceConcrete implements ProfessorServiceAbstract
 
     public function getRandomProfessorBySchoolId($schoolId)
     {
+
+        $cache = \Illuminate\Support\Facades\Cache::get($schoolId . "professor");
+        if ($cache) {
+            return unserialize($cache);
+        }
+
+        $professors = Professor::where('school_id', $schoolId)->get();
+        $professor = $professors->random();
+
+        if ($professor) {
+            $cacheValue = serialize($professor);
+            \Illuminate\Support\Facades\Cache::set($schoolId . "professor",$cacheValue,3600*24);
+            return $professor;
+        }
+
+        return null;
 
 
     }
