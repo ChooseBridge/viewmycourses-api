@@ -171,7 +171,7 @@ class StudentController extends Controller
             throw new APIException("miss param name", APIException::MISS_PARAM);
         }
         $page = $request->get('page', 1);
-        $limit = 2;
+        $limit = $request->get('pageSize', 10);;
 
 
         $countSql = <<<sql
@@ -203,7 +203,6 @@ sql;
 
 
         }
-
 
 
         $offset = ($page - 1) * $limit;

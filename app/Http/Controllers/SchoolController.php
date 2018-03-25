@@ -206,6 +206,7 @@ class SchoolController extends Controller
         $countryId = $request->get('country_id', null);
         $provinceId = $request->get('province_id', null);
         $cityId = $request->get('city_id', null);
+        $limit = $request->get('pageSize', 10);;
 
         $queryCallBack = function ($query) use ($schoolName, $countryId, $provinceId, $cityId) {
 
@@ -227,7 +228,7 @@ class SchoolController extends Controller
             }
 
         };
-        $result = $this->schoolService->getAllCheckedSchoolsForPage(1, $queryCallBack);
+        $result = $this->schoolService->getAllCheckedSchoolsForPage($limit, $queryCallBack);
 
         foreach ($result as $school) {
             $shcools[] = [

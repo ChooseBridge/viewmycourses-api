@@ -146,6 +146,7 @@ class ProfessorController extends Controller
         $schoolName = $request->get('school_name');
         $professorName = $request->get('professor_name');
         $collegeName = $request->get('college_name');
+        $limit = $request->get('pageSize', 10);;
 
         $queryCallBack = function ($query) use ($professorName) {
 
@@ -165,7 +166,7 @@ class ProfessorController extends Controller
               $query->where('college_name', 'like', "%" . $collegeName . "%");
           }
         ];
-        $result = $this->professorService->getProfessorsForPage(1, $queryCallBack, $join);
+        $result = $this->professorService->getProfessorsForPage($limit, $queryCallBack, $join);
         foreach ($result as $professor) {
             $professors[] = [
               'professor_id' => $professor->professor_id,
