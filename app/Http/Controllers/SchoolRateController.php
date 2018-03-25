@@ -6,6 +6,7 @@ use App\Exceptions\APIException;
 use App\Service\Abstracts\SchoolDistrictServiceAbstract;
 use App\Service\Abstracts\SchoolRateServiceAbstract;
 use App\Service\Abstracts\SchoolServiceAbstract;
+use App\Service\Abstracts\StudentServiceAbstract;
 use Illuminate\Http\Request;
 
 class SchoolRateController extends Controller
@@ -15,15 +16,18 @@ class SchoolRateController extends Controller
     protected $schoolRateService;
     protected $schoolDistrictService;
     protected $schoolService;
+    protected $studentService;
 
     public function __construct(
       SchoolRateServiceAbstract $schoolRateService,
       SchoolDistrictServiceAbstract $schoolDistrictService,
-      SchoolServiceAbstract $schoolService
+      SchoolServiceAbstract $schoolService,
+      StudentServiceAbstract $studentService
     ) {
         $this->schoolRateService = $schoolRateService;
         $this->schoolDistrictService = $schoolDistrictService;
         $this->schoolService = $schoolService;
+        $this->studentService = $studentService;
     }
 
 
@@ -64,7 +68,10 @@ class SchoolRateController extends Controller
 
     public function createRate(Request $request)
     {
-        //待处理用户权限处理
+
+        if(!$this->studentService->currentStudentIsVip()){
+            throw new APIException("此操作需要会员权限",APIException::IS_NOT_VIP);
+        }
 
         $data = $request->all();
 

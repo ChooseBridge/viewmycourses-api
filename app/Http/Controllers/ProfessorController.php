@@ -104,7 +104,9 @@ class ProfessorController extends Controller
 
     public function createProfessor(Request $request)
     {
-        //待处理创建权限
+        if(!$this->studentService->currentStudentIsVip()){
+            throw new APIException("此操作需要会员权限",APIException::IS_NOT_VIP);
+        }
 
         $data = $request->all();
         $validator = $this->professorService->validatorForCreate($data);
@@ -140,7 +142,9 @@ class ProfessorController extends Controller
     public function getProfessorByCondition(Request $request)
     {
 
-        //待处理搜索权限
+        if(!$this->studentService->currentStudentIsVip()){
+            throw new APIException("此操作需要会员权限",APIException::IS_NOT_VIP);
+        }
 
         $professors = [];
         $schoolName = $request->get('school_name');
@@ -375,6 +379,10 @@ class ProfessorController extends Controller
 
     public function thumbsUpProfessor(Request $request)
     {
+
+        if(!$this->studentService->currentStudentIsVip()){
+            throw new APIException("此操作需要会员权限",APIException::IS_NOT_VIP);
+        }
 
         $professorId = $request->get('professor_id');
         if (!$professorId) {

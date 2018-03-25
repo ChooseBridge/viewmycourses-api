@@ -148,5 +148,14 @@ class StudentServiceConcrete implements StudentServiceAbstract
         return null;
     }
 
+    public function currentStudentIsVip()
+    {
+        $student = $this->getCurrentStudent();
+        if ($student) {
+            return false;
+        }
+        return $student->is_vip == 1 ? true : false;
+    }
+
 
 }

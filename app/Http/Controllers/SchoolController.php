@@ -112,6 +112,11 @@ class SchoolController extends Controller
 //  api
     public function createSchool(Request $request)
     {
+
+        if(!$this->studentService->currentStudentIsVip()){
+            throw new APIException("此操作需要会员权限",APIException::IS_NOT_VIP);
+        }
+
         $data = $request->all();
 
         $validator = $this->schoolService->validatorForCreate($data);
@@ -159,7 +164,6 @@ class SchoolController extends Controller
     public function getAllSchoolByName(Request $request)
     {
 
-        //待处理搜索权限
 
         $shcools = [];
         $schoolName = $request->get('school_name', null);
@@ -198,7 +202,6 @@ class SchoolController extends Controller
     public function getSchoolByCondition(Request $request)
     {
 
-        //待处理搜索权限
 
 
         $shcools = [];
@@ -278,7 +281,7 @@ class SchoolController extends Controller
             throw new APIException("未知的学校", APIException::DATA_EXCEPTION);
         }
 
-        //待处理每日推荐的教授是什么逻辑
+
         $randomProfessor = $this->professorService->getRandomProfessorBySchoolId($schoolId);
         if($randomProfessor){
             $tmp = [

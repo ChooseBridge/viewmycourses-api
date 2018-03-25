@@ -7,6 +7,7 @@ use App\Service\Abstracts\ProfessorCourseServiceAbstract;
 use App\Service\Abstracts\ProfessorRateServiceAbstract;
 use App\Service\Abstracts\ProfessorServiceAbstract;
 use App\Service\Abstracts\SchoolCourseCategoryServiceAbstract;
+use App\Service\Abstracts\StudentServiceAbstract;
 use Illuminate\Http\Request;
 
 class ProfessorRateController extends Controller
@@ -16,17 +17,20 @@ class ProfessorRateController extends Controller
     protected $professorService;
     protected $professorCourseService;
     protected $schoolCourseCategoryService;
+    protected $studentService;
 
     public function __construct(
       ProfessorRateServiceAbstract $professorRateService,
       ProfessorServiceAbstract $professorService,
       ProfessorCourseServiceAbstract $professorCourseService,
-      SchoolCourseCategoryServiceAbstract $schoolCourseCategoryService
+      SchoolCourseCategoryServiceAbstract $schoolCourseCategoryService,
+      StudentServiceAbstract $studentService
     ) {
         $this->professorRateService = $professorRateService;
         $this->professorService = $professorService;
         $this->professorCourseService = $professorCourseService;
         $this->schoolCourseCategoryService = $schoolCourseCategoryService;
+        $this->studentService = $studentService;
     }
 
 //backend
@@ -68,7 +72,9 @@ class ProfessorRateController extends Controller
     public function createRate(Request $request)
     {
 
-        //待处理用户权限处理
+        if(!$this->studentService->currentStudentIsVip()){
+            throw new APIException("此操作需要会员权限",APIException::IS_NOT_VIP);
+        }
 
         $data = $request->all();
 

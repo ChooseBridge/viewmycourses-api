@@ -101,7 +101,7 @@ class SchoolRateServiceConcrete implements SchoolRateServiceAbstract
                 if (!$isApprove) {
                     throw new  APIException("操作异常 审核失败", APIException::OPERATION_EXCEPTION);
                 }
-                //待处理添加积分
+
                 $isset = $this->studentService->setPoints(Student::RATE_GET_POINT, '点评学校', $rate->student);
                 if (!$isset) {
                     throw new  APIException("操作异常 设置积分失败", APIException::OPERATION_EXCEPTION);

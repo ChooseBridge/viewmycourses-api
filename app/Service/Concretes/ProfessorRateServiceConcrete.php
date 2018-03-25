@@ -137,7 +137,7 @@ class ProfessorRateServiceConcrete implements ProfessorRateServiceAbstract
         $rate = $this->getRateById($id);
         if ($rate) {
             $rate->check_status = ProfessorRate::APPROVE_CHECK;
-            //待处理添加课程和课程类别 和添加积分
+
 
             try {
                 \DB::beginTransaction();
