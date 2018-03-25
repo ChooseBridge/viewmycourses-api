@@ -138,7 +138,7 @@ Route::get('/callback', function (\App\Service\Abstracts\StudentServiceAbstract 
 
                     ];
 
-                    if(isset($userInfo['entities'][0]['academic']) && $userInfo['entities'][0]['academic']){
+                    if (isset($userInfo['entities'][0]['academic']) && $userInfo['entities'][0]['academic']) {
 
                         $arr['is_graduate'] = $userInfo['entities'][0]['academic']['status'];
                         $arr['graduate_year'] = $userInfo['entities'][0]['academic']['graduate_year'];
@@ -174,7 +174,7 @@ Route::get('/callback', function (\App\Service\Abstracts\StudentServiceAbstract 
 
                     ];
 
-                    if(isset($userInfo['entities'][0]['academic']) && $userInfo['entities'][0]['academic']){
+                    if (isset($userInfo['entities'][0]['academic']) && $userInfo['entities'][0]['academic']) {
 
                         $arr['is_graduate'] = $userInfo['entities'][0]['academic']['status'];
                         $arr['graduate_year'] = $userInfo['entities'][0]['academic']['graduate_year'];
@@ -217,9 +217,9 @@ Route::get('/callback', function (\App\Service\Abstracts\StudentServiceAbstract 
 
                     $isUpdate = $studentService->updateStudent($student, $arr);
                     if ($isUpdate) {
-                        if(strpos($redirectUrl,"?") === false){
+                        if (strpos($redirectUrl, "?") === false) {
                             return Redirect::to($redirectUrl . "?token=" . $student->token, 301);
-                        }else{
+                        } else {
                             return Redirect::to($redirectUrl . "&token=" . $student->token, 301);
                         }
 
@@ -285,6 +285,11 @@ Route::group(['prefix' => 'api', 'middleware' => [\App\Http\Middleware\CheckLogi
       ['uses' => 'SchoolController@getAllSchoolByName', 'as' => 'api.get-all-school-by-name']);
     Route::get('get-professor-by-condition',
       ['uses' => 'ProfessorController@getProfessorByCondition', 'as' => 'api.get-professor-by-condition']);
+
+
+    Route::get('get-all-by-name',
+      ['uses' => 'StudentController@getAllByName', 'as' => 'api.get-all-by-name']);
+
 
     Route::get('thumbs-up-professor',
       ['uses' => 'ProfessorController@thumbsUpProfessor', 'as' => 'api.thumbs-up-professor']);

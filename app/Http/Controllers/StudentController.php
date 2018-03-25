@@ -2,13 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Country;
+use App\Exceptions\APIException;
 use App\ProfessorRate;
+use App\School;
 use App\SchoolRate;
+use App\Service\Abstracts\CollegeServiceAbstract;
+use App\Service\Abstracts\CountryServiceAbstract;
 use App\Service\Abstracts\MessageServiceAbstract;
 use App\Service\Abstracts\ProfessorRateServiceAbstract;
+use App\Service\Abstracts\ProvinceServiceAbstract;
+use App\Service\Abstracts\SchoolCourseCategoryServiceAbstract;
 use App\Service\Abstracts\SchoolRateServiceAbstract;
+use App\Service\Abstracts\SchoolServiceAbstract;
 use App\Service\Abstracts\StudentServiceAbstract;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class StudentController extends Controller
 {
@@ -17,17 +26,29 @@ class StudentController extends Controller
     protected $professorRateService;
     protected $schoolRateService;
     protected $messageService;
+    protected $schoolService;
+    protected $collegeService;
+    protected $countryService;
+    protected $provinceService;
 
     public function __construct(
       StudentServiceAbstract $studentService,
       ProfessorRateServiceAbstract $professorRateService,
       SchoolRateServiceAbstract $schoolRateService,
-      MessageServiceAbstract $messageService
+      MessageServiceAbstract $messageService,
+      SchoolServiceAbstract $schoolService,
+      CollegeServiceAbstract $collegeService,
+      CountryServiceAbstract $countryService,
+      ProvinceServiceAbstract $provinceService
     ) {
         $this->studentService = $studentService;
         $this->professorRateService = $professorRateService;
         $this->schoolRateService = $schoolRateService;
         $this->messageService = $messageService;
+        $this->schoolService = $schoolService;
+        $this->collegeService = $collegeService;
+        $this->countryService = $countryService;
+        $this->provinceService = $provinceService;
     }
 
 //api
@@ -111,10 +132,10 @@ class StudentController extends Controller
         $student = $GLOBALS['gStudent'];
         $messages = $this->messageService->getMessagesByStudentId($student->id);
         $messageInfo = [];
-        foreach ($messages as $message){
+        foreach ($messages as $message) {
             $messageInfo[] = [
-              'message_content'=>$message->message_content,
-              'created_at'=>$message->created_at,
+              'message_content' => $message->message_content,
+              'created_at' => $message->created_at,
             ];
         }
 
@@ -140,6 +161,122 @@ class StudentController extends Controller
     {
         $data = $this->studentService->getPoints($GLOBALS['gStudent']);
         var_dump($data);
+    }
+
+    public function getAllByName(Request $request)
+    {
+
+        $name = $request->get('name');
+        if (!$name) {
+            throw new APIException("miss param name", APIException::MISS_PARAM);
+        }
+        $page = $request->get('page', 1);
+        $limit = 2;
+
+
+        $countSql = <<<sql
+        select count(*) as total from 
+        (
+        (select professor_full_name as name  from `professor` where `professor_full_name` like '%$name%') union all
+        (select school_name as name   from `school` where (`school_name` like '%$name%' or `school_nick_name` like '%$name%' or `school_nick_name_two` like '%$name%'))
+        ) as a
+sql;
+        $res = DB::select($countSql);
+        $total = $res[0]->total;
+
+        if ($total == 0) {
+
+            $data = [
+              'success' => true,
+              'data' => [
+                'total' => 0,
+                'pageNum' => 0,
+                'perPageNum' => $limit,
+                'currentPage' => $page,
+                'prevPage' => null,
+                'nextPage' => null,
+                'res' => null,
+              ]
+            ];
+
+            return \Response::json($data);
+
+
+        }
+
+
+
+        $offset = ($page - 1) * $limit;
+        $pageNum = ceil($total / $limit);
+        if ($page == 1) {
+            $prevPage = null;
+        } else {
+            $prevPage = $page - 1;
+        }
+        if ($page == $pageNum) {
+            $nextPage = null;
+        } else {
+            $nextPage = $page + 1;
+        }
+
+
+        $resSql = <<<sql
+        select * from 
+        (
+        (select professor_id as id,professor_full_name as name,school_id as col1,college_id as col2,'professor' as type  from `professor` 
+        where `professor_full_name` like '%$name%') 
+        union all
+        (select school_id as id ,school_name as name ,country_id as col1,province_id as col2,'school' as type   from `school` 
+        where (`school_name` like '%$name%' or `school_nick_name` like '%$name%' or `school_nick_name_two` like '%$name%'))
+        ) as a limit $limit offset $offset
+sql;
+
+
+        $res = DB::select($resSql);
+        $tmp = [];
+
+
+        foreach ($res as $item) {
+            if ($item->type == "professor") {
+                $school = $this->schoolService->getSchoolById($item->col1);
+                $college = $this->collegeService->getCollegeById($item->col2);
+                $tmp[] = [
+                  'id' => $item->id,
+                  'name' => $item->name,
+                  'school_name' => !empty($school) ? $school->school_name : "",
+                  'college_name' => !empty($college) ? $college->college_name : "",
+                  'type' => 'professor',
+                ];
+            }
+            if ($item->type == "school") {
+                $country = $this->countryService->getCountryById($item->col1);
+                $province = $this->provinceService->getProvinceById($item->col2);
+                $tmp[] = [
+                  'id' => $item->id,
+                  'name' => $item->name,
+                  'country_name' => !empty($country) ? $country->country_name : "",
+                  'province_name' => !empty($province) ? $province->province_name : "",
+                  'type' => 'school',
+                ];
+            }
+        }
+        $res = $tmp;
+
+        $data = [
+          'success' => true,
+          'data' => [
+            'total' => $total,
+            'pageNum' => $pageNum,
+            'perPageNum' => $limit,
+            'currentPage' => $page,
+            'prevPage' => $prevPage,
+            'nextPage' => $nextPage,
+            'res' => $res,
+          ]
+        ];
+
+        return \Response::json($data);
+
     }
 
 }
