@@ -191,6 +191,8 @@ class ProfessorController extends Controller
         $tmp['next_page_url'] = $pageInfo['next_page_url'];
         $tmp['last_page_url'] = $pageInfo['last_page_url'];
         $tmp['total'] = $pageInfo['total'];
+        $tmp['last_page'] = $pageInfo['last_page'];
+        $tmp['per_page'] = $pageInfo['per_page'];
         $pageInfo = $tmp;
 
         $data = [
