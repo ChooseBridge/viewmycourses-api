@@ -7,6 +7,7 @@ use App\Exceptions\APIException;
 use App\ProfessorRate;
 use App\School;
 use App\SchoolRate;
+use App\Service\Abstracts\CityServiceAbstract;
 use App\Service\Abstracts\CollegeServiceAbstract;
 use App\Service\Abstracts\CountryServiceAbstract;
 use App\Service\Abstracts\MessageServiceAbstract;
@@ -30,6 +31,7 @@ class StudentController extends Controller
     protected $collegeService;
     protected $countryService;
     protected $provinceService;
+    protected $cityService;
 
     public function __construct(
       StudentServiceAbstract $studentService,
@@ -39,7 +41,8 @@ class StudentController extends Controller
       SchoolServiceAbstract $schoolService,
       CollegeServiceAbstract $collegeService,
       CountryServiceAbstract $countryService,
-      ProvinceServiceAbstract $provinceService
+      ProvinceServiceAbstract $provinceService,
+      CityServiceAbstract $cityService
     ) {
         $this->studentService = $studentService;
         $this->professorRateService = $professorRateService;
@@ -49,6 +52,7 @@ class StudentController extends Controller
         $this->collegeService = $collegeService;
         $this->countryService = $countryService;
         $this->provinceService = $provinceService;
+        $this->cityService = $cityService;
     }
 
 //api
@@ -222,10 +226,10 @@ sql;
         $resSql = <<<sql
         select * from 
         (
-        (select professor_id as id,professor_full_name as name,school_id as col1,college_id as col2,'professor' as type  from `professor` 
+        (select professor_id as id,professor_full_name as name,school_id as col1,college_id as col2,professor_web_site as col3,'professor' as type  from `professor` 
         where `professor_full_name` like '%$name%') 
         union all
-        (select school_id as id ,school_name as name ,country_id as col1,province_id as col2,'school' as type   from `school` 
+        (select school_id as id ,school_name as name ,country_id as col1,province_id as col2,city_id as col3,'school' as type   from `school` 
         where (`school_name` like '%$name%' or `school_nick_name` like '%$name%' or `school_nick_name_two` like '%$name%'))
         ) as a limit $limit offset $offset
 sql;
@@ -244,17 +248,20 @@ sql;
                   'name' => $item->name,
                   'school_name' => !empty($school) ? $school->school_name : "",
                   'college_name' => !empty($college) ? $college->college_name : "",
+                  'professor_web_site' => $item->professor_web_site,
                   'type' => 'professor',
                 ];
             }
             if ($item->type == "school") {
                 $country = $this->countryService->getCountryById($item->col1);
                 $province = $this->provinceService->getProvinceById($item->col2);
+                $city = $this->cityService->getCityById($item->col3);
                 $tmp[] = [
                   'id' => $item->id,
                   'name' => $item->name,
                   'country_name' => !empty($country) ? $country->country_name : "",
                   'province_name' => !empty($province) ? $province->province_name : "",
+                  'city_name' => !empty($city) ? $city->city_name : "",
                   'type' => 'school',
                 ];
             }
