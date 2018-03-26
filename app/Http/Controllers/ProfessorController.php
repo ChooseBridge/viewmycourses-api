@@ -104,8 +104,8 @@ class ProfessorController extends Controller
 
     public function createProfessor(Request $request)
     {
-        if(!$this->studentService->currentStudentIsVip()){
-            throw new APIException("此操作需要会员权限",APIException::IS_NOT_VIP);
+        if (!$this->studentService->currentStudentIsVip()) {
+            throw new APIException("此操作需要会员权限", APIException::IS_NOT_VIP);
         }
 
         $data = $request->all();
@@ -142,34 +142,48 @@ class ProfessorController extends Controller
     public function getProfessorByCondition(Request $request)
     {
 
-        if(!$this->studentService->currentStudentIsVip()){
-            throw new APIException("此操作需要会员权限",APIException::IS_NOT_VIP);
+        if (!$this->studentService->currentStudentIsVip()) {
+            throw new APIException("此操作需要会员权限", APIException::IS_NOT_VIP);
         }
 
         $professors = [];
         $schoolName = $request->get('school_name');
         $professorName = $request->get('professor_name');
+        $schoolId = $request->get('school_id');
+        $collegeId = $request->get('college_id');
         $collegeName = $request->get('college_name');
         $limit = $request->get('pageSize', 10);;
 
-        $queryCallBack = function ($query) use ($professorName) {
-
-
+        $queryCallBack = function ($query) use ($professorName, $schoolId, $collegeId) {
             if ($professorName) {
                 $query->where('professor_full_name', 'like', "%$professorName%");
             }
+            if ($schoolId) {
+                $query->where('school_id', $schoolId);
+            }
+            if ($collegeId) {
+                $query->where('college_id', $collegeId);
+            }
 
         };
-        $join = [
-          'school' => function ($query) use ($schoolName) {
-              $query->where('school_name', 'like', "%" . $schoolName . "%");
-              $query->orWhere('school_nick_name', 'like', "%" . $schoolName . "%");
-              $query->orWhere('school_nick_name_two', 'like', "%" . $schoolName . "%");
-          },
-          'college' => function ($query) use ($collegeName) {
-              $query->where('college_name', 'like', "%" . $collegeName . "%");
-          }
-        ];
+
+        $join = [];
+        if($schoolName){
+            $join['school'] =  function ($query) use ($schoolName) {
+                $query->where('school_name', 'like', "%" . $schoolName . "%");
+                $query->orWhere('school_nick_name', 'like', "%" . $schoolName . "%");
+                $query->orWhere('school_nick_name_two', 'like', "%" . $schoolName . "%");
+            };
+        }
+        if($collegeName){
+            $join['college'] = function ($query) use ($collegeName) {
+                $query->where('college_name', 'like', "%" . $collegeName . "%");
+            };
+        }
+        if(empty($join)){
+            $join = null;
+        }
+
         $result = $this->professorService->getProfessorsForPage($limit, $queryCallBack, $join);
         foreach ($result as $professor) {
             $professors[] = [
@@ -260,7 +274,7 @@ class ProfessorController extends Controller
               'grade' => $rate->grade,
               'comment' => $rate->comment,
               'tag' => $rate->tag,
-              'effort' => round($rate->effort,1),
+              'effort' => round($rate->effort, 1),
               'created_at' => $rate->created_at,
             ];
 
@@ -278,7 +292,7 @@ class ProfessorController extends Controller
                 $thumbsUpNum = count(explode(',', trim($rate->thumbs_up, ',')));
                 $thumbsUpDown = count(explode(',', trim($rate->thumbs_down, ',')));
                 $total = $thumbsUpNum + $thumbsUpDown;
-                $thumbsUpPercent = $thumbsUpNum*100/$total;
+                $thumbsUpPercent = $thumbsUpNum * 100 / $total;
                 $tmp['thumbs_up_percent'] = floor($thumbsUpPercent);
                 $tmp['thumbs_down_percent'] = 100 - $tmp['thumbs_up_percent'];
             }
@@ -312,7 +326,7 @@ class ProfessorController extends Controller
           'country' => $professor->school->country->country_name,
           'province' => $professor->school->province->province_name,
           'city' => $professor->school->city->city_name,
-          'effort' => round($professorEffort,1),
+          'effort' => round($professorEffort, 1),
         ];
 
         if ($professor->thumbs_up == "") {
@@ -351,7 +365,7 @@ class ProfessorController extends Controller
             $coursesInfo[] = [
               'course_id' => $course->course_id,
               'course_code' => $course->course_code,
-              'effort' => round($effort,1),
+              'effort' => round($effort, 1),
             ];
         }
 
@@ -383,8 +397,8 @@ class ProfessorController extends Controller
     public function thumbsUpProfessor(Request $request)
     {
 
-        if(!$this->studentService->currentStudentIsVip()){
-            throw new APIException("此操作需要会员权限",APIException::IS_NOT_VIP);
+        if (!$this->studentService->currentStudentIsVip()) {
+            throw new APIException("此操作需要会员权限", APIException::IS_NOT_VIP);
         }
 
         $professorId = $request->get('professor_id');
