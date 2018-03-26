@@ -72,8 +72,15 @@ class ProfessorServiceConcrete implements ProfessorServiceAbstract
             if ($isApprove) {
                 $content = "你创建的教授" . $professor->professor_full_name . "审核通过";
                 $student_id = $professor->create_student_id;
+                $messageContent = [
+                  'message'=>$content,
+                  'type'=>'success',
+                  'info_type'=>'professor',
+                  'id'=>$professor->professor_id,
+                  'name'=>$professor->professor_name,
+                ];
                 $data = [
-                  'message_content' => $content,
+                  'message_content' => json_encode($messageContent),
                   'to_student_id' => $student_id
                 ];
                 $this->messageService->createMessage($data);
@@ -90,8 +97,15 @@ class ProfessorServiceConcrete implements ProfessorServiceAbstract
                 //待处理是删除相关的教授点评等操作
                 $content = "你创建的教授" . $professor->professor_full_name . "审核失败";
                 $student_id = $professor->create_student_id;
+                $messageContent = [
+                  'message'=>$content,
+                  'type'=>'fail',
+                  'info_type'=>'professor',
+                  'id'=>$professor->professor_id,
+                  'name'=>$professor->professor_name,
+                ];
                 $data = [
-                  'message_content' => $content,
+                  'message_content' => json_encode($messageContent),
                   'to_student_id' => $student_id
                 ];
                 $this->messageService->createMessage($data);

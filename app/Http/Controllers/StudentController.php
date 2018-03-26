@@ -137,10 +137,9 @@ class StudentController extends Controller
         $messages = $this->messageService->getMessagesByStudentId($student->student_id);
         $messageInfo = [];
         foreach ($messages as $message) {
-            $messageInfo[] = [
-              'message_content' => $message->message_content,
-              'created_at' => $message->created_at,
-            ];
+            $tmp = json_decode($message->message_content,true);
+            $tmp['created_at'] = $message->created_at;
+            $messageInfo[] = $tmp;
         }
 
         $data = [

@@ -109,8 +109,15 @@ class SchoolRateServiceConcrete implements SchoolRateServiceAbstract
 
                 $content = "你点评的学校" . $rate->school->school_name . "审核成功，添加了" . Student::RATE_GET_POINT . "积分";
                 $student_id = $rate->create_student_id;
+                $messageContent = [
+                  'message'=>$content,
+                  'type'=>'success',
+                  'info_type'=>'school_rate',
+                  'id'=>$rate->school_rate_id,
+                  'name'=>$rate->school->school_name,
+                ];
                 $data = [
-                  'message_content' => $content,
+                  'message_content' => json_encode($messageContent),
                   'to_student_id' => $student_id
                 ];
                 $this->messageService->createMessage($data);
@@ -134,8 +141,15 @@ class SchoolRateServiceConcrete implements SchoolRateServiceAbstract
             if ($isReject) {
                 $content = "你点评的学校" . $rate->school->school_name . "审核失败";
                 $student_id = $rate->create_student_id;
+                $messageContent = [
+                  'message'=>$content,
+                  'type'=>'fail',
+                  'info_type'=>'school_rate',
+                  'id'=>$rate->school_rate_id,
+                  'name'=>$rate->school->school_name,
+                ];
                 $data = [
-                  'message_content' => $content,
+                  'message_content' => json_encode($messageContent),
                   'to_student_id' => $student_id
                 ];
                 $this->messageService->createMessage($data);

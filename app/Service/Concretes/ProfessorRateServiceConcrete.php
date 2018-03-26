@@ -193,8 +193,15 @@ class ProfessorRateServiceConcrete implements ProfessorRateServiceAbstract
 
                 $content = "你点评的教授" . $rate->professor->professor_full_name . "审核成功，添加了" . Student::RATE_GET_POINT . "积分";
                 $student_id = $rate->create_student_id;
+                $messageContent = [
+                  'message'=>$content,
+                  'type'=>'success',
+                  'info_type'=>'professor_rate',
+                  'id'=>$rate->professor_rate_id,
+                  'name'=>$rate->professor->professor_full_name,
+                ];
                 $data = [
-                  'message_content' => $content,
+                  'message_content' => json_encode($messageContent),
                   'to_student_id' => $student_id
                 ];
                 $this->messageService->createMessage($data);
@@ -217,8 +224,15 @@ class ProfessorRateServiceConcrete implements ProfessorRateServiceAbstract
             if ($isReject) {
                 $content = "你点评的教授" . $rate->professor->professor_full_name . "审核失败";
                 $student_id = $rate->create_student_id;
+                $messageContent = [
+                  'message'=>$content,
+                  'type'=>'fail',
+                  'info_type'=>'professor_rate',
+                  'id'=>$rate->professor_rate_id,
+                  'name'=>$rate->professor->professor_full_name,
+                ];
                 $data = [
-                  'message_content' => $content,
+                  'message_content' => json_encode($messageContent),
                   'to_student_id' => $student_id
                 ];
                 $this->messageService->createMessage($data);

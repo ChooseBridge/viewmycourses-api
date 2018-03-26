@@ -54,8 +54,15 @@ class SchoolServiceConcrete implements SchoolServiceAbstract
             if ($isApprove) {
                 $content = "您创建的学校" . $school->school_name . "审核通过";
                 $student_id = $school->create_student_id;
+                $messageContent = [
+                    'message'=>$content,
+                    'type'=>'success',
+                    'info_type'=>'school',
+                    'id'=>$school->school_id,
+                    'name'=>$school->school_name,
+                ];
                 $data = [
-                  'message_content' => $content,
+                  'message_content' => json_encode($messageContent),
                   'to_student_id' => $student_id
                 ];
                 $this->messageService->createMessage($data);
@@ -71,8 +78,15 @@ class SchoolServiceConcrete implements SchoolServiceAbstract
             $student_id = $school->create_student_id;
             $isReject = $school->delete();
             if($isReject){
+                $messageContent = [
+                  'message'=>$content,
+                  'type'=>'fail',
+                  'info_type'=>'school',
+                  'id'=>$school->school_id,
+                  'name'=>$school->school_name,
+                ];
                 $data = [
-                  'message_content' => $content,
+                  'message_content' => json_encode($messageContent),
                   'to_student_id' => $student_id
                 ];
                 $this->messageService->createMessage($data);
