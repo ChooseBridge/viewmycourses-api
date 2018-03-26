@@ -134,7 +134,7 @@ class StudentController extends Controller
     public function getStudentMessage()
     {
         $student = $GLOBALS['gStudent'];
-        $messages = $this->messageService->getMessagesByStudentId($student->id);
+        $messages = $this->messageService->getMessagesByStudentId($student->student_id);
         $messageInfo = [];
         foreach ($messages as $message) {
             $messageInfo[] = [
