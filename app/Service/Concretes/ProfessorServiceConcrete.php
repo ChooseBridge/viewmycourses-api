@@ -77,7 +77,7 @@ class ProfessorServiceConcrete implements ProfessorServiceAbstract
                   'type'=>'success',
                   'info_type'=>'professor',
                   'id'=>$professor->professor_id,
-                  'name'=>$professor->professor_name,
+                  'name'=>$professor->professor_full_name,
                 ];
                 $data = [
                   'message_content' => json_encode($messageContent),
@@ -102,7 +102,7 @@ class ProfessorServiceConcrete implements ProfessorServiceAbstract
                   'type'=>'fail',
                   'info_type'=>'professor',
                   'id'=>$professor->professor_id,
-                  'name'=>$professor->professor_name,
+                  'name'=>$professor->professor_full_name,
                 ];
                 $data = [
                   'message_content' => json_encode($messageContent),
