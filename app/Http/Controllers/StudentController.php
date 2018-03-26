@@ -138,7 +138,7 @@ class StudentController extends Controller
         $messageInfo = [];
         foreach ($messages as $message) {
             $tmp = json_decode($message->message_content,true);
-            $tmp['created_at'] = $message->created_at;
+            $tmp['created_at'] = $message->created_at->format('Y-m-d H:i:s');
             $messageInfo[] = $tmp;
         }
 
