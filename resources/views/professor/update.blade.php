@@ -11,9 +11,7 @@
         </div>
 
         <div class="container">
-            @foreach ($errors->all() as $message)
-                <li class="text-danger">{{ $message }}</li>
-            @endforeach
+
             <form class="form-horizontal" method="post" action="{{route('backend.professor.update.post')}}">
                 {{csrf_field()}}
 
@@ -37,7 +35,7 @@
 
                 <div class="form-group">
                     <label>学校</label>
-                    <select class="form-control" name="school_id">
+                    <select disabled=disabled class="form-control" name="school_id">
                         <option value="">请选择</option>
                         @foreach ($schools as $school)
                             @if($school->school_id == $professor->school_id)
@@ -51,7 +49,7 @@
 
                 <div class="form-group">
                     <label>学院</label>
-                    <select class="form-control" name="college_id">
+                    <select  disabled=disabled class="form-control" name="college_id">
                         <option value="">请选择</option>
                         @foreach ($colleges as $college)
                             @if($college->college_id == $professor->college_id)

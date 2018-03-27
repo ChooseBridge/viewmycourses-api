@@ -34,6 +34,8 @@ Route::group(['middleware' => 'admin.user', 'as' => 'backend.'], function () {
     Route::post('admin/school/add', ['uses' => 'SchoolController@addSchool', 'as' => 'school.add.post']);
     Route::get('admin/school/approve', ['uses' => 'SchoolController@approve', 'as' => 'school.aprove.get']);
     Route::get('admin/school/reject', ['uses' => 'SchoolController@reject', 'as' => 'school.reject.get']);
+    Route::get('admin/school/update', ['uses' => 'SchoolController@updateSchool', 'as' => 'school.update.get']);
+    Route::post('admin/school/update', ['uses' => 'SchoolController@updateSchool', 'as' => 'school.update.post']);
 
 
     Route::get('admin/college/index', ['uses' => 'CollegeController@index', 'as' => 'college.index']);

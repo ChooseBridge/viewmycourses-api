@@ -92,6 +92,35 @@ class SchoolController extends Controller
         ]);
     }
 
+
+    public function updateSchool(Request $request)
+    {
+
+        $schoolId = $request->get('school_id');
+        $school = $this->schoolService->getSchoolById($schoolId);
+        if (!$schoolId || !$school) {
+            return redirect(route("backend.school.index"));
+        }
+        if ($request->isMethod('POST')) {
+
+            $data = $request->all();
+            $school->update($data);
+            return redirect(route("backend.school.index"));
+
+        }
+        $countrys = $this->countryService->getAllCountrys();
+        $provinces = $this->provinceService->getProvincesByCountryId($school->country_id);
+        $citys = $this->cityService->getCitysByProvinceId($school->province_id);
+        return view('school.update', [
+          'countrys' => $countrys,
+          'provinces' => $provinces,
+          'citys' => $citys,
+          'school' => $school,
+        ]);
+
+    }
+
+
     public function approve(Request $request)
     {
 
@@ -113,8 +142,8 @@ class SchoolController extends Controller
     public function createSchool(Request $request)
     {
 
-        if(!$this->studentService->currentStudentIsVip()){
-            throw new APIException("此操作需要会员权限",APIException::IS_NOT_VIP);
+        if (!$this->studentService->currentStudentIsVip()) {
+            throw new APIException("此操作需要会员权限", APIException::IS_NOT_VIP);
         }
 
         $data = $request->all();
@@ -203,7 +232,6 @@ class SchoolController extends Controller
     {
 
 
-
         $shcools = [];
         $schoolName = $request->get('school_name', null);
         $countryId = $request->get('country_id', null);
@@ -285,17 +313,16 @@ class SchoolController extends Controller
 
 
         $randomProfessor = $this->professorService->getRandomProfessorBySchoolId($schoolId);
-        if($randomProfessor){
+        if ($randomProfessor) {
             $tmp = [
-              'professor_id'=>$randomProfessor->professor_id,
-              'professor_full_name'=>$randomProfessor->professor_full_name,
-              'professor_web_site'=>$randomProfessor->professor_web_site,
-              'school_name'=>$randomProfessor->school->school_name,
-              'college_name'=>$randomProfessor->college->college_name,
+              'professor_id' => $randomProfessor->professor_id,
+              'professor_full_name' => $randomProfessor->professor_full_name,
+              'professor_web_site' => $randomProfessor->professor_web_site,
+              'school_name' => $randomProfessor->school->school_name,
+              'college_name' => $randomProfessor->college->college_name,
             ];
             $randomProfessor = $tmp;
         }
-
 
 
         $effort = $this->professorRateService->getEffortBySchoolId($schoolId);
@@ -377,7 +404,7 @@ class SchoolController extends Controller
                 $thumbsUpNum = count(explode(',', trim($rate->thumbs_up, ',')));
                 $thumbsUpDown = count(explode(',', trim($rate->thumbs_down, ',')));
                 $total = $thumbsUpNum + $thumbsUpDown;
-                $thumbsUpPercent = $thumbsUpNum*100/$total;
+                $thumbsUpPercent = $thumbsUpNum * 100 / $total;
                 $tmp['thumbs_up_percent'] = floor($thumbsUpPercent);
                 $tmp['thumbs_down_percent'] = 100 - $tmp['thumbs_up_percent'];
             }
@@ -477,7 +504,7 @@ class SchoolController extends Controller
         $data = [
           'success' => true,
           'data' => [
-            'randomProfessor'=>$randomProfessor,
+            'randomProfessor' => $randomProfessor,
             'schoolInfo' => $schoolInfo,
             'schoolDistrictInfo' => $schoolDistrictInfo,
             'ratesInfo' => $ratesInfo,

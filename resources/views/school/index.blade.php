@@ -43,6 +43,8 @@
                         <td></td>
                     @endif
                     <td>
+                        <a class="btn btn-info"
+                           href="{{route('backend.school.update.get',['school_id' => $school->school_id])}}">编辑</a>
                         @if($school->check_status == \App\School::PENDING_CHECK)
                             <a class="btn btn-success"
                                href="{{route('backend.school.aprove.get',['school_id' => $school->school_id])}}">通过</a>

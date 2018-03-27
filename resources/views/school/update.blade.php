@@ -11,51 +11,69 @@
         </div>
 
         <div class="container">
-            @foreach ($errors->all() as $message)
-                <li class="text-danger">{{ $message }}</li>
-            @endforeach
-            <form class="form-horizontal" method="post" action="{{route('backend.school.add.post')}}">
+
+            <form class="form-horizontal" method="post" action="{{route('backend.school.update.post')}}">
                 {{csrf_field()}}
+
+                <input type="hidden" name="school_id" value="{{$school->school_id}}">
 
                 <div class="form-group">
                     <label>学校名称</label>
-                    <input type="text" class="form-control" name="school_name" placeholder="学校名称">
+                    <input type="text" value="{{$school->school_name}}" class="form-control" name="school_name" placeholder="学校名称">
                 </div>
                 <div class="form-group">
                     <label>学校昵称</label>
-                    <input type="text" class="form-control" name="school_nick_name" placeholder="学校昵称">
+                    <input type="text" value="{{$school->school_nick_name}}" class="form-control" name="school_nick_name" placeholder="学校昵称">
                 </div>
                 <div class="form-group">
                     <label>学校昵称2</label>
-                    <input type="text" class="form-control" value="" name="school_nick_name_two" placeholder="学校昵称2">
+                    <input type="text" value="{{$school->school_nick_name_two}}" class="form-control" value="" name="school_nick_name_two" placeholder="学校昵称2">
                 </div>
                 <div class="form-group">
                     <label>网站地址</label>
-                    <input type="text" class="form-control" name="website_url" placeholder="网站地址">
+                    <input type="text"  value="{{$school->website_url}}" class="form-control" name="website_url" placeholder="网站地址">
                 </div>
                 <div class="form-group">
                     <label>所属国家</label>
-                    <select class="form-control" name="country_id">
+                    <select disabled="disabled" class="form-control" name="country_id">
                         <option value="">请选择</option>
                         @foreach ($countrys as $country)
-                            <option value="{{$country->country_id}}">{{$country->country_name}}</option>
+                            @if($country->country_id == $school->country_id)
+                                <option selected="selected" value="{{$country->country_id}}">{{$country->country_name}}</option>
+                            @else
+                                <option value="{{$country->country_id}}">{{$country->country_name}}</option>
+                            @endif
                         @endforeach
                     </select>
                 </div>
                 <div class="form-group">
                     <label>所属省份</label>
-                    <select class="form-control" name="province_id">
+                    <select disabled="disabled" class="form-control" name="province_id">
                         <option value="">请选择</option>
+                        @foreach ($provinces as $province)
+                            @if($province->province_id == $school->province_id)
+                                <option selected="selected" value="{{$province->province_id}}">{{$province->province_name}}</option>
+                            @else
+                                <option value="{{$province->province_id}}">{{$province->province_name}}</option>
+                            @endif
+                        @endforeach
                     </select>
                 </div>
                 <div class="form-group">
                     <label>所属城市</label>
-                    <select class="form-control" name="city_id">
+                    <select disabled="disabled" class="form-control" name="city_id">
                         <option value="">请选择</option>
+                        @foreach ($citys as $city)
+                            @if($city->city_id == $school->city_id)
+                                <option selected="selected" value="{{$city->city_id}}">{{$city->city_name}}</option>
+                            @else
+                                <option value="{{$city->city_id}}">{{$city->city_name}}</option>
+                            @endif
+                        @endforeach
                     </select>
                 </div>
 
-                <button type="submit" class="btn btn-success pull-right">创建</button>
+                <button type="submit" class="btn btn-success pull-right">编辑</button>
             </form>
 
 
