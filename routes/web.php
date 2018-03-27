@@ -52,6 +52,8 @@ Route::group(['middleware' => 'admin.user', 'as' => 'backend.'], function () {
     Route::post('admin/professor/add', ['uses' => 'ProfessorController@addProfessor', 'as' => 'professor.add.post']);
     Route::get('admin/professor/approve', ['uses' => 'ProfessorController@approve', 'as' => 'professor.aprove.get']);
     Route::get('admin/professor/reject', ['uses' => 'ProfessorController@reject', 'as' => 'professor.reject.get']);
+    Route::get('admin/professor/update', ['uses' => 'ProfessorController@updateProfessor', 'as' => 'professor.update.get']);
+    Route::post('admin/professor/update', ['uses' => 'ProfessorController@updateProfessor', 'as' => 'professor.update.post']);
 
     Route::get('admin/professor-rate/index',
       ['uses' => 'ProfessorRateController@Index', 'as' => 'professor-rate.index']);

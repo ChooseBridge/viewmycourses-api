@@ -82,6 +82,29 @@ class ProfessorController extends Controller
         ]);
     }
 
+    public function updateProfessor(Request $request){
+
+        $professorId = $request->get('professor_id');
+        $professor = $this->professorService->getProfessorById($professorId);
+        if(!$professorId || !$professor){
+            return redirect(route("backend.professor.index"));
+        }
+        if ($request->isMethod('POST')) {
+
+            $data = $request->all();
+            $professor->update($data);
+            return redirect(route("backend.professor.index"));
+        }
+
+        $schools = $this->schoolService->getAllCheckedSchools();
+        $colleges = $this->collegeService->getCollegesBySchoolId($professor->school_id);
+        return view('professor.update', [
+          'schools' => $schools,
+          'professor' => $professor,
+          'colleges' => $colleges,
+        ]);
+    }
+
     public function approve(Request $request)
     {
 
