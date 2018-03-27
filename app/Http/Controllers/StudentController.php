@@ -85,7 +85,7 @@ class StudentController extends Controller
               'grade' => $rate->grade,
               'comment' => $rate->comment,
               'tag' => $rate->tag,
-              'effort' => $rate->effort,
+              'effort' => round($rate->effort,1),
             ];
         }
 
@@ -110,7 +110,7 @@ class StudentController extends Controller
               'school_students_relations' => $rate->school_students_relations,
               'comment' => $rate->comment,
               'student_name' => $rate->student->name,
-              'score' => $rate->score,
+              'score' => round($rate->score,1),
             ];
         }
 
