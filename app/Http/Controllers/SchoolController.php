@@ -316,11 +316,8 @@ class SchoolController extends Controller
         if ($randomProfessor) {
             $randomProfessorEffort = $this->professorRateService->getEffortByProfessorId($randomProfessor->professor_id);
             $randomProfessorRates= $this->professorRateService->getRatesByProfessorId($randomProfessor->professor_id);
-            if(empty($randomProfessorRates->toArray())){
-                $randomProfessorRatesNum = 0;
-            }else{
-                $randomProfessorRatesNum = count($randomProfessorRates->toArray());
-            }
+            $randomProfessorRatesNum = $randomProfessorRates->count();
+
 
             $tmp = [
               'professor_id' => $randomProfessor->professor_id,
