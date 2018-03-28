@@ -55,11 +55,11 @@ class SchoolServiceConcrete implements SchoolServiceAbstract
                 $content = "您创建的学校" . $school->school_name . "审核通过";
                 $student_id = $school->create_student_id;
                 $messageContent = [
-                    'message'=>$content,
-                    'type'=>'success',
-                    'info_type'=>'school',
-                    'id'=>$school->school_id,
-                    'name'=>$school->school_name,
+                  'message' => $content,
+                  'type' => 'success',
+                  'info_type' => 'school',
+                  'id' => $school->school_id,
+                  'name' => $school->school_name,
                 ];
                 $data = [
                   'message_content' => json_encode($messageContent),
@@ -77,13 +77,13 @@ class SchoolServiceConcrete implements SchoolServiceAbstract
             $content = "您创建的学校" . $school->school_name . "审核失败";
             $student_id = $school->create_student_id;
             $isReject = $school->delete();
-            if($isReject){
+            if ($isReject) {
                 $messageContent = [
-                  'message'=>$content,
-                  'type'=>'fail',
-                  'info_type'=>'school',
-                  'id'=>$school->school_id,
-                  'name'=>$school->school_name,
+                  'message' => $content,
+                  'type' => 'fail',
+                  'info_type' => 'school',
+                  'id' => $school->school_id,
+                  'name' => $school->school_name,
                 ];
                 $data = [
                   'message_content' => json_encode($messageContent),
@@ -170,5 +170,11 @@ class SchoolServiceConcrete implements SchoolServiceAbstract
             return true;
         }
         return false;
+    }
+
+    public function getSchoolsByCityId($cityId)
+    {
+        $schools = School::where('city_id', $cityId)->get();
+        return $schools;
     }
 }

@@ -35,5 +35,7 @@ interface SchoolServiceAbstract
 
     public function isCheckedById($id);
 
+    public function getSchoolsByCityId($cityId);
+
 
 }

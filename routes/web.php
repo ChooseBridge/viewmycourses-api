@@ -34,6 +34,9 @@ Route::group(['middleware' => 'admin.user', 'as' => 'backend.'], function () {
     Route::get('admin/city/index', ['uses' => 'CityController@index', 'as' => 'city.index']);
     Route::get('admin/city/add', ['uses' => 'CityController@addCity', 'as' => 'city.add.get']);
     Route::post('admin/city/add', ['uses' => 'CityController@addCity', 'as' => 'city.add.post']);
+    Route::get('admin/city/update', ['uses' => 'CityController@updateCity', 'as' => 'city.update.get']);
+    Route::post('admin/city/update', ['uses' => 'CityController@updateCity', 'as' => 'city.update.post']);
+    Route::post('admin/city/delete', ['uses' => 'CityController@deleteCity', 'as' => 'city.delete.post']);
 
     Route::get('admin/school/index', ['uses' => 'SchoolController@index', 'as' => 'school.index']);
     Route::get('admin/school/add', ['uses' => 'SchoolController@addSchool', 'as' => 'school.add.get']);
