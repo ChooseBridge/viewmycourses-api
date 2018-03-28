@@ -394,7 +394,7 @@ class SchoolController extends Controller
               'student_name' => $rate->student->name,
               'major' => $rate->student->major,
               'score' => round($rate->score, 1),
-              'created_at' => $rate->created_at,
+              'created_at' => $rate->created_at->format('Y-m-d H:i:s'),
             ];
 
             //计算百分比
