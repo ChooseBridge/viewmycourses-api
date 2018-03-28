@@ -27,6 +27,9 @@ Route::group(['middleware' => 'admin.user', 'as' => 'backend.'], function () {
     Route::get('admin/province/index', ['uses' => 'ProvinceController@index', 'as' => 'province.index']);
     Route::get('admin/province/add', ['uses' => 'ProvinceController@addProvince', 'as' => 'province.add.get']);
     Route::post('admin/province/add', ['uses' => 'ProvinceController@addProvince', 'as' => 'province.add.post']);
+    Route::get('admin/province/update', ['uses' => 'ProvinceController@updateProvince', 'as' => 'province.update.get']);
+    Route::post('admin/province/update', ['uses' => 'ProvinceController@updateProvince', 'as' => 'province.update.post']);
+    Route::post('admin/province/delete', ['uses' => 'ProvinceController@deleteProvince', 'as' => 'province.delete.post']);
 
     Route::get('admin/city/index', ['uses' => 'CityController@index', 'as' => 'city.index']);
     Route::get('admin/city/add', ['uses' => 'CityController@addCity', 'as' => 'city.add.get']);
