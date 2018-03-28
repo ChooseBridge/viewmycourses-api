@@ -20,6 +20,9 @@ Route::group(['middleware' => 'admin.user', 'as' => 'backend.'], function () {
     Route::get('admin/country/index', ['uses' => 'CountryController@index', 'as' => 'country.index']);
     Route::get('admin/country/add', ['uses' => 'CountryController@addCountry', 'as' => 'country.add.get']);
     Route::post('admin/country/add', ['uses' => 'CountryController@addCountry', 'as' => 'country.add.post']);
+    Route::get('admin/country/update', ['uses' => 'CountryController@updateCountry', 'as' => 'country.update.get']);
+    Route::post('admin/country/update', ['uses' => 'CountryController@updateCountry', 'as' => 'country.update.post']);
+    Route::post('admin/country/delete', ['uses' => 'CountryController@deleteCountry', 'as' => 'country.delete.post']);
 
     Route::get('admin/province/index', ['uses' => 'ProvinceController@index', 'as' => 'province.index']);
     Route::get('admin/province/add', ['uses' => 'ProvinceController@addProvince', 'as' => 'province.add.get']);
