@@ -514,7 +514,7 @@ class SchoolController extends Controller
           'province' => $school->province->province_name,
           'city' => $school->city->city_name,
           'website_url' => $school->city->website_url,
-          'effort' => $effort,
+          'effort' => round($effort,1),
           'school_score' => round($schoolScore, 1),
         ];
 
