@@ -55,21 +55,40 @@ class CollegeController extends Controller
         ]);
     }
 
+    public function updateCollege(Request $request)
+    {
+        $collegeId = $request->get('college_id');
+        $college = $this->collegeService->getCollegeById($collegeId);
+        if (!$college && !$collegeId) {
+            return redirect(route("backend.college.index"));
+        }
+        if ($request->isMethod('POST')) {
+            $data = $request->all();
+            $college->update($data);
+            return redirect(route("backend.college.index"));
+        }
+        $schools = $this->schoolService->getAllCheckedSchoolsGroupCountry();
+        return view('college.update', [
+          'schools' => $schools,
+          'college' => $college
+        ]);
+    }
+
 
 //api
 
     public function getCollegeBySchool(Request $request)
     {
         $schoolId = $request->get('school_id');
-        if(!$schoolId){
-            throw  new APIException("参数缺失",APIException::MISS_PARAM);
+        if (!$schoolId) {
+            throw  new APIException("参数缺失", APIException::MISS_PARAM);
         }
         $colleges = $this->collegeService->getCollegesBySchoolId($schoolId);
         $tmp = [];
-        foreach ($colleges as $college){
+        foreach ($colleges as $college) {
             $tmp[] = [
-                'college_id'=>$college->college_id,
-                'college_name'=>$college->college_name,
+              'college_id' => $college->college_id,
+              'college_name' => $college->college_name,
             ];
         }
 
