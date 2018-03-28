@@ -19,6 +19,7 @@
                 <th>所属省</th>
                 <th>所属国家</th>
                 <th>创建者</th>
+                <th>操作</th>
             </tr>
             @foreach ($districts as $district)
                 <tr>
@@ -35,6 +36,10 @@
                     @else
                         <td></td>
                     @endif
+                    <td>
+                        <a class="btn btn-info"
+                           href="{{route('backend.district.update.get',['school_district_id' => $district->school_district_id])}}">编辑</a>
+                    </td>
                 </tr>
             @endforeach
 

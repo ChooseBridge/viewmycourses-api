@@ -33,11 +33,11 @@ class SchoolDistrictController extends Controller
 
     public function addDistrict(Request $request)
     {
-        if($request->isMethod('POST')){
+        if ($request->isMethod('POST')) {
 
             $data = $request->all();
             $validator = $this->schoolDistrictService->validatorForCreate($data);
-            if($validator !== true){
+            if ($validator !== true) {
                 return redirect(route('backend.district.add.get'))
                   ->withErrors($validator);
             }
@@ -52,4 +52,30 @@ class SchoolDistrictController extends Controller
           'schools' => $schools
         ]);
     }
+
+
+    public function updateDistrict(Request $request)
+    {
+
+        $districtId = $request->get('school_district_id');
+        $district = $this->schoolDistrictService->getDistrictById($districtId);
+        if (!$district || !$districtId) {
+            return redirect(route("backend.district.index"));
+        }
+        if ($request->isMethod('POST')) {
+
+            $data = $request->all();
+            $district->update($data);
+            return redirect(route("backend.district.index"));
+        }
+
+        $schools = $this->schoolService->getAllCheckedSchoolsGroupCountry();
+        return view('district.update', [
+          'schools' => $schools,
+          'district' => $district,
+        ]);
+
+
+    }
+
 }
