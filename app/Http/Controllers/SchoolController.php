@@ -438,6 +438,17 @@ class SchoolController extends Controller
 
         foreach ($schoolDistricts as $schoolDistrict) {
             $score = 0;
+            $socialReputation =0;
+            $academicLevel =0;
+            $networkServices =0;
+            $accommodation =0;
+            $foodQuality =0;
+            $campusLocation =0;
+            $extracurricularActivities =0;
+            $lifeHappinessIndex =0;
+            $schoolStudentsRelations =0;
+            $campusInfrastructure =0;
+
 
             if (isset($schoolDistrictScore[$schoolDistrict->school_district_id]['score'])) {
                 $score = $schoolDistrictScore[$schoolDistrict->school_district_id]['score'] / $schoolDistrictScore[$schoolDistrict->school_district_id]['num'];
