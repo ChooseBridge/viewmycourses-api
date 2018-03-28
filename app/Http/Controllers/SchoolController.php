@@ -314,12 +314,22 @@ class SchoolController extends Controller
 
         $randomProfessor = $this->professorService->getRandomProfessorBySchoolId($schoolId);
         if ($randomProfessor) {
+            $randomProfessorEffort = $this->professorRateService->getEffortByProfessorId($randomProfessor->professor_id);
+            $randomProfessorRates= $this->professorRateService->getRatesByProfessorId($randomProfessor->professor_id);
+            if(empty($randomProfessorRates->toArray())){
+                $randomProfessorRatesNum = 0;
+            }else{
+                $randomProfessorRatesNum = count($randomProfessorRates->toArray());
+            }
+
             $tmp = [
               'professor_id' => $randomProfessor->professor_id,
               'professor_full_name' => $randomProfessor->professor_full_name,
               'professor_web_site' => $randomProfessor->professor_web_site,
               'school_name' => $randomProfessor->school->school_name,
               'college_name' => $randomProfessor->college->college_name,
+              'effort'=>round($randomProfessorEffort,1),
+              'rate_num'=>$randomProfessorRatesNum
             ];
             $randomProfessor = $tmp;
         }

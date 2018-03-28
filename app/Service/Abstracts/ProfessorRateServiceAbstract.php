@@ -23,6 +23,8 @@ interface ProfessorRateServiceAbstract
 
     public function getEffortBySchoolId($schoolId);
 
+    public function getEffortByProfessorId($professorId);
+
     public function getCheckedRatesBySchoolId($schoolId);
 
     public function getCheckedRatesByProfessorId($professorId);
