@@ -62,6 +62,7 @@ class StudentController extends Controller
         $student = [
           'name' => $GLOBALS['gStudent']->name,
           'email' => $GLOBALS['gStudent']->email,
+          'is_email_edu' => $GLOBALS['gStudent']->is_email_edu,
         ];
 
         $professorRates = $this->professorRateService->getRatesByStudentId($GLOBALS['gStudent']->student_id);
