@@ -324,6 +324,11 @@ Route::group(['prefix' => 'api', 'middleware' => [\App\Http\Middleware\CheckLogi
     Route::get('thumbs-down-school-rate',
       ['uses' => 'SchoolRateController@thumbsDownRate', 'as' => 'api.thumbs-down-school-rate']);
 
+    Route::post('create-school-comment',
+      ['uses' => 'SchoolController@createComment', 'as' => 'api.create-school-comment']);
+    Route::post('create-professor-comment',
+      ['uses' => 'ProfessorController@createComment', 'as' => 'api.create-professor-comment']);
+
 
 });
 

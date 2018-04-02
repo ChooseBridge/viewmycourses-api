@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\APIException;
 use App\School;
+use App\SchoolComment;
 use App\Service\Abstracts\CityServiceAbstract;
 use App\Service\Abstracts\CountryServiceAbstract;
 use App\Service\Abstracts\ProfessorRateServiceAbstract;
@@ -577,5 +578,30 @@ class SchoolController extends Controller
             ];
         }
         return \Response::json($data);
+    }
+
+
+    public function createComment(Request $request)
+    {
+
+
+        $student = $this->studentService->getCurrentStudent();
+        $schoolId = $request->get('school_id');
+        $comment = $request->get('comment');
+        if (!$schoolId || !$comment) {
+            throw new APIException("miss param school_id or comment", APIException::MISS_PARAM);
+        }
+        SchoolComment::create([
+          'school_id' => $schoolId,
+          'comment' => $comment,
+          'create_student_id' => $student->student_id,
+        ]);
+        $data = [
+          'success' => false,
+          'data' => 'comment success'
+        ];
+        return \Response::json($data);
+
+
     }
 }

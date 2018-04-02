@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\College;
 use App\Exceptions\APIException;
 use App\Professor;
+use App\ProfessorComment;
 use App\SchoolCourseCategory;
 use App\Service\Abstracts\CollegeServiceAbstract;
 use App\Service\Abstracts\ProfessorCourseServiceAbstract;
@@ -447,6 +448,27 @@ class ProfessorController extends Controller
               ]
             ];
         }
+        return \Response::json($data);
+    }
+
+
+    public function createComment(Request $request){
+
+        $student = $this->studentService->getCurrentStudent();
+        $professorId = $request->get('professor_id');
+        $comment = $request->get('comment');
+        if (!$professorId || !$comment) {
+            throw new APIException("miss param professor_id or comment", APIException::MISS_PARAM);
+        }
+        ProfessorComment::create([
+          'professor_id' => $professorId,
+          'comment' => $comment,
+          'create_student_id' => $student->student_id,
+        ]);
+        $data = [
+          'success' => false,
+          'data' => 'comment success'
+        ];
         return \Response::json($data);
     }
 }
