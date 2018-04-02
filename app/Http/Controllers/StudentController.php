@@ -93,6 +93,7 @@ class StudentController extends Controller
               'spend_course_time_at_week' => $rate->spend_course_time_at_week,
               'grade' => $rate->grade,
               'comment' => $rate->comment,
+              'create_student_id' => $rate->create_student_id,
               'tag' => $rate->tag,
               'effort' => round($rate->effort,1),
             ];
@@ -119,6 +120,7 @@ class StudentController extends Controller
               'school_students_relations' => $rate->school_students_relations,
               'comment' => $rate->comment,
               'student_name' => $rate->student->name,
+              'create_student_id' => $rate->create_student_id,
               'score' => round($rate->score,1),
             ];
         }
@@ -136,6 +138,99 @@ class StudentController extends Controller
         ];
 
         return \Response::json($data);
+
+    }
+
+
+    public function getStudentById(Request $request){
+
+        $studentId = $request->get('student_id');
+        if (!$studentId) {
+            throw new APIException("miss student id", APIException::MISS_PARAM);
+        }
+
+        $student = $this->studentService->getStudentById($studentId);
+
+        $studentInfo = [
+          'name' => $student->name,
+          'email' => $student->email,
+          'is_email_edu' => $student->is_email_edu,
+          'gender' => $student->gender,
+          'mobile' => $student->mobile,
+          'education_status' => $student->education_status,
+          'is_graduate' => $student->is_graduate,
+          'graduate_year' => $student->graduate_year,
+          'school_name' => $student->school_name,
+          'major' => $student->major,
+          'exam_province' => $student->exam_province,
+        ];
+
+        $professorRates = $this->professorRateService->getRatesByStudentId($student->student_id);
+        $professorRatesInfo = [];
+        foreach ($professorRates as $rate) {
+            $professorRatesInfo["$rate->created_at"] = [
+              'rate_type' => 'professor',
+              'professor_rate_id' => $rate->school->professor_rate_id,
+              'school_name' => $rate->school->school_name,
+              'professor_name' => $rate->professor->professor_full_name,
+              'course_code' => $rate->course_code,
+              'course_name' => $rate->course_name,
+              'course_category_name' => $rate->course_category_name,
+              'is_attend' => $rate->is_attend,
+              'difficult_level' => $rate->difficult_level,
+              'homework_num' => $rate->homework_num,
+              'written_homework_num' => $rate->written_homework_num,
+              'quiz_num' => $rate->quiz_num,
+              'course_related_quiz' => $rate->course_related_quiz,
+              'spend_course_time_at_week' => $rate->spend_course_time_at_week,
+              'grade' => $rate->grade,
+              'comment' => $rate->comment,
+              'create_student_id' => $rate->create_student_id,
+              'tag' => $rate->tag,
+              'effort' => round($rate->effort,1),
+            ];
+        }
+
+
+        $schoolRates = $this->schoolRateService->getRatesByStudentId($student->student_id);
+        $schoolRatesInfo = [];
+        foreach ($schoolRates as $rate) {
+            $schoolRatesInfo["$rate->created_at"] = [
+              'rate_type' => 'school',
+              'school_rate_id' => $rate->schoolDistrict->school_rate_id,
+              'school_district_name' => $rate->schoolDistrict->school_district_name,
+              'school_name' => $rate->school->school_name,
+              'social_reputation' => $rate->social_reputation,
+              'academic_level' => $rate->academic_level,
+              'network_services' => $rate->network_services,
+              'accommodation' => $rate->accommodation,
+              'food_quality' => $rate->food_quality,
+              'campus_location' => $rate->campus_location,
+              'extracurricular_activities' => $rate->extracurricular_activities,
+              'campus_infrastructure' => $rate->campus_infrastructure,
+              'life_happiness_index' => $rate->life_happiness_index,
+              'school_students_relations' => $rate->school_students_relations,
+              'comment' => $rate->comment,
+              'student_name' => $rate->student->name,
+              'create_student_id' => $rate->create_student_id,
+              'score' => round($rate->score,1),
+            ];
+        }
+
+        $ratesInfo = $schoolRatesInfo + $professorRatesInfo;
+        krsort($ratesInfo);
+
+
+        $data = [
+          'success' => true,
+          'data' => [
+            'student' => $studentInfo,
+            'ratesInfo' => $ratesInfo,
+          ]
+        ];
+
+        return \Response::json($data);
+
 
     }
 

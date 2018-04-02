@@ -291,6 +291,7 @@ Route::group(['prefix' => 'api', 'middleware' => [\App\Http\Middleware\CheckLogi
       ['uses' => 'SchoolController@getAllcheckedSchoolByCountry', 'as' => 'api.get-school-group-by-country']);
 
     Route::get('get-student', ['uses' => 'StudentController@getStudent', 'as' => 'api.get-student']);
+    Route::get('get-student-by-id', ['uses' => 'StudentController@getStudentById', 'as' => 'api.get-student-by-id']);
     Route::get('get-student-message',
       ['uses' => 'StudentController@getStudentMessage', 'as' => 'api.get-student-message']);
 

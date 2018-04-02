@@ -299,6 +299,7 @@ class ProfessorController extends Controller
               'tag' => $rate->tag,
               'effort' => round($rate->effort, 1),
               'created_at' => $rate->created_at,
+              'create_student_id' => $rate->create_student_id,
             ];
 
             //计算百分比

@@ -27,6 +27,8 @@ interface StudentServiceAbstract{
 
     public function getCurrentStudent();
 
+    public function getStudentById($id);
+
     public function currentStudentIsVip();
 
 

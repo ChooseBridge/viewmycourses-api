@@ -148,6 +148,11 @@ class StudentServiceConcrete implements StudentServiceAbstract
         return null;
     }
 
+    public function getStudentById($id)
+    {
+        return Student::where('student_id',$id)->first();
+    }
+
     public function currentStudentIsVip()
     {
         $student = $this->getCurrentStudent();
