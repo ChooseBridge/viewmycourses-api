@@ -177,4 +177,40 @@ class SchoolServiceConcrete implements SchoolServiceAbstract
         $schools = School::where('city_id', $cityId)->get();
         return $schools;
     }
+
+    public function thumbsUpSchoolById($id, $student)
+    {
+        $school = $this->getSchoolById($id);
+        if ($school) {
+            if ($school->thumbs_up == "") {
+                $school->thumbs_up = "," . $student->student_id . ",";
+                $num = 1;
+            } else {
+
+                $studentIds = explode(',', trim($school->thumbs_up, ','));
+
+                if (in_array($student->student_id, $studentIds)) {
+                    //cancel thumbs up
+                    $studentIds = array_flip($studentIds);
+                    unset($studentIds[$student->student_id]);
+                    if (count($studentIds) == 0) {
+                        $school->thumbs_up = "";
+                    } else {
+                        $school->thumbs_up = "," . implode(',', array_keys($studentIds)) . ",";
+                    }
+                    $num = -1;
+                } else {
+                    array_push($studentIds, $student->student_id);
+                    $school->thumbs_up = "," . implode(',', $studentIds) . ",";
+                    $num = 1;
+                }
+
+            }
+            if ($school->save()) {
+                return ['res' => true, 'num' => $num];
+            }
+        }
+        return ['res' => false, 'num' => 0];
+    }
+
 }

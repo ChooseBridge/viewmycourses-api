@@ -315,7 +315,7 @@ class SchoolController extends Controller
         $randomProfessor = $this->professorService->getRandomProfessorBySchoolId($schoolId);
         if ($randomProfessor) {
             $randomProfessorEffort = $this->professorRateService->getEffortByProfessorId($randomProfessor->professor_id);
-            $randomProfessorRates= $this->professorRateService->getRatesByProfessorId($randomProfessor->professor_id);
+            $randomProfessorRates = $this->professorRateService->getRatesByProfessorId($randomProfessor->professor_id);
             $randomProfessorRatesNum = $randomProfessorRates->count();
 
 
@@ -325,8 +325,8 @@ class SchoolController extends Controller
               'professor_web_site' => $randomProfessor->professor_web_site,
               'school_name' => $randomProfessor->school->school_name,
               'college_name' => $randomProfessor->college->college_name,
-              'effort'=>round($randomProfessorEffort,1),
-              'rate_num'=>$randomProfessorRatesNum
+              'effort' => round($randomProfessorEffort, 1),
+              'rate_num' => $randomProfessorRatesNum
             ];
             $randomProfessor = $tmp;
         }
@@ -438,16 +438,16 @@ class SchoolController extends Controller
 
         foreach ($schoolDistricts as $schoolDistrict) {
             $score = 0;
-            $socialReputation =0;
-            $academicLevel =0;
-            $networkServices =0;
-            $accommodation =0;
-            $foodQuality =0;
-            $campusLocation =0;
-            $extracurricularActivities =0;
-            $lifeHappinessIndex =0;
-            $schoolStudentsRelations =0;
-            $campusInfrastructure =0;
+            $socialReputation = 0;
+            $academicLevel = 0;
+            $networkServices = 0;
+            $accommodation = 0;
+            $foodQuality = 0;
+            $campusLocation = 0;
+            $extracurricularActivities = 0;
+            $lifeHappinessIndex = 0;
+            $schoolStudentsRelations = 0;
+            $campusInfrastructure = 0;
 
 
             if (isset($schoolDistrictScore[$schoolDistrict->school_district_id]['score'])) {
@@ -514,9 +514,23 @@ class SchoolController extends Controller
           'province' => $school->province->province_name,
           'city' => $school->city->city_name,
           'website_url' => $school->city->website_url,
-          'effort' => round($effort,1),
+          'effort' => round($effort, 1),
           'school_score' => round($schoolScore, 1),
         ];
+
+        if ($school->thumbs_up == "") {
+            $schoolInfo['thumbs_up_num'] = 0;
+        } else {
+            $schoolInfo['thumbs_up_num'] = count(explode(',', trim($school->thumbs_up, ',')));
+        }
+
+        if ($this->studentService->getCurrentStudent()) {
+            if (strpos($school->thumbs_up, ",{$GLOBALS['gStudent']->student_id},") === false) {
+                $schoolInfo["is_thumbs_up"] = false;
+            } else {
+                $schoolInfo["is_thumbs_up"] = true;
+            }
+        }
 
 
         $data = [
@@ -528,6 +542,39 @@ class SchoolController extends Controller
             'ratesInfo' => $ratesInfo,
           ]
         ];
+        return \Response::json($data);
+    }
+
+
+    public function thumbsUpSchool(Request $request)
+    {
+
+        if (!$this->studentService->currentStudentIsVip()) {
+            throw new APIException("此操作需要会员权限", APIException::IS_NOT_VIP);
+        }
+
+        $schoolId = $request->get('school_id');
+        if (!$schoolId) {
+            throw new APIException("miss param school id ", APIException::MISS_PARAM);
+        }
+        $student = $GLOBALS['gStudent'];
+        $res = $this->schoolService->thumbsUpSchoolById($schoolId, $student);
+        if ($res['res']) {
+            $data = [
+              'success' => true,
+              'data' => [
+                'msg' => 'thumbs up success',
+                'num' => $res['num'],
+              ]
+            ];
+        } else {
+            $data = [
+              'success' => false,
+              'data' => [
+                'msg' => 'thumbs up false',
+              ]
+            ];
+        }
         return \Response::json($data);
     }
 }

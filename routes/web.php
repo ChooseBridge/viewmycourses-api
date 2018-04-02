@@ -312,6 +312,8 @@ Route::group(['prefix' => 'api', 'middleware' => [\App\Http\Middleware\CheckLogi
 
     Route::get('thumbs-up-professor',
       ['uses' => 'ProfessorController@thumbsUpProfessor', 'as' => 'api.thumbs-up-professor']);
+    Route::get('thumbs-up-school',
+      ['uses' => 'SchoolController@thumbsUpSchool', 'as' => 'api.thumbs-up-school']);
     Route::get('thumbs-up-professor-rate',
       ['uses' => 'ProfessorRateController@thumbsUpRate', 'as' => 'api.thumbs-up-professor-rate']);
     Route::get('thumbs-down-professor-rate',

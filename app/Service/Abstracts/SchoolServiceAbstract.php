@@ -37,5 +37,7 @@ interface SchoolServiceAbstract
 
     public function getSchoolsByCityId($cityId);
 
+    public function thumbsUpSchoolById($id, $student);
+
 
 }

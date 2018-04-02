@@ -32,6 +32,7 @@ class School extends Model
       'check_status',
       'create_user_id',
       'create_student_id',
+      'thumbs_up',
     ];
 
     protected $appends = ['check_status_name'];

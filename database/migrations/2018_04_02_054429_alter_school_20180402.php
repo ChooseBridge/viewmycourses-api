@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AlterProfessor20180323 extends Migration
+class AlterSchool20180402 extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,8 @@ class AlterProfessor20180323 extends Migration
     public function up()
     {
         //
-        Schema::table('professor', function (Blueprint $table) {
-            $table->string('thumbs_up',1000)->default("");
+        Schema::table('school', function (Blueprint $table) {
+            $table->string('thumbs_up',1000)->after("check_status")->default("");
         });
     }
 
@@ -27,7 +27,7 @@ class AlterProfessor20180323 extends Migration
     public function down()
     {
         //
-        Schema::table('professor', function (Blueprint $table) {
+        Schema::table('school', function (Blueprint $table) {
             $table->dropColumn('thumbs_up');
         });
     }
