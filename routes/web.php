@@ -183,6 +183,7 @@ Route::get('/callback', function (\App\Service\Abstracts\StudentServiceAbstract 
                     //老用户
 
                     $arr = [
+                      'email' => $userInfo['entities'][0]['email'],
                       'token' => md5(uniqid()),
                       'token_expires_time' => date("Y-m-d H:i:s", strtotime("+1 day")),
                       'access_token' => $tokenInfo['access_token'],
