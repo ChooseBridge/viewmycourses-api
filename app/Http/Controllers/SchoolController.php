@@ -597,7 +597,7 @@ class SchoolController extends Controller
           'create_student_id' => $student->student_id,
         ]);
         $data = [
-          'success' => false,
+          'success' => true,
           'data' => 'comment success'
         ];
         return \Response::json($data);
