@@ -151,6 +151,19 @@ class StudentController extends Controller
 
         $student = $this->studentService->getStudentById($studentId);
 
+        $schoolStatus = "未知的学校";
+        if($student->school_name){
+            $school = $this->schoolService->getSchoolByName($student->school_name);
+            if($school){
+                if($school->country->country_name=='中国'){
+                    $schoolStatus = "国内";
+                }else{
+                    $schoolStatus = "国外";
+                }
+
+            }
+        }
+
         $studentInfo = [
           'name' => $student->name,
           'email' => $student->email,
@@ -161,6 +174,7 @@ class StudentController extends Controller
           'is_graduate' => $student->is_graduate,
           'graduate_year' => $student->graduate_year,
           'school_name' => $student->school_name,
+          'school_status' => $schoolStatus,
           'major' => $student->major,
           'exam_province' => $student->exam_province,
         ];
