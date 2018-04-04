@@ -59,6 +59,19 @@ class StudentController extends Controller
     public function getStudent()
     {
 
+        $schoolStatus = "未知的学校";
+        if($GLOBALS['gStudent']->school_name){
+            $school = $this->schoolService->getSchoolByName($GLOBALS['gStudent']->school_name);
+            if($school){
+                if($school->country->country_name=='中国'){
+                    $schoolStatus = "国内";
+                }else{
+                    $schoolStatus = "国外";
+                }
+
+            }
+        }
+
         $student = [
           'name' => $GLOBALS['gStudent']->name,
           'email' => $GLOBALS['gStudent']->email,
@@ -69,9 +82,12 @@ class StudentController extends Controller
           'is_graduate' => $GLOBALS['gStudent']->is_graduate,
           'graduate_year' => $GLOBALS['gStudent']->graduate_year,
           'school_name' => $GLOBALS['gStudent']->school_name,
+          'school_status' => $schoolStatus,
           'major' => $GLOBALS['gStudent']->major,
           'exam_province' => $GLOBALS['gStudent']->exam_province,
         ];
+
+
 
         $professorRates = $this->professorRateService->getRatesByStudentId($GLOBALS['gStudent']->student_id);
         $professorRatesInfo = [];
