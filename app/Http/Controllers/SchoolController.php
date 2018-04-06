@@ -395,7 +395,7 @@ class SchoolController extends Controller
               'school_students_relations' => $rate->school_students_relations,
               'comment' => $rate->comment,
               'student_name' =>$rate->student?$rate->student->name:"",
-              'major' => $rate->student->major,
+              'major' => $rate->student?$rate->student->major:"",
               'score' => round($rate->score, 1),
               'created_at' => $rate->created_at->format('Y-m-d H:i:s'),
               'create_student_id' => $rate->create_student_id,
