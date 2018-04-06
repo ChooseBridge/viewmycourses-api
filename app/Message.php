@@ -14,6 +14,7 @@ class Message extends Model
     protected $fillable = [
       'message_content',
       'to_student_id',
+      'is_read',
     ];
 
 }

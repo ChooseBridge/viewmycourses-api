@@ -295,6 +295,8 @@ Route::group(['prefix' => 'api', 'middleware' => [\App\Http\Middleware\CheckLogi
     Route::get('get-student-by-id', ['uses' => 'StudentController@getStudentById', 'as' => 'api.get-student-by-id']);
     Route::get('get-student-message',
       ['uses' => 'StudentController@getStudentMessage', 'as' => 'api.get-student-message']);
+    Route::get('get-student-unread-count',
+      ['uses' => 'StudentController@getUnReadCount', 'as' => 'api.get-student-unread-count']);
 
     Route::get('test-set-ponits', ['uses' => 'StudentController@setPoints', 'as' => 'api.test-set-ponits']);
     Route::get('test-get-ponits', ['uses' => 'StudentController@getPoints', 'as' => 'api.test-get-ponits']);

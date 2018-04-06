@@ -23,7 +23,19 @@ class MessageServiceConcrete implements MessageServiceAbstract
     public function getMessagesByStudentId($studentId)
     {
         $messages = Message::where('to_student_id',$studentId)->get();
+        foreach ($messages as $message){
+            $message->is_read = 1;
+            $message->save();
+        }
         return $messages;
+    }
+
+    public function getUnrReadCountByStudentId($studentId)
+    {
+        $count = Message::where('to_student_id',$studentId)
+            ->where('is_read',0)
+            ->count();
+        return $count;
     }
 
 }

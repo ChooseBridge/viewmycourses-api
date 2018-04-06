@@ -14,4 +14,6 @@ Interface MessageServiceAbstract
     public function createMessage($data);
 
     public function getMessagesByStudentId($studentId);
+
+    public function getUnrReadCountByStudentId($studentId);
 }

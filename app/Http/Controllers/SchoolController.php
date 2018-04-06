@@ -170,7 +170,9 @@ class SchoolController extends Controller
 
         $data = [
           'success' => true,
-          'data' => '创建成功'
+          'data' => [
+            'id'=>$shcool->school_id
+          ]
         ];
 
         return \Response::json($data);

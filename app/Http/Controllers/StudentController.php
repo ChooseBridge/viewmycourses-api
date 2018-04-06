@@ -103,7 +103,6 @@ class StudentController extends Controller
               'is_attend' => $rate->is_attend,
               'difficult_level' => $rate->difficult_level,
               'homework_num' => $rate->homework_num,
-              'written_homework_num' => $rate->written_homework_num,
               'quiz_num' => $rate->quiz_num,
               'course_related_quiz' => $rate->course_related_quiz,
               'spend_course_time_at_week' => $rate->spend_course_time_at_week,
@@ -209,7 +208,6 @@ class StudentController extends Controller
               'is_attend' => $rate->is_attend,
               'difficult_level' => $rate->difficult_level,
               'homework_num' => $rate->homework_num,
-              'written_homework_num' => $rate->written_homework_num,
               'quiz_num' => $rate->quiz_num,
               'course_related_quiz' => $rate->course_related_quiz,
               'spend_course_time_at_week' => $rate->spend_course_time_at_week,
@@ -283,6 +281,18 @@ class StudentController extends Controller
           ]
         ];
 
+        return \Response::json($data);
+    }
+
+    public function getUnReadCount(){
+        $student = $GLOBALS['gStudent'];
+        $count = $this->messageService->getUnrReadCountByStudentId($student->student_id);
+        $data = [
+          'success' => true,
+          'data' => [
+            'count' => $count,
+          ]
+        ];
         return \Response::json($data);
     }
 

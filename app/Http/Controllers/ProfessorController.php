@@ -144,7 +144,13 @@ class ProfessorController extends Controller
             throw new APIException('非法操作', APIException::ILLGAL_OPERATION);
         }
 
-        $data['professor_full_name'] = $data['professor_fisrt_name'] . $data['professor_second_name'];
+        if(preg_match("/^[a-zA-Z\s]+$/",$data['professor_fisrt_name'] . $data['professor_second_name'])){
+            $data['professor_full_name'] =   $data['professor_second_name'].$data['professor_fisrt_name'];
+        }else{
+            $data['professor_full_name'] = $data['professor_fisrt_name'] . $data['professor_second_name'];
+        }
+
+
         $data['create_student_id'] = $GLOBALS['gStudent']->student_id;
         $data['check_status'] = Professor::PENDING_CHECK;
         $professor = $this->professorService->createProfessor($data);
@@ -154,7 +160,9 @@ class ProfessorController extends Controller
 
         $data = [
           'success' => true,
-          'data' => '创建成功'
+          'data' => [
+            'id'=>$professor->professor_id
+          ]
         ];
 
         return \Response::json($data);
@@ -291,7 +299,6 @@ class ProfessorController extends Controller
               'is_attend' => $rate->is_attend,
               'difficult_level' => $rate->difficult_level,
               'homework_num' => $rate->homework_num,
-              'written_homework_num' => $rate->written_homework_num,
               'quiz_num' => $rate->quiz_num,
               'course_related_quiz' => $rate->course_related_quiz,
               'spend_course_time_at_week' => $rate->spend_course_time_at_week,
@@ -369,16 +376,19 @@ class ProfessorController extends Controller
         }
 
 
-        $tags = explode(',', rtrim($tagsStr, ','));
         $tagsInfo = [];
-        foreach ($tags as $tag) {
-            if (!isset($tagsInfo[$tag])) {
-                $tagsInfo[$tag] = 1;
-            } else {
-                $tagsInfo[$tag] += 1;
+        if($tagsStr != ""){
+            $tags = explode(',', rtrim($tagsStr, ','));
+            foreach ($tags as $tag) {
+                if (!isset($tagsInfo[$tag])) {
+                    $tagsInfo[$tag] = 1;
+                } else {
+                    $tagsInfo[$tag] += 1;
+                }
             }
         }
 
+        
 
         $coursesInfo = [];
         $courses = $this->professorCourseService->getCoursesByProfessorId($professorId);

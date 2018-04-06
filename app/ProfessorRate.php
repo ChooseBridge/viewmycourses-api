@@ -33,7 +33,6 @@ class ProfessorRate extends Model
       'is_attend',
       'difficult_level',
       'homework_num',
-      'written_homework_num',
       'quiz_num',
       'course_related_quiz',
       'spend_course_time_at_week',
