@@ -388,7 +388,7 @@ class ProfessorController extends Controller
             }
         }
 
-        
+
 
         $coursesInfo = [];
         $courses = $this->professorCourseService->getCoursesByProfessorId($professorId);
