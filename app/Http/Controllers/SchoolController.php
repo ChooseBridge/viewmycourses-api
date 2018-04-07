@@ -404,7 +404,7 @@ class SchoolController extends Controller
               'create_student_id' => $rate->create_student_id,
             ];
 
-            $ratesInfo[$tmp['school_rate_id']] = $tmp;
+
 
 
             //将点赞数最多的一条点评置顶，若点赞数相同，则置顶最新的点评
@@ -448,6 +448,8 @@ class SchoolController extends Controller
                     $tmp["is_thumbs_down"] = true;
                 }
             }
+
+            $ratesInfo[$tmp['school_rate_id']] = $tmp;
 
 
         }
