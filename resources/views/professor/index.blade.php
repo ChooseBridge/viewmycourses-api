@@ -44,7 +44,10 @@
                     <td>
                         <a class="btn btn-info"
                            href="{{route('backend.professor.update.get',['professor_id' => $professor->professor_id])}}">编辑</a>
-                        @if($professor->check_status == \App\Professor::PENDING_CHECK)
+                        <a class="btn btn-success"
+                           href="{{route('backend.professor.show-comment.get',['professor_id' => $professor->professor_id])}}">修正</a>
+
+                    @if($professor->check_status == \App\Professor::PENDING_CHECK)
                             <a class="btn btn-success"
                                href="{{route('backend.professor.aprove.get',['professor_id' => $professor->professor_id])}}">通过</a>
                             <a class="btn btn-danger"

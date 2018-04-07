@@ -63,5 +63,9 @@ class Professor extends Model
         return $this->belongsTo('App\User', 'create_user_id', 'id');
     }
 
+    public function comments(){
+        return $this->hasMany('App\ProfessorComment', 'professor_id', 'professor_id');
+    }
+
 
 }

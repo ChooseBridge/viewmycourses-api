@@ -124,6 +124,14 @@ class ProfessorController extends Controller
 
     }
 
+    public function showComment(Request $request){
+        $professor_id = $request->get('professor_id');
+        $professor = $this->professorService->getProfessorById($professor_id);
+        return view('professor.comment', [
+          'professor' => $professor,
+        ]);
+    }
+
 //api
 
     public function createProfessor(Request $request)

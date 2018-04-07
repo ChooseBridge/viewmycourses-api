@@ -138,6 +138,14 @@ class SchoolController extends Controller
         return redirect(route('backend.school.index'));
     }
 
+    public function showComment(Request $request){
+        $school_id = $request->get('school_id');
+        $school = $this->schoolService->getSchoolById($school_id);
+        return view('school.comment', [
+          'school' => $school,
+        ]);
+    }
+
 
 //  api
     public function createSchool(Request $request)

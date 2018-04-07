@@ -69,10 +69,9 @@ class School extends Model
         return $this->belongsTo('App\User', 'create_user_id', 'id');
     }
 
-//    public function city()
-//    {
-//        return $this->belongsTo('App\City', 'city_id', 'city_id');
-//    }
 
+    public function comments(){
+        return $this->hasMany('App\SchoolComment', 'school_id', 'school_id');
+    }
 
 }
