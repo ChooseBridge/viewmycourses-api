@@ -48,6 +48,14 @@ Route::group(['middleware' => 'admin.user', 'as' => 'backend.'], function () {
     Route::get('admin/school/comment', ['uses' => 'SchoolController@showComment', 'as' => 'school.show-comment.get']);
 
 
+
+    Route::get('admin/course-category/index', ['uses' => 'CourseCategoryController@index', 'as' => 'course-category.index']);
+    Route::get('admin/course-category.add.get', ['uses' => 'CourseCategoryController@addCategory', 'as' => 'course-category.add.get']);
+    Route::post('admin/course-category.add.post', ['uses' => 'CourseCategoryController@addCategory', 'as' => 'course-category.add.post']);
+    Route::get('admin/course-category.update.get', ['uses' => 'CourseCategoryController@updateCategory', 'as' => 'course-category.update.get']);
+    Route::post('admin/course-category.update.post', ['uses' => 'CourseCategoryController@updateCategory', 'as' => 'course-category.update.post']);
+
+
     Route::get('admin/college/index', ['uses' => 'CollegeController@index', 'as' => 'college.index']);
     Route::get('admin/college/add', ['uses' => 'CollegeController@addCollege', 'as' => 'college.add.get']);
     Route::post('admin/college/add', ['uses' => 'CollegeController@addCollege', 'as' => 'college.add.post']);

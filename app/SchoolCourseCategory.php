@@ -16,4 +16,8 @@ class SchoolCourseCategory extends Model
       'course_category_name',
     ];
 
+    public function school(){
+        return $this->belongsTo('App\School','school_id','school_id');
+    }
+
 }

@@ -20,4 +20,6 @@ interface SchoolCourseCategoryServiceAbstract
     public function getCourseCategorysBySchoolId($schoolId);
 
     public function getCourseCategoryById($id);
+
+    public function getCourseCategoryForPage($limit);
 }

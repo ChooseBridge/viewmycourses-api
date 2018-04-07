@@ -56,5 +56,11 @@ class SchoolCourseCategoryServiceConcrete implements SchoolCourseCategoryService
         return $schoolCourseCategory;
     }
 
+    public function getCourseCategoryForPage($limit=10)
+    {
+        $schoolCourseCategorys = SchoolCourseCategory::paginate($limit);
+        return $schoolCourseCategorys;
+    }
+
 
 }
