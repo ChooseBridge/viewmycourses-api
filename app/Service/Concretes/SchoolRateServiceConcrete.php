@@ -71,7 +71,9 @@ class SchoolRateServiceConcrete implements SchoolRateServiceAbstract
     public function getCheckedRatesBySchoolId($schoolId)
     {
         $rates = SchoolRate::where('school_id', $schoolId)
-          ->where('check_status', SchoolRate::APPROVE_CHECK)->get();
+          ->where('check_status', SchoolRate::APPROVE_CHECK)
+          ->orderBy('school_rate_id', 'DESC')
+          ->get();
         return $rates;
     }
 

@@ -171,7 +171,7 @@ class SchoolController extends Controller
         $data = [
           'success' => true,
           'data' => [
-            'id'=>$shcool->school_id
+            'id' => $shcool->school_id
           ]
         ];
 
@@ -342,6 +342,9 @@ class SchoolController extends Controller
 
         $allScore = [];
         $schoolDistrictScore = [];
+
+        $max_thumbs_up_rate_id = 0;
+        $max_thumbs_up = 0;
         foreach ($rates as $rate) {
 
             if (!isset($allScore['score'])) {
@@ -394,12 +397,24 @@ class SchoolController extends Controller
               'life_happiness_index' => $rate->life_happiness_index,
               'school_students_relations' => $rate->school_students_relations,
               'comment' => $rate->comment,
-              'student_name' =>$rate->student?$rate->student->name:"",
-              'major' => $rate->student?$rate->student->major:"",
+              'student_name' => $rate->student ? $rate->student->name : "",
+              'major' => $rate->student ? $rate->student->major : "",
               'score' => round($rate->score, 1),
               'created_at' => $rate->created_at->format('Y-m-d H:i:s'),
               'create_student_id' => $rate->create_student_id,
             ];
+
+            $ratesInfo[$tmp['school_rate_id']] = $tmp;
+
+
+            //将点赞数最多的一条点评置顶，若点赞数相同，则置顶最新的点评
+            if ($rate->thumbs_up != "") {
+                $thumbsUpNum = count(explode(',', trim($rate->thumbs_up, ',')));
+                if ($thumbsUpNum > $max_thumbs_up) {
+                    $max_thumbs_up_rate_id = $rate->school_rate_id;
+                    $max_thumbs_up = $thumbsUpNum;
+                }
+            }
 
             //计算百分比
             if ($rate->thumbs_up == "" && $rate->thumbs_down == "") {
@@ -434,7 +449,13 @@ class SchoolController extends Controller
                 }
             }
 
-            $ratesInfo[] = $tmp;
+
+        }
+
+        if($max_thumbs_up_rate_id != 0){
+            $max_rate = $ratesInfo[$max_thumbs_up_rate_id];
+            unset($ratesInfo[$max_thumbs_up_rate_id]);
+            array_unshift($ratesInfo,$max_rate);
         }
 
         $schoolDistricts = $this->schoolDistrictService->getDistrictsBySchoolId($schoolId);
