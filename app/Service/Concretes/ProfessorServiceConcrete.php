@@ -131,7 +131,7 @@ class ProfessorServiceConcrete implements ProfessorServiceAbstract
         $professors = Professor::where('school_id', $schoolId)->get();
 
         $professor = null;
-        if(!$professors->toArray()){
+        if(!empty($professors->toArray())){
             $professor = $professors->random();
         }
 
