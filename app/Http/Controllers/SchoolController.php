@@ -157,6 +157,10 @@ class SchoolController extends Controller
 
         $data = $request->all();
 
+        $user = $this->studentService->getCurrentStudent();
+
+        $data['your_email'] = $user->email;
+
         $validator = $this->schoolService->validatorForCreate($data);
         if ($validator !== true) {
             $message = $validator->errors()->first();
