@@ -129,15 +129,19 @@ class ProfessorServiceConcrete implements ProfessorServiceAbstract
         }
 
         $professors = Professor::where('school_id', $schoolId)->get();
-        $professor = $professors->random();
+
+        $professor = null;
+        if(!$professors->toArray()){
+            $professor = $professors->random();
+        }
+
 
         if ($professor) {
             $cacheValue = serialize($professor);
             \Illuminate\Support\Facades\Cache::set($schoolId . "professor",$cacheValue,3600*24);
-            return $professor;
         }
 
-        return null;
+        return $professor;
 
 
     }
