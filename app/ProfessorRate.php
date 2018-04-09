@@ -50,7 +50,8 @@ class ProfessorRate extends Model
 
     public function getEffortAttribute()
     {
-        return $this->difficult_level*$this->spend_course_time_at_week*($this->quiz_num/4)*(5/$this->course_related_quiz)/3750*100;
+//        return $this->difficult_level*$this->spend_course_time_at_week*($this->quiz_num/4)*(5/$this->course_related_quiz)/3750*100;
+        return ($this->difficult_level*0.4)+($this->spend_course_time_at_week*0.1)+($this->homework_num*0.05)+($this->quiz_num*0.1)+(5/$this->course_related_quiz)*0.1;
     }
 
     public function getCheckStatusNameAttribute()

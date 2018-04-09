@@ -153,7 +153,7 @@ class ProfessorController extends Controller
         }
 
         if(preg_match("/^[a-zA-Z\s]+$/",$data['professor_fisrt_name'] . $data['professor_second_name'])){
-            $data['professor_full_name'] =   $data['professor_second_name'].$data['professor_fisrt_name'];
+            $data['professor_full_name'] =   $data['professor_second_name']." ".$data['professor_fisrt_name'];
         }else{
             $data['professor_full_name'] = $data['professor_fisrt_name'] . $data['professor_second_name'];
         }
