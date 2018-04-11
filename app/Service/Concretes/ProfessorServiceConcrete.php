@@ -12,9 +12,9 @@ namespace App\Service\Concretes;
 use App\Exceptions\APIException;
 use App\Professor;
 use App\Service\Abstracts\MessageServiceAbstract;
+use App\Service\Abstracts\ProfessorCourseServiceAbstract;
 use App\Service\Abstracts\ProfessorRateServiceAbstract;
 use App\Service\Abstracts\ProfessorServiceAbstract;
-use Doctrine\Common\Cache\Cache;
 use Illuminate\Support\Facades\Validator;
 
 class ProfessorServiceConcrete implements ProfessorServiceAbstract
@@ -22,13 +22,16 @@ class ProfessorServiceConcrete implements ProfessorServiceAbstract
 
     protected $messageService;
     protected $professorRateService;
+    protected $professorCourseService;
 
     public function __construct(
       MessageServiceAbstract $messageService,
-      ProfessorRateServiceAbstract $professorRateService
+      ProfessorRateServiceAbstract $professorRateService,
+      ProfessorCourseServiceAbstract $professorCourseService
     ) {
         $this->messageService = $messageService;
         $this->professorRateService = $professorRateService;
+        $this->professorCourseService = $professorCourseService;
 
     }
 
@@ -112,6 +115,13 @@ class ProfessorServiceConcrete implements ProfessorServiceAbstract
                 if (!$isdelete) {
                     throw new APIException("数据库操作异常",APIException::OPERATION_EXCEPTION);
                 }
+
+                $isdelete = $this->professorCourseService->deleteCoursesByProfessorId($id);
+                if (!$isdelete) {
+                    throw new APIException("数据库操作异常",APIException::OPERATION_EXCEPTION);
+                }
+
+                
 
                 $content = "你创建的教授" . $professor->professor_full_name . "审核失败";
                 $student_id = $professor->create_student_id;

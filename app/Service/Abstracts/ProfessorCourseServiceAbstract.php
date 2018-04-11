@@ -21,4 +21,6 @@ interface ProfessorCourseServiceAbstract
 
     public function getCourseById($id);
 
+    public function deleteCoursesByProfessorId($professorId);
+
 }

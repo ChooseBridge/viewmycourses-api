@@ -49,4 +49,10 @@ class ProfessorCourseServiceConcrete implements ProfessorCourseServiceAbstract
         $course = ProfessorCourse::where('course_id',$id)->first();
         return $course;
     }
+
+    public function deleteCoursesByProfessorId($professorId)
+    {
+        return ProfessorCourse::where('professor_id',$professorId)->delete();
+    }
+
 }
