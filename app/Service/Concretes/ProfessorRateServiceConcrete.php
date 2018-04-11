@@ -340,4 +340,9 @@ class ProfessorRateServiceConcrete implements ProfessorRateServiceAbstract
         return ['res' => false, 'num' => 0];
     }
 
+    public function deleteRatesByProfessorId($professorId)
+    {
+        return ProfessorRate::where('professor_id',$professorId)->delete();
+    }
+
 }

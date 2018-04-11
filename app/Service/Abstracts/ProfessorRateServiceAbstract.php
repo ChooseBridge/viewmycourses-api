@@ -39,5 +39,7 @@ interface ProfessorRateServiceAbstract
 
     public function thumbsDownRateById($id,$student);
 
+    public function deleteRatesByProfessorId($professorId);
+
 
 }

@@ -9,8 +9,10 @@
 namespace App\Service\Concretes;
 
 
+use App\Exceptions\APIException;
 use App\Professor;
 use App\Service\Abstracts\MessageServiceAbstract;
+use App\Service\Abstracts\ProfessorRateServiceAbstract;
 use App\Service\Abstracts\ProfessorServiceAbstract;
 use Doctrine\Common\Cache\Cache;
 use Illuminate\Support\Facades\Validator;
@@ -19,10 +21,15 @@ class ProfessorServiceConcrete implements ProfessorServiceAbstract
 {
 
     protected $messageService;
+    protected $professorRateService;
 
-    public function __construct(MessageServiceAbstract $messageService)
-    {
+    public function __construct(
+      MessageServiceAbstract $messageService,
+      ProfessorRateServiceAbstract $professorRateService
+    ) {
         $this->messageService = $messageService;
+        $this->professorRateService = $professorRateService;
+
     }
 
     public function getProfessorsForPage($limit = 10, $queryCallBack = null, $join = null)
@@ -92,24 +99,46 @@ class ProfessorServiceConcrete implements ProfessorServiceAbstract
     {
         $professor = $this->getProfessorById($id);
         if ($professor) {
-            $isReject = $professor->delete();
-            if ($isReject) {
-                //待处理是删除相关的教授点评等操作
+
+            \DB::beginTransaction();
+            try{
+
+                $isReject = $professor->delete();
+                if (!$isReject) {
+                    throw new APIException("数据库操作异常",APIException::OPERATION_EXCEPTION);
+                }
+
+                $isdelete = $this->professorRateService->deleteRatesByProfessorId($id);
+                if (!$isdelete) {
+                    throw new APIException("数据库操作异常",APIException::OPERATION_EXCEPTION);
+                }
+
                 $content = "你创建的教授" . $professor->professor_full_name . "审核失败";
                 $student_id = $professor->create_student_id;
                 $messageContent = [
-                  'message'=>$content,
-                  'type'=>'fail',
-                  'info_type'=>'professor',
-                  'id'=>$professor->professor_id,
-                  'name'=>$professor->professor_full_name,
+                  'message' => $content,
+                  'type' => 'fail',
+                  'info_type' => 'professor',
+                  'id' => $professor->professor_id,
+                  'name' => $professor->professor_full_name,
                 ];
                 $data = [
                   'message_content' => json_encode($messageContent),
                   'to_student_id' => $student_id
                 ];
-                $this->messageService->createMessage($data);
+                $message = $this->messageService->createMessage($data);
+                if (!$message) {
+
+                    throw new APIException("数据库操作异常", APIException::OPERATION_EXCEPTION);
+
+                }
+                \DB::commit();
+
+
+            }catch (APIException $exception){
+                \DB::rollBack();
             }
+
 
         }
     }
