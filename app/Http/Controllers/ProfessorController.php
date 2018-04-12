@@ -132,6 +132,15 @@ class ProfessorController extends Controller
         ]);
     }
 
+
+    public function commentIndex(){
+
+        $comments  = ProfessorComment::paginate(10);
+        return view('professor.comment_index', [
+          'comments' => $comments,
+        ]);
+    }
+
 //api
 
     public function createProfessor(Request $request)

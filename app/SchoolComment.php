@@ -16,4 +16,15 @@ class SchoolComment extends Model
       'create_student_id',
       'school_id',
     ];
+
+    public function student()
+    {
+        return $this->belongsTo('App\Student', 'create_student_id', 'student_id');
+    }
+
+
+    public function school()
+    {
+        return $this->belongsTo('App\School', 'school_id', 'school_id');
+    }
 }

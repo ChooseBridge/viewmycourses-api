@@ -17,4 +17,17 @@ class ProfessorComment extends Model
       'create_student_id',
       'professor_id',
     ];
+
+
+    public function student()
+    {
+        return $this->belongsTo('App\Student', 'create_student_id', 'student_id');
+    }
+
+
+    public function professor()
+    {
+        return $this->belongsTo('App\Professor', 'professor_id', 'professor_id');
+    }
+
 }

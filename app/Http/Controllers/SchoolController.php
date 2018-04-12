@@ -146,6 +146,14 @@ class SchoolController extends Controller
         ]);
     }
 
+    public function commentIndex(){
+
+        $comments = SchoolComment::paginate(10);
+        return view('school.comment_index', [
+          'comments' => $comments,
+        ]);
+    }
+
 
 //  api
     public function createSchool(Request $request)

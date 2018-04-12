@@ -46,6 +46,7 @@ Route::group(['middleware' => 'admin.user', 'as' => 'backend.'], function () {
     Route::get('admin/school/update', ['uses' => 'SchoolController@updateSchool', 'as' => 'school.update.get']);
     Route::post('admin/school/update', ['uses' => 'SchoolController@updateSchool', 'as' => 'school.update.post']);
     Route::get('admin/school/comment', ['uses' => 'SchoolController@showComment', 'as' => 'school.show-comment.get']);
+    Route::get('admin/school-comment/index', ['uses' => 'SchoolController@commentIndex', 'as' => 'school-comment.index']);
 
 
 
@@ -81,6 +82,7 @@ Route::group(['middleware' => 'admin.user', 'as' => 'backend.'], function () {
     Route::get('admin/professor/update', ['uses' => 'ProfessorController@updateProfessor', 'as' => 'professor.update.get']);
     Route::post('admin/professor/update', ['uses' => 'ProfessorController@updateProfessor', 'as' => 'professor.update.post']);
     Route::get('admin/professor/comment', ['uses' => 'ProfessorController@showComment', 'as' => 'professor.show-comment.get']);
+    Route::get('admin/professor-comment/index', ['uses' => 'ProfessorController@commentIndex', 'as' => 'professor-comment.index']);
 
     Route::get('admin/professor-rate/index',
       ['uses' => 'ProfessorRateController@Index', 'as' => 'professor-rate.index']);
