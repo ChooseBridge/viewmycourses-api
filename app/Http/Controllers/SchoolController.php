@@ -472,6 +472,8 @@ class SchoolController extends Controller
             array_unshift($ratesInfo,$max_rate);
         }
 
+        $ratesInfo = array_values($ratesInfo);
+
         $schoolDistricts = $this->schoolDistrictService->getDistrictsBySchoolId($schoolId);
         $schoolDistrictInfo = [];
 
