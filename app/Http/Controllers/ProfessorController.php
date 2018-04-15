@@ -83,7 +83,13 @@ class ProfessorController extends Controller
                 return redirect(route('backend.professor.add.get'))
                   ->withErrors($validator);
             }
-            $data['professor_full_name'] = $data['professor_fisrt_name'] . $data['professor_second_name'];
+
+            if(preg_match("/^[a-zA-Z\s]+$/",$data['professor_fisrt_name'] . $data['professor_second_name'])){
+                $data['professor_full_name'] =   $data['professor_second_name']." ".$data['professor_fisrt_name'];
+            }else{
+                $data['professor_full_name'] = $data['professor_fisrt_name'] . $data['professor_second_name'];
+            }
+
             $data['create_user_id'] = Auth::user()->id;
             $data['check_status'] = Professor::APPROVE_CHECK;
             $this->professorService->createProfessor($data);
