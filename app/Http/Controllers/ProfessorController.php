@@ -378,7 +378,7 @@ class ProfessorController extends Controller
         if($max_thumbs_up_rate_id != 0){
             $max_rate = $rateInfo[$max_thumbs_up_rate_id];
             unset($rateInfo[$max_thumbs_up_rate_id]);
-            array_unshift($ratesInfo,$max_rate);
+            array_unshift($rateInfo,$max_rate);
         }
         $rateInfo = array_values($rateInfo);
 
