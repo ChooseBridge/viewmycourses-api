@@ -80,7 +80,7 @@ class ProfessorServiceConcrete implements ProfessorServiceAbstract
             $professor->check_status = Professor::APPROVE_CHECK;
             $isApprove = $professor->save();
             if ($isApprove) {
-                $content = "你创建的教授" . $professor->professor_full_name . "审核通过";
+                $content = "您创建的教授" . $professor->professor_full_name . "审核通过";
                 $student_id = $professor->create_student_id;
                 $messageContent = [
                   'message'=>$content,
@@ -123,7 +123,7 @@ class ProfessorServiceConcrete implements ProfessorServiceAbstract
 
                 
 
-                $content = "你创建的教授" . $professor->professor_full_name . "审核失败";
+                $content = "您创建的教授" . $professor->professor_full_name . "审核失败";
                 $student_id = $professor->create_student_id;
                 $messageContent = [
                   'message' => $content,
