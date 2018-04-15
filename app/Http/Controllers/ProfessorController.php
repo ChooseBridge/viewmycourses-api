@@ -371,7 +371,7 @@ class ProfessorController extends Controller
                 }
             }
 
-            $rateInfo[$tmp['professor_rate_id']] = $tmp;
+            $rateInfo[$rate->professor_rate_id] = $tmp;
             $tagsStr .= $rate->tag . ",";
         }
 
