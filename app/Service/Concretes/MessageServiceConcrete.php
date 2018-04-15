@@ -22,7 +22,9 @@ class MessageServiceConcrete implements MessageServiceAbstract
 
     public function getMessagesByStudentId($studentId)
     {
-        $messages = Message::where('to_student_id',$studentId)->get();
+        $messages = Message::where('to_student_id',$studentId)
+          ->orderBy('messag_id','desc')
+          ->get();
         foreach ($messages as $message){
             $message->is_read = 1;
             $message->save();
