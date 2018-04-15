@@ -289,6 +289,8 @@ class ProfessorController extends Controller
         $calculateAllEffort = [];
         $calculateCourseEffort = [];
 
+        $max_thumbs_up_rate_id = 0;
+        $max_thumbs_up = 0;
         foreach ($rates as $rate) {
 
             if (!isset($calculateAllEffort['effort'])) {
@@ -327,6 +329,15 @@ class ProfessorController extends Controller
               'create_student_id' => $rate->create_student_id,
             ];
 
+            //将点赞数最多的一条点评置顶，若点赞数相同，则置顶最新的点评
+            if ($rate->thumbs_up != "") {
+                $thumbsUpNum = count(explode(',', trim($rate->thumbs_up, ',')));
+                if ($thumbsUpNum > $max_thumbs_up) {
+                    $max_thumbs_up_rate_id = $rate->professor_rate_id;
+                    $max_thumbs_up = $thumbsUpNum;
+                }
+            }
+
             //计算百分比
             if ($rate->thumbs_up == "" && $rate->thumbs_down == "") {
                 $tmp['thumbs_up_percent'] = 0;
@@ -360,9 +371,16 @@ class ProfessorController extends Controller
                 }
             }
 
-            $rateInfo[] = $tmp;
+            $rateInfo[$tmp['professor_rate_id']] = $tmp;
             $tagsStr .= $rate->tag . ",";
         }
+
+        if($max_thumbs_up_rate_id != 0){
+            $max_rate = $rateInfo[$max_thumbs_up_rate_id];
+            unset($rateInfo[$max_thumbs_up_rate_id]);
+            array_unshift($ratesInfo,$max_rate);
+        }
+        $rateInfo = array_values($rateInfo);
 
         $professorEffort = 0;
         if (isset($calculateAllEffort['effort'])) {
