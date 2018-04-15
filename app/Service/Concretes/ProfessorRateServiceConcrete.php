@@ -69,9 +69,14 @@ class ProfessorRateServiceConcrete implements ProfessorRateServiceAbstract
         return $rate;
     }
 
-    public function getRatesForPage($limit = 10)
+    public function getRatesForPage($limit = 10,$queryCallBack=null)
     {
-        $rates = ProfessorRate::paginate($limit);
+        if ($queryCallBack) {
+            $rates = ProfessorRate::where($queryCallBack)->paginate($limit);
+        }else{
+            $rates = ProfessorRate::paginate($limit);
+        }
+
         return $rates;
     }
 

@@ -56,12 +56,26 @@ class SchoolController extends Controller
     }
 
 // backend
-    public function index()
+    public function index(Request $request)
     {
 
-        $schools = $this->schoolService->getSchoolsForPage();
+        $check_status = $request->get('check_status');
+        if($check_status != null){
+
+            $callback = function ($query) use ($check_status){
+                $query->where('check_status',$check_status);
+            };
+        }
+
+        if(isset($callback)){
+            $schools = $this->schoolService->getSchoolsForPage(10,$callback);
+        }else{
+            $schools = $this->schoolService->getSchoolsForPage();
+        }
+
         return view('school.index', [
-          'schools' => $schools
+          'schools' => $schools,
+          'check_status' => $check_status
         ]);
     }
 

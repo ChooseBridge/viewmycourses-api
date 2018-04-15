@@ -35,11 +35,26 @@ class ProfessorRateController extends Controller
 
 //backend
 
-    public function index()
+    public function index(Request $request)
     {
-        $rates = $this->professorRateService->getRatesForPage();
+        $check_status = $request->get('check_status');
+        if($check_status != null){
+
+            $callback = function ($query) use ($check_status){
+                $query->where('check_status',$check_status);
+            };
+        }
+
+        if(isset($callback)){
+            $rates = $this->professorRateService->getRatesForPage(10,$callback);
+        }else{
+            $rates = $this->professorRateService->getRatesForPage();
+        }
+
+
         return view('professor_rate.index', [
-          'rates' => $rates
+          'rates' => $rates,
+          'check_status' => $check_status,
         ]);
     }
 

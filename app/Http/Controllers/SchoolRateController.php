@@ -33,11 +33,26 @@ class SchoolRateController extends Controller
 
 //backend
 
-    public function index()
+    public function index(Request $request)
     {
-        $rates = $this->schoolRateService->getRatesForPage();
+
+        $check_status = $request->get('check_status');
+        if($check_status != null){
+
+            $callback = function ($query) use ($check_status){
+                $query->where('check_status',$check_status);
+            };
+        }
+
+        if(isset($callback)){
+            $rates = $this->schoolRateService->getRatesForPage(10,$callback);
+        }else{
+            $rates = $this->schoolRateService->getRatesForPage();
+        }
+
         return view('school_rate.index', [
-          'rates' => $rates
+          'rates' => $rates,
+          'check_status' => $check_status,
         ]);
     }
 

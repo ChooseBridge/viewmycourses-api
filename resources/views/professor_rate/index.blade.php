@@ -9,6 +9,36 @@
             </h1>
         </div>
 
+
+        <div class="row">
+
+            <form>
+                <div class="col-xs-4">
+                    <select name="check_status" class="form-control">
+                        <option value="">请选择</option>
+                        @if($check_status == 0)
+                            <option selected="selected" value="0">待审核</option>
+                        @else
+                            <option value="0">待审核</option>
+                        @endif
+
+                        @if($check_status == 1)
+                            <option selected="selected" value="1">已审核</option>
+                        @else
+                            <option value="1">已审核</option>
+                        @endif
+
+
+                    </select>
+                </div>
+                <div class="col-xs-4">
+                    <input type="submit" class="btn-sm btn-info" value="查询">
+                </div>
+            </form>
+        </div>
+
+        <br>
+
         <table class="table table-bordered">
             <tr>
                 <th>点评ID</th>

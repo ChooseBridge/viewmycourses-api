@@ -15,7 +15,7 @@ interface ProfessorRateServiceAbstract
 
     public function createRate($data);
 
-    public function getRatesForPage($limit);
+    public function getRatesForPage($limit,$queryCallBack);
 
     public function getRateById($id);
 

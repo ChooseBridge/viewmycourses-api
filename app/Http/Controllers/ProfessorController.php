@@ -50,12 +50,26 @@ class ProfessorController extends Controller
 
 //backend
 
-    public function index()
+    public function index(Request $request)
     {
+        $check_status = $request->get('check_status');
+        if($check_status != null){
 
-        $professors = $this->professorService->getProfessorsForPage();
+            $callback = function ($query) use ($check_status){
+                $query->where('check_status',$check_status);
+            };
+        }
+
+        if(isset($callback)){
+            $professors = $this->professorService->getProfessorsForPage(10,$callback);
+        }else{
+            $professors = $this->professorService->getProfessorsForPage();
+        }
+
+
         return view('professor.index', [
-          'professors' => $professors
+          'professors' => $professors,
+          'check_status' => $check_status
         ]);
     }
 

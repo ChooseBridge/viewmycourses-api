@@ -15,7 +15,7 @@ interface SchoolRateServiceAbstract
 
     public function createRate($data);
 
-    public function getRatesForPage($limit);
+    public function getRatesForPage($limit,$queryCallBack);
 
     public function getRatesBySchoolId($schoolId);
 

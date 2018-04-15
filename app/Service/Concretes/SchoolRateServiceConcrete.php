@@ -56,9 +56,14 @@ class SchoolRateServiceConcrete implements SchoolRateServiceAbstract
         return $rate;
     }
 
-    public function getRatesForPage($limit = 10)
+    public function getRatesForPage($limit = 10,$queryCallBack=null)
     {
-        $rates = SchoolRate::paginate($limit);
+        if ($queryCallBack) {
+            $rates = SchoolRate::where($queryCallBack)->paginate($limit);
+        } else {
+            $rates = SchoolRate::paginate($limit);
+        }
+
         return $rates;
     }
 
