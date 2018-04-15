@@ -303,6 +303,9 @@ class SchoolController extends Controller
               'school_id' => $school->school_id,
               'school_name' => $school->school_name,
               'school_nick_name' => $school->school_nick_name,
+              'country' => $school->country?$school->country->country_name:"",
+              'province' => $school->province?$school->province->province_name:"",
+              'city' => $school->city?$school->city->city_name:"",
             ];
         }
 
