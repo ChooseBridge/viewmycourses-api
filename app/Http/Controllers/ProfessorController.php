@@ -113,6 +113,9 @@ class ProfessorController extends Controller
         if ($request->isMethod('POST')) {
 
             $data = $request->all();
+            if(!isset($data['professor_web_site'])){
+                $data['professor_web_site'] = "";
+            }
             $professor->update($data);
             return redirect(route("backend.professor.index"));
         }
