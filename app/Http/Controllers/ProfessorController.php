@@ -418,6 +418,7 @@ class ProfessorController extends Controller
         $professorInfo = [
           'professor_full_name' => $professor->professor_full_name,
           'school' => $professor->school->school_name,
+          'college' => $professor->school->college->college_name,
           'country' => $professor->school->country->country_name,
           'province' => $professor->school->province->province_name,
           'city' => $professor->school->city->city_name,
