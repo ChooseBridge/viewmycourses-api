@@ -111,15 +111,23 @@ class ProfessorServiceConcrete implements ProfessorServiceAbstract
                     throw new APIException("数据库操作异常",APIException::OPERATION_EXCEPTION);
                 }
 
-                $isdelete = $this->professorRateService->deleteRatesByProfessorId($id);
-                if (!$isdelete) {
-                    throw new APIException("数据库操作异常",APIException::OPERATION_EXCEPTION);
+                $rates = $this->professorRateService->getRatesByProfessorId($id);
+                if(!empty($rates->toArray())){
+
+                    $isdelete = $this->professorRateService->deleteRatesByProfessorId($id);
+                    if (!$isdelete) {
+                        throw new APIException("数据库操作异常",APIException::OPERATION_EXCEPTION);
+                    }
                 }
 
-                $isdelete = $this->professorCourseService->deleteCoursesByProfessorId($id);
-                if (!$isdelete) {
-                    throw new APIException("数据库操作异常",APIException::OPERATION_EXCEPTION);
+                $courses = $this->professorCourseService->getCoursesByProfessorId($id);
+                if(!empty($courses->toArray())){
+                    $isdelete = $this->professorCourseService->deleteCoursesByProfessorId($id);
+                    if (!$isdelete) {
+                        throw new APIException("数据库操作异常",APIException::OPERATION_EXCEPTION);
+                    }
                 }
+
 
                 
 
