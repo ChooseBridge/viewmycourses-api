@@ -224,6 +224,7 @@ class ProfessorRateServiceConcrete implements ProfessorRateServiceAbstract
                   'info_type'=>'professor_rate',
                   'id'=>$rate->professor_rate_id,
                   'name'=>$rate->professor->professor_full_name,
+                  'professor_id'=>$rate->professor->professor_id,
                 ];
                 $data = [
                   'message_content' => json_encode($messageContent),
@@ -255,6 +256,7 @@ class ProfessorRateServiceConcrete implements ProfessorRateServiceAbstract
                   'info_type'=>'professor_rate',
                   'id'=>$rate->professor_rate_id,
                   'name'=>$rate->professor->professor_full_name,
+                  'professor_id'=>$rate->professor->professor_id,
                 ];
                 $data = [
                   'message_content' => json_encode($messageContent),

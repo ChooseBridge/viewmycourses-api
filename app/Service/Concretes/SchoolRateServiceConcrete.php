@@ -122,6 +122,7 @@ class SchoolRateServiceConcrete implements SchoolRateServiceAbstract
                   'info_type'=>'school_rate',
                   'id'=>$rate->school_rate_id,
                   'name'=>$rate->school->school_name,
+                  'school_id'=>$rate->school->school_id,
                 ];
                 $data = [
                   'message_content' => json_encode($messageContent),
@@ -154,6 +155,7 @@ class SchoolRateServiceConcrete implements SchoolRateServiceAbstract
                   'info_type'=>'school_rate',
                   'id'=>$rate->school_rate_id,
                   'name'=>$rate->school->school_name,
+                  'school_id'=>$rate->school->school_id,
                 ];
                 $data = [
                   'message_content' => json_encode($messageContent),
