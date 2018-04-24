@@ -111,7 +111,7 @@ class SchoolServiceConcrete implements SchoolServiceAbstract
         if ($queryCallBack) {
             $bulider->where($queryCallBack);
         }
-        $schools = $bulider->orderBy('p_sort asc')->paginate($limit);
+        $schools = $bulider->orderBy('p_sort','asc')->paginate($limit);
         return $schools;
     }
 
@@ -145,7 +145,7 @@ class SchoolServiceConcrete implements SchoolServiceAbstract
         if ($queryCallBack) {
             $bulider->where($queryCallBack);
         }
-        $schools = $bulider->orderBy('p_sort asc')->get();
+        $schools = $bulider->orderBy('p_sort','asc')->get();
         return $schools;
     }
 
