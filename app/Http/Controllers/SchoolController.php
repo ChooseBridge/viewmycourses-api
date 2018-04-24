@@ -18,6 +18,7 @@ use function foo\func;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Overtrue\Pinyin\Pinyin;
 
 class SchoolController extends Controller
 {
@@ -119,6 +120,8 @@ class SchoolController extends Controller
         if ($request->isMethod('POST')) {
 
             $data = $request->all();
+            $pinyin = new Pinyin();
+            $data['p_sort'] = substr($pinyin->abbr($data['school_name']),0,1);
             $school->update($data);
             return redirect(route("backend.school.index"));
 
@@ -173,6 +176,8 @@ class SchoolController extends Controller
     public function createSchool(Request $request)
     {
 
+
+
         if (!$this->studentService->currentStudentIsVip()) {
             throw new APIException("此操作需要会员权限", APIException::IS_NOT_VIP);
         }
@@ -188,6 +193,10 @@ class SchoolController extends Controller
             $message = $validator->errors()->first();
             throw new APIException($message, APIException::ERROR_PARAM);
         }
+
+        $pinyin = new Pinyin();
+        $data['p_sort'] = substr($pinyin->abbr($data['school_name']),0,1);
+
 
         $country = $this->countryService->getCountryById($data['country_id']);
         $province = $this->provinceService->getProvinceById($data['province_id']);
