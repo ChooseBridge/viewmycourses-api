@@ -96,6 +96,8 @@ class SchoolController extends Controller
                 return redirect(route('backend.school.add.get'))
                   ->withErrors($validator);
             }
+            $pinyin = new Pinyin();
+            $data['p_sort'] = substr($pinyin->abbr($data['school_name']),0,1);
             $this->schoolService->createSchool($data);
             return redirect(route("backend.school.index"));
 
