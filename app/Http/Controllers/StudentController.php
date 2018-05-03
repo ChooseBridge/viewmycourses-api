@@ -143,12 +143,22 @@ class StudentController extends Controller
         $ratesInfo = $schoolRatesInfo + $professorRatesInfo;
         krsort($ratesInfo);
 
+        $isVip = $this->studentService->currentStudentIsVip();
+        $vipExpireTime = "";
+        if($isVip){
+            $vipExpireTime = $GLOBALS['gStudent']->vip_expire_time;
+        }
+        $points = $this->studentService->getPoints($GLOBALS['gStudent']);
+
 
         $data = [
           'success' => true,
           'data' => [
             'student' => $student,
             'ratesInfo' => $ratesInfo,
+            'isVip' => $isVip,
+            'vipExpireTime' => $vipExpireTime,
+            'points'=>$points
           ]
         ];
 
