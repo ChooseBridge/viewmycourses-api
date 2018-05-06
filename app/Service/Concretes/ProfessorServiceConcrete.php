@@ -38,17 +38,17 @@ class ProfessorServiceConcrete implements ProfessorServiceAbstract
     public function getProfessorsForPage($limit = 10, $queryCallBack = null, $join = null)
     {
         if ($queryCallBack == null && $join == null) {
-            $professors = Professor::paginate($limit);
+            $professors = Professor::orderBy('p_sort','asc')->paginate($limit);
         } elseif ($queryCallBack && $join) {
             $builder = Professor::where($queryCallBack);
             foreach ($join as $key => $value) {
                 $builder->whereHas($key, $value);
             }
-            $professors = $builder->paginate($limit);
+            $professors = $builder->orderBy('p_sort','asc')->paginate($limit);
         } elseif ($join) {
-            $professors = Professor::with($join)->paginate($limit);
+            $professors = Professor::with($join)->orderBy('p_sort','asc')->paginate($limit);
         } else {
-            $professors = Professor::where($queryCallBack)->paginate($limit);
+            $professors = Professor::where($queryCallBack)->orderBy('p_sort','asc')->paginate($limit);
         }
 
 

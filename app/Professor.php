@@ -32,6 +32,7 @@ class Professor extends Model
       'create_user_id',
       'check_status',
       'thumbs_up',
+      'p_sort',
     ];
 
 

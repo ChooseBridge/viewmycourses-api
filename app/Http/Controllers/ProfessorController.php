@@ -16,6 +16,7 @@ use App\Service\Abstracts\SchoolServiceAbstract;
 use App\Service\Abstracts\StudentServiceAbstract;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Overtrue\Pinyin\Pinyin;
 
 class ProfessorController extends Controller
 {
@@ -90,6 +91,9 @@ class ProfessorController extends Controller
                 $data['professor_full_name'] = $data['professor_fisrt_name'] . $data['professor_second_name'];
             }
 
+            $pinyin = new Pinyin();
+            $data['p_sort'] = substr($pinyin->abbr($data['professor_full_name']),0,1);
+
             $data['create_user_id'] = Auth::user()->id;
             $data['check_status'] = Professor::APPROVE_CHECK;
             $this->professorService->createProfessor($data);
@@ -121,6 +125,10 @@ class ProfessorController extends Controller
             }else{
                 $data['professor_full_name'] = $data['professor_fisrt_name'] . $data['professor_second_name'];
             }
+
+            $pinyin = new Pinyin();
+            $data['p_sort'] = substr($pinyin->abbr($data['professor_full_name']),0,1);
+
             $professor->update($data);
             return redirect(route("backend.professor.index"));
         }
@@ -194,6 +202,9 @@ class ProfessorController extends Controller
         }else{
             $data['professor_full_name'] = $data['professor_fisrt_name'] . $data['professor_second_name'];
         }
+
+        $pinyin = new Pinyin();
+        $data['p_sort'] = substr($pinyin->abbr($data['professor_full_name']),0,1);
 
 
         $data['create_student_id'] = $GLOBALS['gStudent']->student_id;
