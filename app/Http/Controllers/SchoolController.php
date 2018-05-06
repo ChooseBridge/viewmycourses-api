@@ -180,9 +180,9 @@ class SchoolController extends Controller
 
 
 
-        if (!$this->studentService->currentStudentIsVip()) {
-            throw new APIException("此操作需要会员权限", APIException::IS_NOT_VIP);
-        }
+//        if (!$this->studentService->currentStudentIsVip()) {
+//            throw new APIException("此操作需要会员权限", APIException::IS_NOT_VIP);
+//        }
 
         $data = $request->all();
 
