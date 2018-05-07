@@ -82,6 +82,8 @@
 
                         <a class="btn btn-success"
                            href="{{route('backend.school-rate.detail',['school_rate_id' => $rate->school_rate_id])}}">详情</a>
+                        <a class="btn btn-danger"
+                           href="{{route('backend.school-rate.delete',['school_rate_id' => $rate->school_rate_id])}}">删除</a>
                         {{--@if($rate->check_status == \App\SchoolRate::PENDING_CHECK)--}}
                             {{--<a class="btn btn-success"--}}
                                {{--href="{{route('backend.school-rate.aprove.get',['school_rate_id' => $rate->school_rate_id])}}">通过</a>--}}

@@ -92,6 +92,8 @@ Route::group(['middleware' => 'admin.user', 'as' => 'backend.'], function () {
       ['uses' => 'ProfessorRateController@reject', 'as' => 'professor-rate.reject.get']);
     Route::get('admin/professor-rate/detail',
       ['uses' => 'ProfessorRateController@detail', 'as' => 'professor-rate.detail']);
+    Route::get('admin/professor-rate/delete',
+      ['uses' => 'ProfessorRateController@delete', 'as' => 'professor-rate.delete']);
 
 
     Route::get('admin/school-rate/index', ['uses' => 'SchoolRateController@Index', 'as' => 'school-rate.index']);
@@ -99,6 +101,7 @@ Route::group(['middleware' => 'admin.user', 'as' => 'backend.'], function () {
       ['uses' => 'SchoolRateController@approve', 'as' => 'school-rate.aprove.get']);
     Route::get('admin/school-rate/reject', ['uses' => 'SchoolRateController@reject', 'as' => 'school-rate.reject.get']);
     Route::get('admin/school-rate/detail', ['uses' => 'SchoolRateController@detail', 'as' => 'school-rate.detail']);
+    Route::get('admin/school-rate/delete', ['uses' => 'SchoolRateController@delete', 'as' => 'school-rate.delete']);
 
 
     Route::post('admin/api/get-college-by-school',

@@ -84,6 +84,8 @@
                     <td>
                         <a class="btn btn-success"
                            href="{{route('backend.professor-rate.detail',['professor_rate_id' => $rate->professor_rate_id])}}">详情</a>
+                        <a class="btn btn-danger"
+                           href="{{route('backend.professor-rate.delete',['professor_rate_id' => $rate->professor_rate_id])}}">删除</a>
                         {{--@if($rate->check_status == \App\ProfessorRate::PENDING_CHECK)--}}
                             {{--<a class="btn btn-success"--}}
                                {{--href="{{route('backend.professor-rate.aprove.get',['professor_rate_id' => $rate->professor_rate_id])}}">通过</a>--}}

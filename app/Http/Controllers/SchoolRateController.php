@@ -79,6 +79,15 @@ class SchoolRateController extends Controller
         return redirect(route('backend.school-rate.index'));
     }
 
+    public function delete(Request $request){
+        $schoolRateId = $request->get('school_rate_id');
+        $rate = $this->schoolRateService->getRateById($schoolRateId);
+        if($rate){
+            $rate->delete();
+        }
+        return redirect(route('backend.school-rate.index'));
+    }
+
 //api
 
     public function createRate(Request $request)

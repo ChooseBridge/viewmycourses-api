@@ -82,6 +82,16 @@ class ProfessorRateController extends Controller
         return redirect(route('backend.professor-rate.index'));
     }
 
+    public function delete(Request $request){
+
+        $professorRateId = $request->get('professor_rate_id');
+        $rate = $this->professorRateService->getRateById($professorRateId);
+        if($rate){
+            $rate->delete();
+        }
+        return redirect(route('backend.professor-rate.index'));
+    }
+
 //api
 
     public function createRate(Request $request)
