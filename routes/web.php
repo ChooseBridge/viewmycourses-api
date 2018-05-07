@@ -239,7 +239,7 @@ Route::get('/callback', function (\App\Service\Abstracts\StudentServiceAbstract 
                     }
 
                     if ($student->mobile != (string)$userInfo['entities'][0]['profile']['mobile']) {
-                        $arr['mobile'] = $userInfo['entities'][0]['profile']['mobile'];
+                        $arr['mobile'] = (string)$userInfo['entities'][0]['profile']['mobile'];
                     }
                     if ($student->mobile_verified != $userInfo['entities'][0]['profile']['mobile_verified']) {
                         $arr['mobile_verified'] = $userInfo['entities'][0]['profile']['mobile_verified'];
