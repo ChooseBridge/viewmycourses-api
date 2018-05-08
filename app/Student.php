@@ -8,7 +8,7 @@ class Student extends Model
 {
     //
 
-    const RATE_GET_POINT = 500;
+    const RATE_GET_POINT = 100;
 
     protected $table = 'student';
 
