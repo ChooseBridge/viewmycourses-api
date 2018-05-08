@@ -181,10 +181,13 @@ Route::get('/callback', function (\App\Service\Abstracts\StudentServiceAbstract 
                         $arr['exam_province'] = $userInfo['entities'][0]['academic']['exam_province'];
                     }
 
+                    //如果是微信用户绑定高校邮箱处理逻辑
+
                     //如果是edu邮箱并且验证了邮箱
                     if ($arr['is_email_edu'] && $arr['email_verified']) {
                         $arr['is_vip'] = 1;
                         $arr['vip_expire_time'] = date("Y-m-d H:i:s", strtotime("+6 month", time()));
+                        $arr['is_assigned'] = 1;
                     }
 
 
@@ -206,6 +209,10 @@ Route::get('/callback', function (\App\Service\Abstracts\StudentServiceAbstract 
                       'access_token_expires_time' => date("Y-m-d H:i:s", time() + $tokenInfo['expires_in']),
                       'gender' => $userInfo['entities'][0]['profile']['gender'],
                       'education_status' => $userInfo['entities'][0]['profile']['education_status'],
+                      'mobile' => (string)$userInfo['entities'][0]['profile']['mobile'],
+                      'mobile_verified' => (string)$userInfo['entities'][0]['profile']['mobile_verified'],
+                      'email_verified' => (string)$userInfo['entities'][0]['profile']['email_verified'],
+                      'is_email_edu' => (string)$userInfo['entities'][0]['profile']['is_email_edu'],
 
                     ];
 
@@ -218,37 +225,22 @@ Route::get('/callback', function (\App\Service\Abstracts\StudentServiceAbstract 
                         $arr['exam_province'] = $userInfo['entities'][0]['academic']['exam_province'];
                     }
 
-                    //说明之前没有验证邮箱 现在验证了
-                    if ($student->email_verified == 0 && $userInfo['entities'][0]['profile']['email_verified']) {
-
-                        //如果是edu邮箱 并且第一次为vip
-                        if ($student->is_email_edu && $student->vip_expire_time == '1970-01-01 00:00:00') {
-                            $arr['is_vip'] = 1;
-                            $arr['vip_expire_time'] = date("Y-m-d H:i:s", strtotime("+6 month", time()));
-                            $arr['email_verified'] = $userInfo['entities'][0]['profile']['email_verified'];
-                        } elseif ($student->is_email_edu) {
-                            //有可能是微信登录的未验证的edu邮箱用户
-                            $arr['is_vip'] = 1;
-                            $arr['vip_expire_time'] = date("Y-m-d H:i:s",
-                              strtotime("+5 month 2 week", strtotime($student->vip_expire_time)));
-                            $arr['email_verified'] = $userInfo['entities'][0]['profile']['email_verified'];
-                        } else {
-                            $arr['email_verified'] = $userInfo['entities'][0]['profile']['email_verified'];
-                        }
-
-                    }
-
-                    if ($student->mobile != (string)$userInfo['entities'][0]['profile']['mobile']) {
-                        $arr['mobile'] = (string)$userInfo['entities'][0]['profile']['mobile'];
-                    }
-                    if ($student->mobile_verified != $userInfo['entities'][0]['profile']['mobile_verified']) {
-                        $arr['mobile_verified'] = $userInfo['entities'][0]['profile']['mobile_verified'];
-                    }
 
                     //vip失效
                     if (time() > strtotime($student->vip_expire_time)) {
                         $arr['is_vip'] = 0;
                     }
+
+                    //微信用户绑定高校邮箱并且没有成为过vip逻辑
+
+                    //如果是edu邮箱并且验证了邮箱并且之前没有分配过权限
+                    if ($arr['is_email_edu'] && $arr['email_verified'] && $student->is_assigned == 0) {
+                        $arr['is_vip'] = 1;
+                        $arr['vip_expire_time'] = date("Y-m-d H:i:s", strtotime("+6 month", time()));
+                        $arr['is_assigned'] = 1;
+                    }
+
+
 
                     $isUpdate = $studentService->updateStudent($student, $arr);
                     if ($isUpdate) {

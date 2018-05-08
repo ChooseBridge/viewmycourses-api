@@ -26,6 +26,7 @@ class Student extends Model
       'ucenter_uid',
       'is_vip',
       'vip_expire_time',
+      'is_assigned',
       'mobile',
       'mobile_verified',
       'email_verified',
