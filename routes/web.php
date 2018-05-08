@@ -182,7 +182,7 @@ Route::get('/callback', function (\App\Service\Abstracts\StudentServiceAbstract 
                     }
 
                     //如果是微信用户绑定高校邮箱处理逻辑
-                    if($userInfo['entities']['is_wechat'] && $arr['is_email_edu']){
+                    if($userInfo['entities'][0]['is_wechat'] && $arr['is_email_edu']){
                         $arr['is_vip'] = 1;
                         $arr['vip_expire_time'] = date("Y-m-d H:i:s", strtotime("+2 week", time()));
                     }
@@ -236,7 +236,7 @@ Route::get('/callback', function (\App\Service\Abstracts\StudentServiceAbstract 
                     }
 
                     //微信用户绑定高校邮箱并且没有成为过vip逻辑
-                    if($userInfo['entities']['is_wechat'] && $arr['is_email_edu'] && $student->vip_expire_time == '1970-01-01 00:00:00'){
+                    if($userInfo['entities'][0]['is_wechat'] && $arr['is_email_edu'] && $student->vip_expire_time == '1970-01-01 00:00:00'){
                         $arr['is_vip'] = 1;
                         $arr['vip_expire_time'] = date("Y-m-d H:i:s", strtotime("+2 week", time()));
                     }
