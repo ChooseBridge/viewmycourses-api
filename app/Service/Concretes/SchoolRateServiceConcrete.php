@@ -114,7 +114,7 @@ class SchoolRateServiceConcrete implements SchoolRateServiceAbstract
                     throw new  APIException("操作异常 设置积分失败", APIException::OPERATION_EXCEPTION);
                 }
 
-                $content = "您点评的学校" . $rate->school->school_name . "审核成功，添加了" . Student::RATE_GET_POINT . "积分";
+                $content = "您点评的学校" . $rate->school->school_name . "审核成功，获得了" . Student::RATE_GET_POINT . "点RP值";
                 $student_id = $rate->create_student_id;
                 $messageContent = [
                   'message'=>$content,
