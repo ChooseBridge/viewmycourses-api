@@ -61,7 +61,7 @@
                 </div>
                 <div class="form-group">
                     <label>所属城市</label>
-                    <select disabled="disabled" class="form-control" name="city_id">
+                    <select  class="form-control" name="city_id">
                         <option value="">请选择</option>
                         @foreach ($citys as $city)
                             @if($city->city_id == $school->city_id)
