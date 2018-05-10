@@ -216,7 +216,7 @@ Route::get('/callback', function (\App\Service\Abstracts\StudentServiceAbstract 
                       'mobile' => (string)$userInfo['entities'][0]['profile']['mobile'],
                       'mobile_verified' => (string)$userInfo['entities'][0]['profile']['mobile_verified'],
                       'email_verified' => (string)$userInfo['entities'][0]['profile']['email_verified'],
-                      'is_email_edu' => (string)$userInfo['entities'][0]['profile']['is_email_edu'],
+                      'is_email_edu' => (int)$userInfo['entities'][0]['profile']['is_email_edu'],
 
                     ];
 
