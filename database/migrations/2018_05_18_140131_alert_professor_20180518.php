@@ -14,7 +14,7 @@ class AlertProfessor20180518 extends Migration
     public function up()
     {
         Schema::table('professor', function (Blueprint $table) {
-            $table->string('college_name')->after("college_id")->nullable("");
+            $table->string('college_name')->after("college_id")->nullable();
         });
     }
 
