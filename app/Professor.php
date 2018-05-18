@@ -28,6 +28,7 @@ class Professor extends Model
       'professor_web_site',
       'school_id',
       'college_id',
+      'college_name',
       'create_student_id',
       'create_user_id',
       'check_status',

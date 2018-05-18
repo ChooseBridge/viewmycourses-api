@@ -62,7 +62,12 @@
                         <td></td>
                     @endif
 
-                    <td>{{$professor->college->college_name}}</td>
+                    @if($professor->college_id == 0)
+                        <td>{{$professor->college_name}}</td>
+                    @else
+                        <td>{{$professor->college->college_name}}</td>
+                    @endif
+
                     @if(!empty($professor->student))
                         <td>{{$professor->student->name}}</td>
                     @elseif(!empty($professor->user))

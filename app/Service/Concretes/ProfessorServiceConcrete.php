@@ -11,6 +11,7 @@ namespace App\Service\Concretes;
 
 use App\Exceptions\APIException;
 use App\Professor;
+use App\Service\Abstracts\CollegeServiceAbstract;
 use App\Service\Abstracts\MessageServiceAbstract;
 use App\Service\Abstracts\ProfessorCourseServiceAbstract;
 use App\Service\Abstracts\ProfessorRateServiceAbstract;
@@ -23,15 +24,18 @@ class ProfessorServiceConcrete implements ProfessorServiceAbstract
     protected $messageService;
     protected $professorRateService;
     protected $professorCourseService;
+    protected $collegeService;
 
     public function __construct(
       MessageServiceAbstract $messageService,
       ProfessorRateServiceAbstract $professorRateService,
-      ProfessorCourseServiceAbstract $professorCourseService
+      ProfessorCourseServiceAbstract $professorCourseService,
+      CollegeServiceAbstract $collegeService
     ) {
         $this->messageService = $messageService;
         $this->professorRateService = $professorRateService;
         $this->professorCourseService = $professorCourseService;
+        $this->collegeService = $collegeService;
 
     }
 
@@ -77,6 +81,14 @@ class ProfessorServiceConcrete implements ProfessorServiceAbstract
     {
         $professor = $this->getProfessorById($id);
         if ($professor) {
+            if($professor->college_id == 0){
+                $college = $this->collegeService->createCollege([
+                    'college_name'=>$professor->college_name,
+                    'school_id'=>$professor->school_id,
+                    'create_student_id'=>$professor->create_student_id,
+                ]);
+                $professor->college_id == $college->college_id;
+            }
             $professor->check_status = Professor::APPROVE_CHECK;
             $isApprove = $professor->save();
             if ($isApprove) {

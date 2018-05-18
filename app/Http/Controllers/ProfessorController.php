@@ -209,6 +209,12 @@ class ProfessorController extends Controller
 
         $data['create_student_id'] = $GLOBALS['gStudent']->student_id;
         $data['check_status'] = Professor::PENDING_CHECK;
+
+        //代表上传的是文字
+        if(intval($data['college_id']) == 0){
+            $data['college_name'] = $data['college_id'];
+            $data['college_id'] = 0;
+        }
         $professor = $this->professorService->createProfessor($data);
         if (!$professor) {
             throw new APIException('操作异常', APIException::OPERATION_EXCEPTION);

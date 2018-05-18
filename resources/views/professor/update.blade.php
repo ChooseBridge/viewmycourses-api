@@ -16,6 +16,7 @@
                 {{csrf_field()}}
 
                 <input type="hidden" name="professor_id" value="{{$professor->professor_id}}">
+                <input type="hidden" name="college_name" value="{{$professor->college_name}}">
                 <div class="form-group">
                     <label>教授姓</label>
                     <input type="text" value="{{$professor->professor_fisrt_name}}" class="form-control" name="professor_fisrt_name" placeholder="教授姓">
@@ -51,13 +52,17 @@
                     <label>学院</label>
                     <select  disabled=disabled class="form-control" name="college_id">
                         <option value="">请选择</option>
-                        @foreach ($colleges as $college)
-                            @if($college->college_id == $professor->college_id)
-                                <option selected="selected" value="{{$college->college_id}}">{{$college->college_name}}</option>
-                            @else
-                                <option value="{{$college->college_id}}">{{$college->college_name}}</option>
-                            @endif
-                        @endforeach
+                        @if($professor->college_id == 0)
+                            <option selected="selected" value="0">{{$professor->college_name}}</option>
+                        @else
+                            @foreach ($colleges as $college)
+                                @if($college->college_id == $professor->college_id)
+                                    <option selected="selected" value="{{$college->college_id}}">{{$college->college_name}}</option>
+                                @else
+                                    <option value="{{$college->college_id}}">{{$college->college_name}}</option>
+                                @endif
+                            @endforeach
+                        @endif
                     </select>
                 </div>
 
