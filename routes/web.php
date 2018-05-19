@@ -291,6 +291,9 @@ Route::group(['prefix' => 'internal', 'middleware' => [\App\Http\Middleware\Inte
     Route::get('get-all-school-by-name',
       ['uses' => 'InternalController@getAllSchoolByName', 'as' => 'internal.get-all-school-by-name']);
 
+    Route::get('set-vip-time',
+      ['uses' => 'InternalController@setVipTime', 'as' => 'internal.set-student-score']);
+
 });
 
 

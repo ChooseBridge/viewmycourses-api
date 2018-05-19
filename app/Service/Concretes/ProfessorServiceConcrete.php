@@ -66,7 +66,7 @@ class ProfessorServiceConcrete implements ProfessorServiceAbstract
           'professor_fisrt_name' => 'required|max:255',
           'professor_second_name' => 'required|max:255',
           'school_id' => 'required|integer',
-          'college_id' => 'required|integer',
+//          'college_id' => 'required|integer',
         ]);
         return $validator->fails() ? $validator : true;
     }
