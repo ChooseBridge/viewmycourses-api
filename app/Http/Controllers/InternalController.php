@@ -76,15 +76,17 @@ class InternalController extends Controller
             throw  new APIException("参数score格式错误", APIException::ERROR_PARAM);
         }
 
+        $num = $score/300;
         if($student->is_vip == 1){
-            $num = $score/300;
+
             $time = strtotime($student->vip_expire_time)+3600*24*180*$num;
             $data = [
               'vip_expire_time'=>date("Y-m-d H:i:s", $time),
             ];
         }else{
+            $time = time()+3600*24*180*$num;
             $data = [
-              'vip_expire_time'=>date("Y-m-d H:i:s", time()),
+              'vip_expire_time'=>date("Y-m-d H:i:s", $time),
               'is_vip'=>1,
             ];
         }
