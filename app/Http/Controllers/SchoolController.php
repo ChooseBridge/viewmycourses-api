@@ -375,7 +375,7 @@ class SchoolController extends Controller
               'professor_full_name' => $randomProfessor->professor_full_name,
               'professor_web_site' => $randomProfessor->professor_web_site,
               'school_name' => $randomProfessor->school->school_name,
-              'college_name' => $randomProfessor->college->college_name,
+              'college_name' =>$randomProfessor->college_id == 0 ?$randomProfessor->college_name : $randomProfessor->college->college_name,
               'effort' => round($randomProfessorEffort, 1),
               'rate_num' => $randomProfessorRatesNum
             ];
