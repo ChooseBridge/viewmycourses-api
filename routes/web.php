@@ -292,7 +292,9 @@ Route::group(['prefix' => 'internal', 'middleware' => [\App\Http\Middleware\Inte
       ['uses' => 'InternalController@getAllSchoolByName', 'as' => 'internal.get-all-school-by-name']);
 
     Route::get('set-vip-time',
-      ['uses' => 'InternalController@setVipTime', 'as' => 'internal.set-student-score']);
+      ['uses' => 'InternalController@setVipTime', 'as' => 'internal.set-vip-time']);
+    Route::get('get-vip-time',
+      ['uses' => 'InternalController@getVipTime', 'as' => 'internal.get-vip-time']);
 
 });
 

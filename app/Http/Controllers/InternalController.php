@@ -110,4 +110,27 @@ class InternalController extends Controller
         }
 
     }
+
+
+    public function getVipTime(Request $request){
+
+        $uid= $request->get('uid', null);
+
+        if (!$uid) {
+            throw  new APIException("缺失参数uid", APIException::MISS_PARAM);
+        }
+
+        $student = $this->studentService->getStudentByUCenterUId($uid);
+
+        if(!$student){
+            throw  new APIException("未知的用户信息", APIException::DATA_EXCEPTION);
+        }
+
+        return \Response::json([
+          'success' => true,
+          'data' => [
+            'msg' => $student->vip_expire_time,
+          ]
+        ]);
+    }
 }
