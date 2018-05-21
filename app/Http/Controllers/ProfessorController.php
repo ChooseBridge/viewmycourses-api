@@ -192,10 +192,10 @@ class ProfessorController extends Controller
             throw new APIException($message, APIException::ERROR_PARAM);
         }
 
-        $college = $this->collegeService->getCollegeById($data['college_id']);
-        if (!$college || $college->school->school_id != $data['school_id']) {
-            throw new APIException('非法操作', APIException::ILLGAL_OPERATION);
-        }
+//        $college = $this->collegeService->getCollegeById($data['college_id']);
+//        if (!$college || $college->school->school_id != $data['school_id']) {
+//            throw new APIException('非法操作', APIException::ILLGAL_OPERATION);
+//        }
 
         if(preg_match("/^[a-zA-Z\s]+$/",$data['professor_fisrt_name'] . $data['professor_second_name'])){
             $data['professor_full_name'] =   $data['professor_second_name']." ".$data['professor_fisrt_name'];
