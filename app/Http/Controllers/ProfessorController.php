@@ -437,7 +437,7 @@ class ProfessorController extends Controller
           'professor_full_name' => $professor->professor_full_name,
           'professor_web_site' => $professor->professor_web_site,
           'school' => $professor->school->school_name,
-          'college' => $professor->college->college_name,
+          'college' => $professor->college_id?$professor->college_name:$professor->college->college_name,
           'country' => $professor->school->country->country_name,
           'province' => $professor->school->province->province_name,
           'city' => $professor->school->city->city_name,
