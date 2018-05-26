@@ -197,7 +197,7 @@ class ProfessorServiceConcrete implements ProfessorServiceAbstract
 
         if ($professor) {
             $cacheValue = serialize($professor);
-            \Illuminate\Support\Facades\Cache::set($schoolId . "professor",$cacheValue,3600*24);
+            \Illuminate\Support\Facades\Cache::set($schoolId . "professor",$cacheValue,60);
         }
 
         return $professor;
