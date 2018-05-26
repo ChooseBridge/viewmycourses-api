@@ -62,7 +62,7 @@
                         <td></td>
                     @endif
 
-                    @if($professor->college_id == 0)
+                    @if(!$professor->college)
                         <td>{{$professor->college_name}}</td>
                     @else
                         <td>{{$professor->college->college_name}}</td>
