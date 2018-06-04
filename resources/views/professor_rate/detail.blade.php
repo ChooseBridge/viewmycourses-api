@@ -25,7 +25,7 @@
             </tr>
             <tr>
                 <td>学院</td>
-                <td>{{$rate->professor->college->college_name}}</td>
+                <td>{{$rate->professor->college?$rate->professor->college->college_name:''}}</td>
             </tr>
             <tr>
                 <td>课程代码</td>
