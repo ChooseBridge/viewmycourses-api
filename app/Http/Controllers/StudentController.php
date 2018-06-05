@@ -379,10 +379,10 @@ sql;
         $resSql = <<<sql
         select * from 
         (
-        (select professor_id as id,professor_full_name as name,school_id as col1,college_id as col2,professor_web_site as col3,'professor' as type  from `professor` 
+        (select professor_id as id,professor_full_name as name,school_id as col1,college_id as col2,professor_web_site as col3,college_name as col4,'professor' as type  from `professor` 
         where `professor_full_name` like '%$name%') 
         union all
-        (select school_id as id ,school_name as name ,country_id as col1,province_id as col2,city_id as col3,'school' as type   from `school` 
+        (select school_id as id ,school_name as name ,country_id as col1,province_id as col2,city_id as col3,school_nick_name_two as col4,'school' as type   from `school` 
         where (`school_name` like '%$name%' or `school_nick_name` like '%$name%' or `school_nick_name_two` like '%$name%'))
         ) as a limit $limit offset $offset
 sql;
@@ -400,7 +400,7 @@ sql;
                   'professor_id' => $item->id,
                   'professor_full_name' => $item->name,
                   'school_name' => !empty($school) ? $school->school_name : "",
-                  'college_name' => !empty($college) ? $college->college_name : "",
+                  'college_name' => !empty($college) ? $college->college_name : $item->col4,
                   'professor_web_site' => $item->col3,
                   'type' => 'professor',
                 ];
