@@ -94,6 +94,10 @@ Route::group(['middleware' => 'admin.user', 'as' => 'backend.'], function () {
       ['uses' => 'ProfessorRateController@detail', 'as' => 'professor-rate.detail']);
     Route::get('admin/professor-rate/delete',
       ['uses' => 'ProfessorRateController@delete', 'as' => 'professor-rate.delete']);
+    Route::get('admin/professor-rate/update',
+      ['uses' => 'ProfessorRateController@update', 'as' => 'professor-rate.update.get']);
+    Route::post('admin/professor-rate/update',
+      ['uses' => 'ProfessorRateController@update', 'as' => 'professor-rate.update.post']);
 
 
     Route::get('admin/school-rate/index', ['uses' => 'SchoolRateController@Index', 'as' => 'school-rate.index']);

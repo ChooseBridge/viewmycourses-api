@@ -82,4 +82,8 @@ class ProfessorRate extends Model
         return $this->belongsTo('App\Student', 'create_student_id', 'student_id');
     }
 
+    public function coursecategory(){
+        return $this->belongsTo('App\SchoolCourseCategory', 'course_category_id', 'course_category_id');
+    }
+
 }

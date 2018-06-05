@@ -92,6 +92,39 @@ class ProfessorRateController extends Controller
         return redirect(route('backend.professor-rate.index'));
     }
 
+    public function update(Request $request)
+    {
+
+        $professorRateId = $request->get('professor_rate_id');
+        $rate = $this->professorRateService->getRateById($professorRateId);
+
+        if ($request->isMethod('POST')) {
+
+            $data = $request->all();
+            $validator = $this->professorRateService->validatorForUpdate($data);
+            if ($validator !== true) {
+                return redirect(route('backend.professor-rate.update.get',['professor_rate_id' => $rate->professor_rate_id]))
+                  ->withErrors($validator);
+            }
+
+            $course = $this->professorCourseService->getCourseById($data['course_id']);
+            $courseCategory = $this->schoolCourseCategoryService->getCourseCategoryById($data['course_category_id']);
+            $data['course_code'] = $course->course_code;
+            $data['course_category_name'] = $courseCategory->course_category_name;
+
+            $rate->update($data);
+            return redirect(route('backend.professor-rate.index'));
+        }
+        $courseCodes = $this->professorCourseService->getCoursesByProfessorId($rate->professor_id);
+        $courseCategorys = $this->schoolCourseCategoryService->getCourseCategorysBySchoolId($rate->school_id);
+
+        return view('professor_rate.update', [
+          'rate' => $rate,
+          'courseCodes' => $courseCodes,
+          'courseCategorys' => $courseCategorys,
+        ]);
+    }
+
 //api
 
     public function createRate(Request $request)

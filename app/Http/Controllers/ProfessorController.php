@@ -360,7 +360,7 @@ class ProfessorController extends Controller
               'professor_rate_id' => $rate->professor_rate_id,
               'course_code' => $rate->course_code,
               'course_name' => $rate->course_name,
-              'course_category_name' => $rate->course_category_name,
+              'course_category_name' => $rate->coursecategory?$rate->coursecategory->course_category_name:$rate->course_category_name,
               'is_attend' => $rate->is_attend,
               'difficult_level' => $rate->difficult_level,
               'homework_num' => $rate->homework_num,

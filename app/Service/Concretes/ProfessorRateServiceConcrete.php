@@ -63,6 +63,25 @@ class ProfessorRateServiceConcrete implements ProfessorRateServiceAbstract
         return $validator->fails() ? $validator : true;
     }
 
+    public function validatorForUpdate($data)
+    {
+        $validator = Validator::make($data, [
+          'course_id' => 'required|integer',
+          'course_name' => 'required|string',
+          'course_category_id' => 'required|integer',
+          'comment' => 'required|string',
+        ],[
+          "required"             => ":attribute 不能为空",
+          "integer"      => "请选择 :attribute "
+        ],[
+          "course_id" => '课程编号',
+          "course_category_id" => '课程分类',
+          "course_name" => '课程名称',
+          "comment" => '文字评论',
+        ]);
+        return $validator->fails() ? $validator : true;
+    }
+
     public function createRate($data)
     {
         $rate = ProfessorRate::create($data);

@@ -13,6 +13,8 @@ interface ProfessorRateServiceAbstract
 {
     public function validatorForCreate($data);
 
+    public function validatorForUpdate($data);
+
     public function createRate($data);
 
     public function getRatesForPage($limit,$queryCallBack);
