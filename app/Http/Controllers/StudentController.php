@@ -400,7 +400,7 @@ sql;
                   'professor_id' => $item->id,
                   'professor_full_name' => $item->name,
                   'school_name' => !empty($school) ? $school->school_name : "",
-                  'college_name' => !empty($college) ? $college->college_name : $item->col4,
+                  'college' => !empty($college) ? $college->college_name : $item->col4,
                   'professor_web_site' => $item->col3,
                   'type' => 'professor',
                 ];
