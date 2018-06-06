@@ -27,4 +27,6 @@ interface ProfessorServiceAbstract
     public function getRandomProfessorBySchoolId($id);
 
     public function thumbsUpProfessorById($id,$student);
+
+    public function getAllCheckedProfessors($queryCallBack);
 }

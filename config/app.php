@@ -195,6 +195,8 @@ return [
         \App\Service\Providers\ProfessorCourseServiceProvider::class,
         \App\Service\Providers\SchoolCourseCategoryServiceProvider::class,
         \App\Service\Providers\MessageServiceProvider::class,
+        \App\Service\Providers\CourseServiceProvider::class,
+
     ],
 
     /*

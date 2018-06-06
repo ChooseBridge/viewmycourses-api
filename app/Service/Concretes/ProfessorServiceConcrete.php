@@ -239,4 +239,14 @@ class ProfessorServiceConcrete implements ProfessorServiceAbstract
         }
         return ['res' => false, 'num' => 0];
     }
+
+    public function getAllCheckedProfessors($queryCallBack = null)
+    {
+        $bulider = Professor::where('check_status', Professor::APPROVE_CHECK);
+        if ($queryCallBack) {
+            $bulider->where($queryCallBack);
+        }
+        $professors = $bulider->orderBy('p_sort','asc')->get();
+        return $professors;
+    }
 }

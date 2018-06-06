@@ -56,6 +56,11 @@ Route::group(['middleware' => 'admin.user', 'as' => 'backend.'], function () {
     Route::get('admin/course-category.update.get', ['uses' => 'CourseCategoryController@updateCategory', 'as' => 'course-category.update.get']);
     Route::post('admin/course-category.update.post', ['uses' => 'CourseCategoryController@updateCategory', 'as' => 'course-category.update.post']);
 
+    Route::get('admin/course/index', ['uses' => 'CourseController@index', 'as' => 'course.index']);
+    Route::get('admin/course.add.get', ['uses' => 'CourseController@addCourse', 'as' => 'course.add.get']);
+    Route::post('admin/course.add.post', ['uses' => 'CourseController@addCourse', 'as' => 'course.add.post']);
+    Route::get('admin/course.update.get', ['uses' => 'CourseController@updateCourse', 'as' => 'course.update.get']);
+    Route::post('admin/course.update.post', ['uses' => 'CourseController@updateCourse', 'as' => 'course.update.post']);
 
     Route::get('admin/college/index', ['uses' => 'CollegeController@index', 'as' => 'college.index']);
     Route::get('admin/college/add', ['uses' => 'CollegeController@addCollege', 'as' => 'college.add.get']);

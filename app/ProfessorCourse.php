@@ -15,4 +15,10 @@ class ProfessorCourse extends Model
       'professor_id',
       'course_code',
     ];
+
+    public function professor()
+    {
+        return $this->belongsTo('App\Professor', 'professor_id', 'professor_id');
+    }
+
 }
