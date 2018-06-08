@@ -164,6 +164,7 @@ class ProfessorRateServiceConcrete implements ProfessorRateServiceAbstract
     {
         $rates = ProfessorRate::where('professor_id', $professorId)
           ->where('check_status', ProfessorRate::APPROVE_CHECK)
+          ->orderBy('created_at','desc')
           ->get();
         return $rates;
     }
