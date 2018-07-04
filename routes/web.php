@@ -267,7 +267,6 @@ Route::get('/callback', function (\App\Service\Abstracts\StudentServiceAbstract 
                         } else {
                             return Redirect::to($redirectUrl . "&token=" . $student->token, 301);
                         }
-
                     }
                 }
 
@@ -368,4 +367,9 @@ Route::group(['prefix' => 'api', 'middleware' => [\App\Http\Middleware\CheckLogi
 
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
+});
+
+Route::middleware('wechat_sign')->prefix('api/wechat')->group(function () {
+    Route::post('login', 'WechatController@login');
+    Route::post('vip', 'WechatController@getUserVIP');
 });

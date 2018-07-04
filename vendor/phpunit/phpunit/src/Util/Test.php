@@ -14,9 +14,9 @@ use PharIo\Version\VersionConstraintParser;
 use PHPUnit\Framework\CodeCoverageException;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\InvalidCoversTargetException;
+use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\SelfDescribing;
 use PHPUnit\Framework\SkippedTestError;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Warning;
 use PHPUnit\Runner\Version;
 use ReflectionClass;
@@ -423,7 +423,10 @@ class Test
      */
     private static function parseAnnotationContent($message)
     {
-        if ((\strpos($message, '::') !== false && \count(\explode('::', $message)) == 2) && \defined($message)) {
+        if (
+            (\strpos($message, '::') !== false && \count(\explode('::', $message)) == 2)
+            && \defined($message)
+        ) {
             $message = \constant($message);
         }
 
@@ -524,15 +527,7 @@ class Test
                 }
 
                 if ($data instanceof Traversable) {
-                    $origData = $data;
-                    $data     = [];
-                    foreach ($origData as $key => $value) {
-                        if (\is_int($key)) {
-                            $data[] = $value;
-                        } else {
-                            $data[$key] = $value;
-                        }
-                    }
+                    $data = \iterator_to_array($data);
                 }
 
                 if (\is_array($data)) {
@@ -810,7 +805,6 @@ class Test
             foreach (['small', 'medium', 'large'] as $size) {
                 if (isset($annotations[$element][$size])) {
                     $groups[] = $size;
-
                     break 2;
                 }
             }

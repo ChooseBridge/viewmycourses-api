@@ -26,6 +26,6 @@ return array(
     's' => '1 sekunda|:count sekundy|:count sekund',
     'ago' => ':time temu',
     'from_now' => ':time od teraz',
-    'after' => ':time po',
-    'before' => ':time przed',
+    'after' => ':time przed',
+    'before' => ':time po',
 );

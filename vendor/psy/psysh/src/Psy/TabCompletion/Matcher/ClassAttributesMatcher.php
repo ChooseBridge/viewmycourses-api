@@ -36,12 +36,7 @@ class ClassAttributesMatcher extends AbstractMatcher
 
         $class = $this->getNamespaceAndClass($tokens);
 
-        try {
-            $reflection = new \ReflectionClass($class);
-        } catch (\ReflectionException $re) {
-            return array();
-        }
-
+        $reflection = new \ReflectionClass($class);
         $vars = array_merge(
             array_map(
                 function ($var) {
@@ -70,7 +65,7 @@ class ClassAttributesMatcher extends AbstractMatcher
      */
     public function hasMatched(array $tokens)
     {
-        $token     = array_pop($tokens);
+        $token = array_pop($tokens);
         $prevToken = array_pop($tokens);
 
         switch (true) {

@@ -24,8 +24,8 @@ return array(
     'min' => '1 λεπτό|:count λεπτά',
     'second' => '1 δευτερόλεπτο|:count δευτερόλεπτα',
     's' => '1 δευτερόλεπτο|:count δευτερόλεπτα',
-    'ago' => 'πριν από :time',
-    'from_now' => 'σε :time από τώρα',
+    'ago' => 'πρίν απο :time',
+    'from_now' => 'σε :time απο τώρα',
     'after' => ':time μετά',
-    'before' => ':time πριν',
+    'before' => ':time πρίν',
 );

@@ -50,7 +50,7 @@ class ShellInput extends StringInput
         $hasCodeArgument = false;
 
         if ($definition->getArgumentCount() > 0) {
-            $args    = $definition->getArguments();
+            $args = $definition->getArguments();
             $lastArg = array_pop($args);
             foreach ($args as $arg) {
                 if ($arg instanceof CodeArgument) {
@@ -165,24 +165,20 @@ class ShellInput extends StringInput
                 $this->arguments[$arg->getName()] = $arg->isArray() ? array($token) : $token;
             }
 
-            return;
-        }
-
         // if last argument isArray(), append token to last argument
-        if ($this->definition->hasArgument($c - 1) && $this->definition->getArgument($c - 1)->isArray()) {
+        } elseif ($this->definition->hasArgument($c - 1) && $this->definition->getArgument($c - 1)->isArray()) {
             $arg = $this->definition->getArgument($c - 1);
             $this->arguments[$arg->getName()][] = $token;
 
-            return;
-        }
-
         // unexpected argument
-        $all = $this->definition->getArguments();
-        if (count($all)) {
-            throw new \RuntimeException(sprintf('Too many arguments, expected arguments "%s".', implode('" "', array_keys($all))));
-        }
+        } else {
+            $all = $this->definition->getArguments();
+            if (count($all)) {
+                throw new \RuntimeException(sprintf('Too many arguments, expected arguments "%s".', implode('" "', array_keys($all))));
+            }
 
-        throw new \RuntimeException(sprintf('No arguments expected, got "%s".', $token));
+            throw new \RuntimeException(sprintf('No arguments expected, got "%s".', $token));
+        }
     }
 
     // Everything below this is copypasta from ArgvInput private methods
@@ -218,7 +214,7 @@ class ShellInput extends StringInput
     private function parseShortOptionSet($name)
     {
         $len = strlen($name);
-        for ($i = 0; $i < $len; $i++) {
+        for ($i = 0; $i < $len; ++$i) {
             if (!$this->definition->hasShortcut($name[$i])) {
                 throw new \RuntimeException(sprintf('The "-%s" option does not exist.', $name[$i]));
             }

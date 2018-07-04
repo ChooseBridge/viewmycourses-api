@@ -5,7 +5,6 @@ namespace Illuminate\Foundation\Console;
 use Closure;
 use Exception;
 use Throwable;
-use ReflectionClass;
 use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 use Symfony\Component\Finder\Finder;
@@ -14,6 +13,7 @@ use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Console\Application as Artisan;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Contracts\Console\Kernel as KernelContract;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 
@@ -97,11 +97,9 @@ class Kernel implements KernelContract
      */
     protected function defineConsoleSchedule()
     {
-        $this->app->singleton(Schedule::class, function ($app) {
-            return new Schedule;
-        });
-
-        $schedule = $this->app->make(Schedule::class);
+        $this->app->instance(
+            Schedule::class, $schedule = new Schedule($this->app[Cache::class])
+        );
 
         $this->schedule($schedule);
     }
@@ -214,8 +212,7 @@ class Kernel implements KernelContract
                 Str::after($command->getPathname(), app_path().DIRECTORY_SEPARATOR)
             );
 
-            if (is_subclass_of($command, Command::class) &&
-                ! (new ReflectionClass($command))->isAbstract()) {
+            if (is_subclass_of($command, Command::class)) {
                 Artisan::starting(function ($artisan) use ($command) {
                     $artisan->resolve($command);
                 });
@@ -296,13 +293,13 @@ class Kernel implements KernelContract
             $this->app->bootstrapWith($this->bootstrappers());
         }
 
-        $this->app->loadDeferredProviders();
-
         if (! $this->commandsLoaded) {
             $this->commands();
 
             $this->commandsLoaded = true;
         }
+
+        $this->app->loadDeferredProviders();
     }
 
     /**

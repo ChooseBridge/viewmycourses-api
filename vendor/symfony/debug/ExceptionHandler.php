@@ -196,6 +196,8 @@ class ExceptionHandler
     /**
      * Gets the HTML content associated with the given exception.
      *
+     * @param FlattenException $exception A FlattenException instance
+     *
      * @return string The content as a string
      */
     public function getContent(FlattenException $exception)
@@ -274,6 +276,8 @@ EOF;
     /**
      * Gets the stylesheet associated with the given exception.
      *
+     * @param FlattenException $exception A FlattenException instance
+     *
      * @return string The stylesheet as a string
      */
     public function getStylesheet(FlattenException $exception)
@@ -306,8 +310,8 @@ EOF;
             .exception-message { flex-grow: 1; padding: 30px 0; }
             .exception-message, .exception-message a { color: #FFF; font-size: 21px; font-weight: 400; margin: 0; }
             .exception-message.long { font-size: 18px; }
-            .exception-message a { border-bottom: 1px solid rgba(255, 255, 255, 0.5); font-size: inherit; text-decoration: none; }
-            .exception-message a:hover { border-bottom-color: #ffffff; }
+            .exception-message a { text-decoration: none; }
+            .exception-message a:hover { text-decoration: underline; }
 
             .exception-illustration { flex-basis: 111px; flex-shrink: 0; height: 66px; margin-left: 15px; opacity: .7; }
 

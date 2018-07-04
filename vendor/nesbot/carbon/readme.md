@@ -6,7 +6,6 @@
 [![StyleCI](https://styleci.io/repos/5724990/shield?style=flat)](https://styleci.io/repos/5724990)
 [![codecov.io](https://codecov.io/github/briannesbitt/Carbon/coverage.svg?branch=master)](https://codecov.io/github/briannesbitt/Carbon?branch=master)
 [![PHP-Eye](https://php-eye.com/badge/nesbot/carbon/tested.svg?style=flat)](https://php-eye.com/package/nesbot/carbon)
-[![PHPStan](https://img.shields.io/badge/PHPStan-enabled-brightgreen.svg?style=flat)](https://github.com/phpstan/phpstan)
 
 A simple PHP API extension for DateTime. [http://carbon.nesbot.com](http://carbon.nesbot.com)
 
@@ -75,7 +74,6 @@ printf("Now: %s", Carbon::now());
 ```
 
 <a name="install-nocomposer"/>
-
 ### Without Composer
 
 Why are you not using [composer](http://getcomposer.org/)? Download [Carbon.php](https://github.com/briannesbitt/Carbon/blob/master/src/Carbon/Carbon.php) from the repo and save the file into your project path somewhere.

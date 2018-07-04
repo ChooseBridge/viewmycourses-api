@@ -33,12 +33,12 @@ final class Example extends BaseTag
     private $isURI = false;
 
     /**
-     * @var int
+     * @var
      */
     private $startingLine;
 
     /**
-     * @var int
+     * @var
      */
     private $lineCount;
 
@@ -51,7 +51,6 @@ final class Example extends BaseTag
         $this->filePath = $filePath;
         $this->startingLine = $startingLine;
         $this->lineCount = $lineCount;
-        $this->name = 'example';
         if ($description !== null) {
             $this->description = trim($description);
         }
