@@ -169,6 +169,14 @@ class ProfessorRateController extends Controller
 
         $data['create_student_id'] = $GLOBALS['gStudent']->student_id;
 
+        if(!isset($data['course_category_name'])){
+            $data['course_category_name'] = " ";
+        }
+
+        if(!isset($data['tag'])){
+            $data['tag'] = " ";
+        }
+
         $validator = $this->professorRateService->validatorForCreate($data);
         if ($validator !== true) {
             $message = $validator->errors()->first();
