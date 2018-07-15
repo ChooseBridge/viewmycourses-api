@@ -208,23 +208,23 @@ class ProfessorRateServiceConcrete implements ProfessorRateServiceAbstract
                 }
 
                 //代表用户手动填写course_category_name
-                if ($rate->course_category_id == 0) {
-                    $hasCourseCategory = $this->schoolCourseCategoryService->schoolHasCourseCategory($rate->school_id,
-                      $rate->course_category_name);
-                    if (!$hasCourseCategory) {
-                        $data = [
-                          'school_id' => $rate->school_id,
-                          'course_category_name' => $rate->course_category_name,
-                        ];
-                        if ($this->schoolCourseCategoryService->validatorForCreate($data)) {
-                            $category = $this->schoolCourseCategoryService->createCourseCategory($data);
-                            if (!$category) {
-                                throw new  APIException("操作异常 课程类别添加失败", APIException::OPERATION_EXCEPTION);
-                            }
-                            $rate->course_category_id = $category->course_category_id;
-                        }
-                    }
-                }
+//                if ($rate->course_category_id == 0) {
+//                    $hasCourseCategory = $this->schoolCourseCategoryService->schoolHasCourseCategory($rate->school_id,
+//                      $rate->course_category_name);
+//                    if (!$hasCourseCategory) {
+//                        $data = [
+//                          'school_id' => $rate->school_id,
+//                          'course_category_name' => $rate->course_category_name,
+//                        ];
+//                        if ($this->schoolCourseCategoryService->validatorForCreate($data)) {
+//                            $category = $this->schoolCourseCategoryService->createCourseCategory($data);
+//                            if (!$category) {
+//                                throw new  APIException("操作异常 课程类别添加失败", APIException::OPERATION_EXCEPTION);
+//                            }
+//                            $rate->course_category_id = $category->course_category_id;
+//                        }
+//                    }
+//                }
 
                 $isApprove = $rate->save();
                 if (!$isApprove) {
