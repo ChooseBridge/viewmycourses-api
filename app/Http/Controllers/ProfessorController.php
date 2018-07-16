@@ -369,7 +369,7 @@ class ProfessorController extends Controller
               'spend_course_time_at_week' => $rate->spend_course_time_at_week,
               'grade' => $rate->grade,
               'comment' => $rate->comment,
-              'tag' => $rate->tag == " "?null:$rate->tag,
+              'tag' => $rate->tag == " "?"":$rate->tag,
               'effort' => round($rate->effort, 1),
               'created_at' => $rate->created_at,
               'create_student_id' => $rate->create_student_id,
