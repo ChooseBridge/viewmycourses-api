@@ -57,7 +57,7 @@ class ProfessorRateServiceConcrete implements ProfessorRateServiceAbstract
           'spend_course_time_at_week' => 'required|integer',
           'grade' => 'required|max:255',
           'comment' => 'required|string',
-          'tag' => 'required|max:255',
+//          'tag' => 'required|max:255',
           'create_student_id' => 'required|integer',
         ]);
         return $validator->fails() ? $validator : true;
