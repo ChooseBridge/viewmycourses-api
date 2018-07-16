@@ -369,7 +369,7 @@ class ProfessorController extends Controller
               'spend_course_time_at_week' => $rate->spend_course_time_at_week,
               'grade' => $rate->grade,
               'comment' => $rate->comment,
-              'tag' => $rate->tag,
+              'tag' => $rate->tag == " "?null:$rate->tag,
               'effort' => round($rate->effort, 1),
               'created_at' => $rate->created_at,
               'create_student_id' => $rate->create_student_id,
@@ -420,8 +420,6 @@ class ProfessorController extends Controller
             $rateInfo[$rate->professor_rate_id] = $tmp;
             if($rate->tag != " "){
                 $tagsStr .= $rate->tag . ",";
-            }else{
-                $rate->tag = "";
             }
         }
 
