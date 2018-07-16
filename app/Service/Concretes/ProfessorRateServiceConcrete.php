@@ -48,7 +48,7 @@ class ProfessorRateServiceConcrete implements ProfessorRateServiceAbstract
           'college_id' => 'required|integer',
           'course_code' => 'required|max:255',
           'course_name' => 'required|max:255',
-          'course_category_name' => 'required|max:255',
+//          'course_category_name' => 'required|max:255',
           'is_attend' => 'required|integer',
           'difficult_level' => 'required|numeric',
           'homework_num' => 'required|numeric',
