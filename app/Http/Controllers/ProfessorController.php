@@ -418,7 +418,11 @@ class ProfessorController extends Controller
             }
 
             $rateInfo[$rate->professor_rate_id] = $tmp;
-            $tagsStr .= $rate->tag . ",";
+            if($rate->tag != " "){
+                $tagsStr .= $rate->tag . ",";
+            }else{
+                $rate->tag = "";
+            }
         }
 
         if($max_thumbs_up_rate_id != 0){
