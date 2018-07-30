@@ -190,17 +190,11 @@ Route::get('/callback', function (\App\Service\Abstracts\StudentServiceAbstract 
                         $arr['exam_province'] = $userInfo['entities'][0]['academic']['exam_province'];
                     }
 
-                    //如果是微信用户绑定高校邮箱处理逻辑
-                    if($userInfo['entities'][0]['is_wechat'] && $arr['is_email_edu']){
+                    $arr['vip_expire_time'] = $userInfo['entities'][0]['vip_expire'];
+                    if (\Carbon\Carbon::parse($userInfo['entities'][0]['vip_expire'])->gte(\Carbon\Carbon::now())) {
                         $arr['is_vip'] = 1;
-                        $arr['vip_expire_time'] = date("Y-m-d H:i:s", strtotime("+2 week", time()));
-                    }
-
-                    //如果是edu邮箱并且验证了邮箱
-                    if ($arr['is_email_edu'] && $arr['email_verified']) {
-                        $arr['is_vip'] = 1;
-                        $arr['vip_expire_time'] = date("Y-m-d H:i:s", strtotime("+6 month", time()));
-                        $arr['is_assigned'] = 1;
+                    } else {
+                        $arr['is_vip'] = 0;
                     }
 
 
@@ -239,23 +233,11 @@ Route::get('/callback', function (\App\Service\Abstracts\StudentServiceAbstract 
                     }
 
 
-                    //vip失效
-                    if (time() > strtotime($student->vip_expire_time)) {
+                    $arr['vip_expire_time'] = $userInfo['entities'][0]['vip_expire'];
+                    if (\Carbon\Carbon::parse($userInfo['entities'][0]['vip_expire'])->gte(\Carbon\Carbon::now())) {
+                        $arr['is_vip'] = 1;
+                    } else {
                         $arr['is_vip'] = 0;
-                    }
-
-                    //微信用户绑定高校邮箱并且没有成为过vip逻辑
-                    if($userInfo['entities'][0]['is_wechat'] && $arr['is_email_edu'] && $student->vip_expire_time == '1970-01-01 00:00:00'){
-                        $arr['is_vip'] = 1;
-                        $arr['vip_expire_time'] = date("Y-m-d H:i:s", strtotime("+2 week", time()));
-                    }
-
-
-                    //如果是edu邮箱并且验证了邮箱并且之前没有分配过权限
-                    if ($arr['is_email_edu'] && $arr['email_verified'] && $student->is_assigned == 0) {
-                        $arr['is_vip'] = 1;
-                        $arr['vip_expire_time'] = date("Y-m-d H:i:s", strtotime("+6 month", time()));
-                        $arr['is_assigned'] = 1;
                     }
 
 
