@@ -13,6 +13,8 @@ return [
     |
     */
 
+    'wechat_des_key' => env('WECHAT_DES_KEY', 'cH0sbR1d'),
+
     'name' => env('APP_NAME', 'Laravel'),
 
     /*
