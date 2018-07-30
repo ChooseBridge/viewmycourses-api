@@ -29,7 +29,7 @@ class WechatController extends Controller
 
         return Response::json(array(
             "success" => true,
-            "token" => openssl_encrypt($token, "des-cbc", config("app.wechat_des_key"), 0, config("app.wechat_des_key")),
+            "token" => $token,
         ));
     }
 }
